@@ -1,7 +1,7 @@
 {
     "name": "@mongez/moonlight",
     "version": "1.0.0",
-    "description": "A Massive React Builder.",
+    "description": "A Massive React Builder for web apps.",
     "main": "src/index.ts",
     "dependencies": {
         "@emotion/cache": "^11.10.5",
