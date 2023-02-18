@@ -7,7 +7,7 @@ export const themeAtom = atom<MantineTheme>({
   default: DEFAULT_THEME,
 });
 
-export default function InjectThemeAtom() {
+export function InjectThemeAtom() {
   const theme = useMantineTheme();
   themeAtom.update(theme);
   return null;
