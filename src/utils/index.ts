@@ -3,6 +3,7 @@ export * from "./extensions";
 export * from "./helpers";
 export * from "./human-size";
 export * from "./nonPaginated";
+export * from "./responsive";
 export * from "./catch-error";
 export * from "./parse-error";
 export * from "./scroll";
