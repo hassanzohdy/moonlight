@@ -4,6 +4,7 @@ export * from "./ErrorHandler";
 export * from "./Form";
 export * from "./FormModal";
 export * from "./Icons";
+export * from "./HTML";
 export * from "./Image";
 export * from "./LoadingErrorHandler";
 export * from "./Table";
