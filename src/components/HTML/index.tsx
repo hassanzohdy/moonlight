@@ -8,6 +8,6 @@ export const Wrapper = styled.div`
   }
 `;
 
-export default function HTML({ html }: { html: string | any }) {
+export function HTML({ html }: { html: string | any }) {
   return <Wrapper dangerouslySetInnerHTML={{ __html: html }}></Wrapper>;
 }
