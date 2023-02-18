@@ -1,0 +1,14 @@
+.richTextEditorRoot {
+    .ProseMirror {
+        >*+* {
+            margin-top: 0.75em;
+        }
+    }
+
+    .ProseMirror [data-placeholder]::before {
+        color: #adb5bd;
+        content: attr(data-placeholder);
+        height: 0;
+        pointer-events: none;
+    }
+}
