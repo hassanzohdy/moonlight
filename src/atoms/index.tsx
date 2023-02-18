@@ -2,7 +2,7 @@ import cache from "@mongez/cache";
 import { userPrefersDarkMode } from "@mongez/dom";
 import { atom } from "@mongez/react-atom";
 
-const themeCacheKey = "dr-theme";
+const themeCacheKey = "moonlight-theme";
 
 const defaultThemeValue = cache.get(
   themeCacheKey,
@@ -13,10 +13,6 @@ export const themeAtom = atom({
   key: "moonlight-theme",
   default: {
     mode: defaultThemeValue,
-    paper: {
-      color: defaultThemeValue === "light" ? "black" : "white",
-      backgroundColor: defaultThemeValue === "light" ? "white" : "black",
-    },
     get isDarkMode() {
       return this.mode === "dark";
     },
@@ -32,10 +28,6 @@ export const themeAtom = atom({
       themeAtom.update({
         ...themeAtom.value,
         mode: newTheme,
-        paper: {
-          color: newTheme === "light" ? "black" : "white",
-          backgroundColor: newTheme === "light" ? "white" : "black",
-        },
       });
     },
   },
