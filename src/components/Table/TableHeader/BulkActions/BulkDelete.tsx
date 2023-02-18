@@ -1,7 +1,7 @@
 import { Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
-import { Trash } from "tabler-icons-react";
+import { IconTrash } from "@tabler/icons";
 import { parseError } from "../../../../utils/parse-error";
 import { toastLoading } from "../../../Toast";
 import { useBulkRows } from "../../hooks/useBulkRows";
@@ -11,7 +11,7 @@ import { Button } from "../style";
 
 async function deleteMultipleRows(
   superTable: SuperTable,
-  bulkRows: BulkSelectionRow[],
+  bulkRows: BulkSelectionRow[]
 ) {
   const service: any = superTable.service;
   if (service) {
@@ -26,7 +26,7 @@ async function deleteMultipleRows(
 
       // remove deleted rows from table
       superTable.data = superTable.data.filter(
-        row => !bulkRows.find(({ row: r }) => r.id === row.id),
+        (row) => !bulkRows.find(({ row: r }) => r.id === row.id)
       );
 
       superTable.setData([...superTable.data]);
@@ -83,7 +83,8 @@ export function BulkDelete() {
       color="red"
       onClick={openDeleteModal}
       disabled={selectedBulkRows.length === 0}
-      leftIcon={<Trash size={20} />}>
+      leftIcon={<IconTrash size={20} />}
+    >
       {trans("deleteBulk", { count: selectedBulkRows.length })}
     </Button>
   );

@@ -11,7 +11,7 @@ import { atom } from "@mongez/react-atom";
 import { Random } from "@mongez/reinforcements";
 import { IconCheck } from "@tabler/icons";
 import React from "react";
-import { X } from "tabler-icons-react";
+import { IconX } from "@tabler/icons";
 
 export { toastConfirm } from "./ToastConfirm";
 
@@ -31,7 +31,7 @@ export function ToastContainer() {
 export function toastSuccess(
   message: React.ReactNode,
   title: React.ReactNode = trans("success"),
-  placement: NotificationProviderProps["position"] = "top-right",
+  placement: NotificationProviderProps["position"] = "top-right"
 ) {
   toastAtom.update({
     ...toastAtom.value,
@@ -50,7 +50,7 @@ export function toastSuccess(
 export function toastError(
   message: React.ReactNode,
   title: React.ReactNode = trans("error"),
-  placement: NotificationProviderProps["position"] = "top-right",
+  placement: NotificationProviderProps["position"] = "top-right"
 ) {
   toastAtom.update({
     ...toastAtom.value,
@@ -67,7 +67,7 @@ export function toastError(
 export function toastLoading(
   message: React.ReactNode,
   title: React.ReactNode = trans("loading"),
-  closeAfter = 5000,
+  closeAfter = 5000
 ) {
   const id = Random.string(8);
   showNotification({
@@ -86,7 +86,7 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "green",
         autoClose: closeAfter,
-      },
+      }
     ) => {
       updateNotification({
         id,
@@ -102,13 +102,13 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "yellow",
         autoClose: closeAfter,
-      } as NotificationProps,
+      } as NotificationProps
     ) => {
       updateNotification({
         id,
         title,
         message,
-        icon: <X size={16} />,
+        icon: <IconX size={16} />,
         ...notificationProps,
       });
     },
@@ -131,13 +131,13 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "red",
         autoClose: closeAfter,
-      },
+      }
     ) => {
       updateNotification({
         id,
         title,
         message,
-        icon: <X size={16} />,
+        icon: <IconX size={16} />,
         ...notificationProps,
       });
     },

@@ -2,7 +2,7 @@ import { Box, Collapse, Flex, Group, Paper, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import Helmet from "@mongez/react-helmet";
 import { useMemo, useState } from "react";
-import { Filter, FilterOff } from "tabler-icons-react";
+import { IconFilter, IconFilterOff } from "@tabler/icons";
 import { useSuperTable } from "../hooks/useSuperTable";
 import LimitOptions from "../Pagination/LimitOptions";
 import { TableFilter } from "../TableFilter/Filters/TableFilter";
@@ -56,14 +56,16 @@ export function TableHeader() {
                     variant="light"
                     color="lime"
                     onClick={toggleFilterState}
-                    leftIcon={<Filter cursor="pointer" />}>
+                    leftIcon={<IconFilter cursor="pointer" />}
+                  >
                     {trans("filters")}
                   </Button>
                 ) : (
                   <Button
                     variant="outline"
                     onClick={toggleFilterState}
-                    leftIcon={<FilterOff cursor="pointer" />}>
+                    leftIcon={<IconFilterOff cursor="pointer" />}
+                  >
                     {trans("filters")}
                   </Button>
                 )}

@@ -2,7 +2,7 @@ import { Box } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { Form } from "@mongez/react-form";
 import { useMemo } from "react";
-import { Filter, RotateClockwise } from "tabler-icons-react";
+import { IconFilter, IconRotateClockwise } from "@tabler/icons";
 import { SubmitButton } from "../../../Form";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { ButtonWrapper, FilterWrapper } from "./style";
@@ -15,7 +15,7 @@ export function TableFilter() {
       .map(
         (
           { componentProps, wrapperProps = {}, component: Component },
-          index,
+          index
         ) => {
           if (!Component) return null;
 
@@ -27,7 +27,7 @@ export function TableFilter() {
               />
             </Box>
           );
-        },
+        }
       );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [superTable.filters]);
@@ -37,7 +37,8 @@ export function TableFilter() {
   return (
     <Form
       id={superTable.tableFilterFromId}
-      onSubmit={superTable.submitFilter.bind(superTable)}>
+      onSubmit={superTable.submitFilter.bind(superTable)}
+    >
       <Box>
         <FilterWrapper>
           {filters}
@@ -49,10 +50,15 @@ export function TableFilter() {
                 id="reset-btn"
                 color="orange"
                 variant="light"
-                leftIcon={<RotateClockwise />}>
+                leftIcon={<IconRotateClockwise />}
+              >
                 {trans("reset")}
               </SubmitButton>
-              <SubmitButton color="teal" variant="light" leftIcon={<Filter />}>
+              <SubmitButton
+                color="teal"
+                variant="light"
+                leftIcon={<IconFilter />}
+              >
                 {trans("filter")}
               </SubmitButton>
             </ButtonWrapper>

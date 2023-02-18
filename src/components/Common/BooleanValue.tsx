@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { Check, X } from "tabler-icons-react";
+import { IconCheck, IconX } from "@tabler/icons";
 
 export type BooleanValueProps = {
   value: boolean;
@@ -15,7 +15,7 @@ export function BooleanValue({
   if (value === true) {
     return (
       <Box>
-        <Check color={trueColor} />
+        <IconCheck color={trueColor} />
       </Box>
     );
   }
@@ -23,7 +23,7 @@ export function BooleanValue({
   return (
     <>
       <Box>
-        <X color={falseColor} />
+        <IconX color={falseColor} />
       </Box>
     </>
   );
