@@ -1,12 +1,12 @@
-import { current } from "@mongez/react";
 import {
   IconChevronLeft,
   IconChevronRight,
   TablerIconProps,
 } from "@tabler/icons";
+import { currentDirection } from "../../utils/helpers";
 
 export const ChevronIcon = (props: TablerIconProps) =>
-  current("direction") === "ltr" ? (
+  currentDirection() === "ltr" ? (
     <IconChevronRight {...props} />
   ) : (
     <IconChevronLeft {...props} />

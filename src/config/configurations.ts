@@ -12,6 +12,10 @@ export type MoonlightConfigurations = {
       flag?: any;
     };
   };
+  current?: {
+    direction?: () => "rtl" | "ltr";
+    localeCode?: () => string;
+  };
   reactiveForm?: {
     singleRecordKey?: string;
     defaultColSize?: ColSpan;
@@ -86,7 +90,7 @@ const defaultConfigurations: MoonlightConfigurations = {
     createRecordKey: "record",
     updateRecordKey: "record",
     limitOptions: [10, 20, 50, 100, 200, 250, 500],
-    paginationInfo: response => {
+    paginationInfo: (response) => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -106,7 +110,7 @@ const defaultConfigurations: MoonlightConfigurations = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations,
+  configurations: MoonlightConfigurations
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
 }

@@ -1,19 +1,19 @@
-import { current } from "@mongez/react";
 import Is from "@mongez/supportive-is";
 import { getMoonlightConfig } from "../config";
+import { currentLocaleCode } from "./helpers";
 
 export function getLocalizedValue(
   value: any,
-  localeCode: string = current("localeCode"),
+  localeCode: string = currentLocaleCode(),
   localeCodeKey = "localeCode",
-  textKey = "text",
+  textKey = "text"
 ) {
   if (!value) return "";
 
   if (value[localeCode]) return value[localeCode];
 
   if (Is.array(value)) {
-    return value.find(item => item[localeCodeKey] === localeCode)?.[textKey];
+    return value.find((item) => item[localeCodeKey] === localeCode)?.[textKey];
   }
 
   return value;
@@ -22,7 +22,7 @@ export function getLocalizedValue(
 export function multiLingualName(
   name = "",
   localeCodeIndex = 0,
-  textKey = "text",
+  textKey = "text"
 ) {
   if (!name) return "";
 
@@ -46,12 +46,12 @@ export function getLocaleCodes() {
     });
   }
 
-  const currentLocaleCode = current("localeCode");
+  const localeCode = currentLocaleCode();
 
   // order locale codes by current locale code
   localeCodes.sort((a, b) => {
-    if (a.localeCode === currentLocaleCode) return -1;
-    if (b.localeCode === currentLocaleCode) return 1;
+    if (a.localeCode === localeCode) return -1;
+    if (b.localeCode === localeCode) return 1;
     return 0;
   });
 

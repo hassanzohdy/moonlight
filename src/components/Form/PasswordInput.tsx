@@ -1,5 +1,4 @@
 import { PasswordInput as BasePasswordInput } from "@mantine/core";
-import { current } from "@mongez/react";
 import { useFormInput } from "@mongez/react-form";
 import {
   lengthRule,
@@ -9,6 +8,7 @@ import {
   requiredRule,
 } from "@mongez/validator";
 import { left, right } from "../../utils/directions";
+import { currentDirection } from "../../utils/helpers";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
 
@@ -37,7 +37,8 @@ export function PasswordInput({ description, dir, ...props }: BaseInputProps) {
         id={id}
         description={description}
         {...rest}
-        error={error}>
+        error={error}
+      >
         <BasePasswordInput
           error={error !== null}
           name={name}
@@ -50,8 +51,7 @@ export function PasswordInput({ description, dir, ...props }: BaseInputProps) {
           placeholder={placeholder + (props.required ? " *" : "")}
           styles={() => ({
             input: {
-              textAlign:
-                current("direction") === "ltr" ? left(dir) : right(dir),
+              textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
             },
           })}
           {...otherProps}

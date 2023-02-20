@@ -1,10 +1,10 @@
 import { Input, Loader, useMantineTheme } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { current } from "@mongez/react";
 import { FormInputProps, useFormInput } from "@mongez/react-form";
 import { IconAlertCircle } from "@tabler/icons";
 import React, { useEffect } from "react";
 import { left, right } from "../../utils/directions";
+import { currentDirection } from "../../utils/helpers";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
 
@@ -17,7 +17,7 @@ function _BaseInput({
   component: Component = Input,
   loading,
   description,
-  onChangeInput = e => e,
+  onChangeInput = (e) => e,
   ...props
 }: BaseInputProps) {
   const {
@@ -74,7 +74,8 @@ function _BaseInput({
         id={id}
         description={description}
         {...rest}
-        error={error}>
+        error={error}
+      >
         <Component
           invalid={error !== null}
           name={name}
@@ -84,15 +85,14 @@ function _BaseInput({
           rightSection={rightSection}
           styles={() => ({
             input: {
-              textAlign:
-                current("direction") === "ltr" ? left(dir) : right(dir),
+              textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
             },
           })}
           placeholder={
             placeholder &&
             trans(placeholder as string) + (props.required ? " *" : "")
           }
-          onChange={e => onChange(onChangeInput(e))}
+          onChange={(e) => onChange(onChangeInput(e))}
           onBlur={onBlur as any}
           value={value}
           autoFocus={autoFocus}

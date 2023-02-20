@@ -1,6 +1,5 @@
 import { Link, RichTextEditor as BaseRichTextEditor } from "@mantine/tiptap";
 import { trans } from "@mongez/localization";
-import { current } from "@mongez/react";
 import { FormInputProps, HiddenInput, useFormInput } from "@mongez/react-form";
 import { requiredRule } from "@mongez/validator";
 import { Color } from "@tiptap/extension-color";
@@ -15,6 +14,7 @@ import { EditorOptions, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, { useEffect } from "react";
 import { uploadFiles, uploadsHandler } from "../../../services/upload-service";
+import { currentDirection } from "../../../utils/helpers";
 import { parseError } from "../../../utils/parse-error";
 import { toastError, toastLoading } from "../../Toast";
 import { InputWrapper } from "../InputWrapper";
@@ -34,10 +34,10 @@ function _RichTextEditor(
     description,
     height = 300,
     hint,
-    dir = current("direction"),
+    dir = currentDirection(),
     ...props
   }: RichTextEditorInputProps,
-  ref: any,
+  ref: any
 ) {
   const {
     required,
@@ -152,7 +152,7 @@ function _RichTextEditor(
     }
 
     uploadFiles(formData)
-      .then(response => {
+      .then((response) => {
         const files: any[] = uploadsHandler.resolveResponse(response);
 
         editor.view.focus();
@@ -161,7 +161,7 @@ function _RichTextEditor(
 
         loading.success(trans("success"), trans("filesUploaded"));
       })
-      .catch(error => {
+      .catch((error) => {
         loading.error(trans("error"), parseError(error));
       });
   };
@@ -171,7 +171,8 @@ function _RichTextEditor(
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}>
+      onDragLeave={handleDragLeave}
+    >
       <InputWrapper
         visibleElementRef={visibleElementRef}
         error={error}
@@ -186,7 +187,8 @@ function _RichTextEditor(
           },
         }}
         description={description}
-        required={required}>
+        required={required}
+      >
         <HiddenInput name={name} value={value} />
         <BaseRichTextEditor
           editor={editor}
@@ -196,7 +198,8 @@ function _RichTextEditor(
               height,
               overflowY: "auto",
             },
-          })}>
+          })}
+        >
           <BaseRichTextEditor.Toolbar sticky stickyOffset={60}>
             <BaseRichTextEditor.ControlsGroup>
               <BaseRichTextEditor.Bold />

@@ -1,27 +1,21 @@
 {
     "name": "@mongez/moonlight",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "A Massive React Builder for web apps.",
     "main": "src/index.ts",
     "dependencies": {
-        "@emotion/cache": "^11.10.5",
         "@emotion/react": "^11.10.6",
         "@emotion/styled": "^11.10.6",
         "@mantine/core": "^5.10.4",
         "@mantine/dates": "^5.10.4",
         "@mantine/dropzone": "^5.10.4",
-        "@mantine/hooks": "^5.10.4",
         "@mantine/modals": "^5.10.4",
         "@mantine/notifications": "^5.10.4",
         "@mantine/tiptap": "^5.10.4",
         "@mongez/cache": "^1.2.1",
-        "@mongez/config": "^1.0.26",
-        "@mongez/dom": "^1.1.2",
         "@mongez/events": "^1.0.9",
         "@mongez/http": "^2.1.2",
-        "@react-google-maps/api": "^2.18.1",
         "@mongez/localization": "^2.1.2",
-        "@mongez/react": "^2.1.4",
         "@mongez/react-atom": "^2.0.2",
         "@mongez/react-form": "^1.5.26",
         "@mongez/react-helmet": "^1.0.9",
@@ -53,11 +47,8 @@
         "prosemirror-keymap": "^1.2.1",
         "prosemirror-schema-list": "^1.2.2",
         "@tabler/icons": "^1.119.0",
+        "@react-google-maps/api": "^2.18.1",
         "use-places-autocomplete": "^4.0.0"
-    },
-    "peerDependencies": {
-        "react": ">=18.0.0",
-        "react-dom": ">=18.0.0"
     },
     "devDependencies": {
         "typescript": "^4.9.5"

@@ -1,9 +1,9 @@
-import { current } from "@mongez/react";
+import { currentDirection } from "./helpers";
 
 export type Direction = "ltr" | "rtl";
 
 export function left(
-  direction: Direction = current("direction"),
+  direction: Direction = currentDirection()
 ): "left" | "right" {
   switch (direction) {
     case "ltr":
@@ -16,7 +16,7 @@ export function left(
 }
 
 export function right(
-  direction: Direction = current("direction"),
+  direction: Direction = currentDirection()
 ): "right" | "left" {
   switch (direction) {
     case "ltr":
@@ -29,4 +29,4 @@ export function right(
 }
 
 export const directionIs = (direction: "ltr" | "rtl") =>
-  current("direction") === direction;
+  currentDirection() === direction;
