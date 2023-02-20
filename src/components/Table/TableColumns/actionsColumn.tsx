@@ -1,5 +1,6 @@
 import { Group } from "@mantine/core";
 import React from "react";
+import { getMoonlightConfig } from "../../../config";
 import { DeleteButton } from "../SuperTable/Actions/DeleteButton";
 import { EditBUtton } from "../SuperTable/Actions/EditButton";
 import { ViewButton } from "../SuperTable/Actions/ViewButton";
@@ -7,7 +8,11 @@ import { FormatterProps, TableColumn } from "../TableProps";
 import { tableColumn } from "./tableColumn";
 
 export function actionsColumn(
-  buttons: React.FC<FormatterProps>[] = [ViewButton, EditBUtton, DeleteButton],
+  buttons: React.FC<FormatterProps>[] = getMoonlightConfig("table.actions", [
+    ViewButton,
+    EditBUtton,
+    DeleteButton,
+  ]),
   column: Partial<TableColumn> = {},
 ) {
   return tableColumn("actions", "actions")

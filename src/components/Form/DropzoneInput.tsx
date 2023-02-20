@@ -21,6 +21,7 @@ import {
 import { SortableItem, SortableList } from "@thaddeusjiang/react-sortable-list";
 import { useMemo, useRef, useState } from "react";
 import { FileRejection } from "react-dropzone";
+import { moonlightTranslations } from "../../locales";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
 import { parseError } from "../../utils/parse-error";
 import { toastError, toastLoading } from "../Toast";
@@ -112,25 +113,31 @@ export function DropzoneInput({
           if (stats.total.errors) {
             if (stats.total.errors < stats.total.files) {
               loading.warning(
-                trans("partialUploadSuccess"),
+                trans(moonlightTranslations.partialUploadSuccess),
                 <>
                   <div>
-                    {trans("partialUploadSuccessDescription", {
-                      count: stats.total.files,
-                      success: stats.total.uploaded,
-                    })}
+                    {trans(
+                      moonlightTranslations.partialUploadSuccessDescription,
+                      {
+                        count: stats.total.files,
+                        success: stats.total.uploaded,
+                      },
+                    )}
                   </div>
                   <Progress value={100} color={theme.colors.yellow[5]} />
                 </>,
               );
             } else {
               loading.error(
-                trans("uploadingFilesFailed"),
+                trans(moonlightTranslations.uploadingFilesFailed),
                 <>
                   <div>
-                    {trans("uploadingFilesFailedDescription", {
-                      count: stats.total.files,
-                    })}
+                    {trans(
+                      moonlightTranslations.uploadingFilesFailedDescription,
+                      {
+                        count: stats.total.files,
+                      },
+                    )}
                   </div>
                   <Progress value={100} color={theme.colors.red[5]} />
                 </>,
@@ -138,10 +145,10 @@ export function DropzoneInput({
             }
           } else {
             loading.success(
-              trans("filesUploaded"),
+              trans(moonlightTranslations.filesUploaded),
               <>
                 <div>
-                  {trans("filesUploadedSuccessfully", {
+                  {trans(moonlightTranslations.filesUploadedSuccessfully, {
                     count: stats.total.uploaded,
                   })}
                 </div>
@@ -153,13 +160,13 @@ export function DropzoneInput({
           loaderRef.current = null;
         } else {
           loading.update(
-            trans("uploadingFiles", {
+            trans(moonlightTranslations.uploadingFiles, {
               count: stats.total.files,
               current: stats.total.uploaded,
             }),
             <>
               <div>
-                {trans("uploadingFilesDescription", {
+                {trans(moonlightTranslations.uploadingFilesDescription, {
                   count: stats.total.files,
                   current: stats.total.uploaded,
                 })}
@@ -253,7 +260,7 @@ export function DropzoneInput({
 
     if (!loaderRef.current) {
       const loading = toastLoading(
-        trans("uploadingFiles", {
+        trans(moonlightTranslations.uploadingFiles, {
           count: stats.total.files,
           current: 0,
         }),
@@ -280,7 +287,7 @@ export function DropzoneInput({
 
     if (!loaderRef.current) {
       const loading = toastLoading(
-        trans("uploadingFiles", {
+        trans(moonlightTranslations.uploadingFiles, {
           count: stats.total.files,
           current: 0,
         }),
@@ -337,8 +344,8 @@ export function DropzoneInput({
     }
 
     const loading = toastLoading(
-      trans("fileIsBeingForDeletion"),
-      trans("deletingFile"),
+      trans(moonlightTranslations.fileIsBeingForDeletion),
+      trans(moonlightTranslations.deletingFile),
     );
 
     deleteUploadedFile(fileId)
@@ -346,7 +353,10 @@ export function DropzoneInput({
         filesList.splice(fileIndex, 1);
 
         const newFiles = [...filesList];
-        loading.success(trans("fileDeletedSuccessfully"), trans("fileDeleted"));
+        loading.success(
+          trans(moonlightTranslations.fileDeletedSuccessfully),
+          trans(moonlightTranslations.fileDeleted),
+        );
         onChange({
           target: {
             value: newFiles.map(file => file.id),
@@ -357,7 +367,10 @@ export function DropzoneInput({
         setFilesList(newFiles);
       })
       .catch(error => {
-        loading.error(trans("deleteFileFailed"), parseError(error));
+        loading.error(
+          trans(moonlightTranslations.deleteFileFailed),
+          parseError(error),
+        );
       });
   };
 
@@ -365,7 +378,7 @@ export function DropzoneInput({
     files.forEach(file => {
       toastError(
         file.errors.map(error => error.message)[0],
-        trans("invalidUploadedFile", {
+        trans(moonlightTranslations.invalidUploadedFile, {
           file: (
             <Text span color="cyan" inline>
               {file.file.name}
@@ -473,7 +486,7 @@ export function DropzoneInput({
                       size={file.size}
                       name={file.fileName}
                       rightIcon={
-                        <Tooltip label={trans("remove")}>
+                        <Tooltip label={trans(moonlightTranslations.remove)}>
                           <ActionIcon onClick={() => removeFile(file.id)}>
                             <IconTrash />
                           </ActionIcon>

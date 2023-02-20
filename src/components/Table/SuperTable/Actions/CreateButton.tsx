@@ -13,7 +13,7 @@ export function createButton(Form: React.ComponentType<any>) {
 
     const pushRow = (response: AxiosResponse) => {
       const recordKey = getMoonlightConfig("table.createRecordKey", "record");
-      const record = get(response.data, `data.${recordKey}`, "record");
+      const record = get(response.data, recordKey, "record");
 
       if (record) {
         superTable.unshiftRow(record);

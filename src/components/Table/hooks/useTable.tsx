@@ -41,7 +41,7 @@ export function useTable({
   responsePaginationHandler,
   responseRecordsKey,
   responseDataHandler,
-  limitOptions = [10, 20, 50, 100],
+  limitOptions,
   onPageSizeChange,
   total,
   sortCallback,
@@ -118,6 +118,8 @@ export function useTable({
   }, [data, limit, page, pagination, totalPages, total, superTable]);
 
   useEffect(() => {
+    if (limitOptions === undefined) return;
+
     superTable.setLimitOptions(limitOptions);
   }, [limitOptions, superTable]);
 

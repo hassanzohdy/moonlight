@@ -219,12 +219,13 @@ export class SuperTable {
   /**
    * Limit options
    */
-  public limitOptions: number[] | false = [10, 25, 50, 100];
+  public limitOptions: number[] | false =
+    getMoonlightConfig("table.limitOptions");
 
   /**
    * Pagination info cast callback
    */
-  protected paginationInfoCast = responseData => responseData.paginationInfo;
+  protected paginationInfoCast = response => response.data.paginationInfo;
 
   /**
    * Determine if pagination is enabled
@@ -241,7 +242,11 @@ export class SuperTable {
     if (lazyTable) {
       this.isLoading = true;
 
-      this.castPaginationInfo(getMoonlightConfig("table.paginationInfoCast"));
+      const paginationInfoHandler = getMoonlightConfig("table.paginationInfo");
+
+      if (paginationInfoHandler) {
+        this.castPaginationInfo(paginationInfoHandler);
+      }
     }
   }
 

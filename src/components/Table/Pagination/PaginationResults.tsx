@@ -1,5 +1,6 @@
 import { Card, Flex, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
+import { moonlightTranslations } from "../../../locales";
 import { isDarkMode } from "../../../theme";
 import { usePaginationInfo } from "../hooks/usePaginationInfo";
 import { useSuperTable } from "../hooks/useSuperTable";
@@ -14,7 +15,7 @@ export function PaginationResults() {
     <Flex mb={16}>
       <Card fz="sm" shadow={"xs"} w={"100%"} py={5} px={24}>
         <Text color={isDarkMode() ? "white" : "gray"}>
-          {trans("tableResultsInfo", {
+          {trans(moonlightTranslations.tableResultsInfo, {
             current: (
               <Text span fw="bold">
                 {paginationInfo.results}

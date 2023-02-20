@@ -10,6 +10,7 @@ import { readMoreChars } from "@mongez/reinforcements";
 import { requiredRule } from "@mongez/validator";
 import { IconRefresh, IconTrash } from "@tabler/icons";
 import { useRef, useState } from "react";
+import { moonlightTranslations } from "../../locales";
 import {
   deleteUploadedFile,
   uploadFiles,
@@ -30,7 +31,7 @@ type FileInputProps = FormInputProps & {
 };
 
 export function FileInput({
-  buttonLabel = trans("selectFile"),
+  buttonLabel = trans(moonlightTranslations.selectFile),
   buttonProps = {},
   description,
   hint,
@@ -88,8 +89,8 @@ export function FileInput({
     setUploadedFile(null);
 
     const loading = toastLoading(
-      trans("uploadingFileDescription"),
-      trans("uploadingFile"),
+      trans(moonlightTranslations.uploadingFileDescription),
+      trans(moonlightTranslations.uploadingFile),
       2000,
     );
 
@@ -111,14 +112,17 @@ export function FileInput({
         });
 
         loading.success(
-          trans("fileUploadedDescription"),
-          trans("fileUploaded"),
+          trans(moonlightTranslations.fileUploadedDescription),
+          trans(moonlightTranslations.fileUploaded),
         );
       })
       .catch(error => {
         setUploadError(true);
 
-        loading.error(parseError(error), trans("uploadingFileFailed"));
+        loading.error(
+          parseError(error),
+          trans(moonlightTranslations.uploadingFileFailed),
+        );
       })
       .finally(() => {
         uploading(false);
@@ -248,7 +252,7 @@ export function FileInput({
             )}
           </Button>
           {uploadError && (
-            <Tooltip label={<span>{trans("retry")}</span>}>
+            <Tooltip label={<span>{trans(moonlightTranslations.retry)}</span>}>
               <Button
                 type="button"
                 color="red"
@@ -259,12 +263,13 @@ export function FileInput({
             </Tooltip>
           )}
           {isUploading && (
-            <Tooltip label={<span>{trans("uploading")}</span>}>
+            <Tooltip
+              label={<span>{trans(moonlightTranslations.uploading)}</span>}>
               <Button type="button" color="blue" variant="outline" loading />
             </Tooltip>
           )}
           {uploadedFile && (
-            <Tooltip label={<span>{trans("remove")}</span>}>
+            <Tooltip label={<span>{trans(moonlightTranslations.remove)}</span>}>
               <Button
                 type="button"
                 color="red"

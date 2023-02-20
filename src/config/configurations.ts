@@ -1,3 +1,4 @@
+import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import Endpoint from "@mongez/http";
 import { get, merge } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
@@ -13,6 +14,8 @@ export type MoonlightConfigurations = {
   };
   reactiveForm?: {
     singleRecordKey?: string;
+    defaultColSize?: ColSpan;
+    openInModal?: boolean;
   };
   select?: {
     responseDataKey?: string;
@@ -44,6 +47,8 @@ export type MoonlightConfigurations = {
     recordKey?: string;
     createRecordKey?: string;
     updateRecordKey?: string;
+    limitOptions?: number[];
+    actions?: React.ComponentType<any>[];
     paginationInfo?: (response: AxiosResponse) => PaginationInfo;
   };
 };
@@ -80,6 +85,7 @@ const defaultConfigurations: MoonlightConfigurations = {
     recordKey: "record",
     createRecordKey: "record",
     updateRecordKey: "record",
+    limitOptions: [10, 20, 50, 100, 200, 250, 500],
     paginationInfo: response => {
       return {
         limit: response.data.paginationInfo?.limit,
@@ -92,6 +98,8 @@ const defaultConfigurations: MoonlightConfigurations = {
   },
   reactiveForm: {
     singleRecordKey: "record",
+    defaultColSize: 12,
+    openInModal: false,
   },
 };
 

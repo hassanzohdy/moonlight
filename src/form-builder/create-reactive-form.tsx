@@ -1,10 +1,18 @@
 import { RestfulEndpoint } from "@mongez/http";
+import { trans } from "@mongez/localization";
 import { memo, useMemo } from "react";
-import { InputBuilder, ReactiveForm } from "./";
+import {
+  cancelButton,
+  InputBuilder,
+  ReactiveForm,
+  resetButton,
+  saveAndClearButton,
+  submitButton,
+} from "./";
 import { ReactFormComponentProps } from "./types";
 
 export function createReactForm(callback: (reactForm: ReactiveForm) => void) {
-  function UsersListForm(props: ReactFormComponentProps) {
+  function ReactiveFormComponent(props: ReactFormComponentProps) {
     const Form = useMemo(() => {
       const reactiveForm = new ReactiveForm();
       callback(reactiveForm);
@@ -15,7 +23,9 @@ export function createReactForm(callback: (reactForm: ReactiveForm) => void) {
     return <Form {...props} />;
   }
 
-  return memo(UsersListForm);
+  ReactiveFormComponent.displayName = "ReactiveForm";
+
+  return memo(ReactiveFormComponent);
 }
 
 export function createSimpleReactiveForm(
@@ -25,7 +35,18 @@ export function createSimpleReactiveForm(
   callback?: (reactiveForm: ReactiveForm) => void,
 ) {
   return createReactForm(reactiveForm => {
-    reactiveForm.setInputs(inputs).service(service).singleName(singleName);
+    reactiveForm
+      .setInputs(inputs)
+      .service(service)
+      .singleName(singleName)
+      .buttons([
+        cancelButton(),
+        resetButton(),
+        saveAndClearButton().when(button => {
+          return button.reactiveForm.hasRecordId() === false;
+        }),
+        submitButton(trans("save")),
+      ]);
 
     callback?.(reactiveForm);
   });

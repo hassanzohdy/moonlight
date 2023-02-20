@@ -20,7 +20,7 @@ export function EditBUtton({ row, rowIndex }: FormatterProps) {
 
   const updateRowData = (response: AxiosResponse) => {
     const recordKey = getMoonlightConfig("table.updateRecordKey", "record");
-    const record = get(response.data, `data.${recordKey}`, "record");
+    const record = get(response.data, recordKey, "record");
 
     superTable.updateRow(record, rowIndex);
   };

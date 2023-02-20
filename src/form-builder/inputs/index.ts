@@ -9,6 +9,7 @@ export { dropzoneInput } from "./dropzoneInput";
 export { emailInput } from "./emailInput";
 export { fileInput } from "./fileInput";
 export { floatInput } from "./floatInput";
+export * from "./formRow";
 export { googleMapInput } from "./googleMapInput";
 export { hiddenInput } from "./hiddenInput";
 export { imageInput } from "./imageInput";

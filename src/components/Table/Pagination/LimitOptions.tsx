@@ -7,9 +7,11 @@ export default function LimitOptions() {
   const limitOptions = useLimitOptions();
   const superTable = useSuperTable();
 
+  if (limitOptions === false) return null;
+
   return (
     <SelectInput
-      size="xs"
+      size="sm"
       name="limit"
       placeholder={trans("limit")}
       data={limitOptions}

@@ -1,4 +1,4 @@
-import { Box, Tooltip } from "@mantine/core";
+import { ActionIcon, Tooltip } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { currentRoute, Link } from "@mongez/react-router";
 import { IconLogout } from "@tabler/icons";
@@ -13,7 +13,7 @@ export function ViewButton({ row, rowIndex, settings }: FormatterProps) {
   const route = settings?.route || currentRoute() + "/" + row.id;
 
   return (
-    <Box display={"inline-block"} mt={6}>
+    <ActionIcon>
       <Link to={route}>
         <Tooltip withArrow label={trans("view")} position="top">
           <span>
@@ -21,7 +21,7 @@ export function ViewButton({ row, rowIndex, settings }: FormatterProps) {
           </span>
         </Tooltip>
       </Link>
-    </Box>
+    </ActionIcon>
   );
 }
 

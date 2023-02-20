@@ -9,6 +9,7 @@ import { IconCircleCheck, IconMapPin, IconTrash } from "@tabler/icons";
 import { useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { googleMapConfig } from "../../config";
+import { moonlightTranslations } from "../../locales";
 import {
   getAddressByLatLng,
   getAddressByPlaceId,
@@ -183,7 +184,7 @@ export function GoogleMapInput({
           rightSection={
             <>
               {!required && location.address && (
-                <Tooltip label={trans("clear")}>
+                <Tooltip label={trans(moonlightTranslations.clear)}>
                   <ThemeIcon
                     ml={-31}
                     mr={3}
@@ -197,7 +198,7 @@ export function GoogleMapInput({
                   </ThemeIcon>
                 </Tooltip>
               )}
-              <Tooltip label={trans("select")}>
+              <Tooltip label={trans(moonlightTranslations.select)}>
                 <ThemeIcon
                   style={{
                     cursor: "pointer",
@@ -226,7 +227,6 @@ export function GoogleMapInput({
               value={value}
               placeholder={placeholder}
               onChange={handleInput}
-              // disabled={!ready}
             />
           </Grid.Col>
 
@@ -251,10 +251,7 @@ export function GoogleMapInput({
           mapContainerStyle={styles.container}
           zoom={zoom}
           center={location}
-          // options={config.get("vendors.google.maps.options")}
-          onClick={onMapClick}
-          // onLoad={onMapLoad}
-        >
+          onClick={onMapClick}>
           <Marker position={{ lat: location.lat, lng: location.lng }} />
         </GoogleMap>
       </Modal>

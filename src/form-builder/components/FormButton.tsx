@@ -3,8 +3,9 @@ import { trans } from "@mongez/localization";
 import React from "react";
 import { SubmitButton } from "../../components";
 import { ReactiveForm } from "./ReactiveForm";
+import { ShouldBeRendered } from "./ShouldBeRendered";
 
-export class FormButton {
+export class FormButton extends ShouldBeRendered {
   /**
    * button props
    */
@@ -115,18 +116,28 @@ export class FormButton {
   /**
    * Render as component
    */
-  public getComponent() {
+  public asComponent() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const formButton = this;
 
-    function FormButton({ reactiveForm }: { reactiveForm: ReactiveForm }) {
+    function FormButton() {
       const Component = formButton.buttonComponent;
       const propsList: any = { ...formButton.props };
 
       if (propsList.onClick) {
         propsList.onClick = (event: React.MouseEvent) => {
-          formButton.props["onClick"](reactiveForm, event);
+          formButton.props["onClick"](formButton.reactiveForm, event);
         };
+      }
+
+      if (formButton.shouldBeRendered) {
+        if (typeof formButton.shouldBeRendered === "function") {
+          if (!formButton.shouldBeRendered(formButton)) {
+            return null;
+          }
+        }
+      } else {
+        return null;
       }
 
       return <Component {...propsList} />;
@@ -135,5 +146,14 @@ export class FormButton {
     FormButton.displayName = "FormButton" + this.getName();
 
     return FormButton;
+  }
+
+  /**
+   * Render the button
+   */
+  public render() {
+    const Component = this.asComponent();
+
+    return <Component />;
   }
 }

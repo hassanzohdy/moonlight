@@ -11,6 +11,22 @@ export const moonlightTranslations = {
     en: "Not Found",
     ar: "غير موجود",
   },
+  select: {
+    en: "Select",
+    ar: "اختر",
+  },
+  retry: {
+    en: "Retry",
+    ar: "إعادة المحاولة",
+  },
+  clear: {
+    en: "Clear",
+    ar: "مسح",
+  },
+  uploading: {
+    en: "Uploading",
+    ar: "جاري الرفع",
+  },
   selectFile: {
     en: "Please select a file",
     ar: "ارفع ملف",
