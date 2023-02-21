@@ -50,9 +50,11 @@ export function uploadFile(
 }
 
 export const uploadsHandler = {
-  resolveResponse: getMoonlightConfig(
-    "uploads.resolveResponse",
-    (response) => response.data.uploads
-  ),
+  resolveResponse: (response) => {
+    return getMoonlightConfig(
+      "uploads.resolveResponse",
+      (response) => response.data.uploads
+    )(response);
+  },
   uploadsKey: () => getMoonlightConfig("uploads.key", "uploads[]"),
 };
