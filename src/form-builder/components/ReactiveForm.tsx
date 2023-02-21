@@ -910,7 +910,7 @@ export class ReactiveForm {
             this.callbacks.onSave.forEach((callback) =>
               callback(response, this)
             );
-          }, getMoonlightConfig("reactiveForm.saveEventDelay", 250));
+          }, getMoonlightConfig("reactiveForm.saveEventDelay", 100));
         } else if (this._submit) {
           await this._submit(e, form, this);
           if (this._closeOnSave) {

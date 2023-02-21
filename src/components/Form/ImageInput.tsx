@@ -99,7 +99,7 @@ export function ImageInput({
 
         onChange({
           target: {
-            value: file.id,
+            value: file,
             file,
           },
         });
