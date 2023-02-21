@@ -1,5 +1,5 @@
 export * from "./BaseInput";
-export * from "./CheckBox";
+export * from "./Checkbox";
 export * from "./ChooseInput";
 export * from "./DatePickerInput";
 export * from "./DropzoneInput";

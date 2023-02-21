@@ -33,7 +33,7 @@ const getExtensionColor = (extension: string, theme: MantineTheme) => {
       return theme.fn.linearGradient(
         45,
         theme.colors.indigo[5],
-        theme.colors.cyan[5],
+        theme.colors.cyan[5]
       );
     case "doc":
     case "docx":

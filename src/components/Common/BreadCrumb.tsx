@@ -40,7 +40,7 @@ export function BreadCrumbList({ list, withHome }: BreadcrumbListProps) {
 
 export function breadCrumb(
   title: BreadCrumbType["title"],
-  href: BreadCrumbType["href"],
+  href: BreadCrumbType["href"]
 ) {
   return { title, href };
 }

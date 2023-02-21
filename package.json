@@ -1,6 +1,6 @@
 {
     "name": "@mongez/moonlight",
-    "version": "1.0.11",
+    "version": "1.0.12",
     "description": "A Massive React Builder for web apps.",
     "main": "src/index.ts",
     "dependencies": {

@@ -2,7 +2,7 @@ import { FormInputProps, HiddenInput, useFormInput } from "@mongez/react-form";
 import { useEvent } from "@mongez/react-hooks";
 import { requiredRule } from "@mongez/validator";
 import React, { useEffect } from "react";
-import { useControlled } from "./../../../hooks";
+import { useControlled } from "../../../hooks";
 
 const defaultOptions = {
   otherProps: (otherProps: any, _props: any) => otherProps,
@@ -12,13 +12,13 @@ const defaultOptions = {
 
 export function withCheckboxInput<T>(
   Component: React.FC<FormInputProps & T>,
-  incomingOptions: any = {},
+  incomingOptions: any = {}
 ) {
   function CheckboxInput(props: FormInputProps & T) {
     const [checked, setEnabled, initialState, isControlled] = useControlled(
       props,
       "checked",
-      false,
+      false
     );
 
     const [uncheckedValue] = useControlled(props, "uncheckedValue", "");
@@ -42,16 +42,31 @@ export function withCheckboxInput<T>(
     useEvent(() => formInput.on("reset", () => setEnabled(initialState)));
 
     const updateChangeState = (e: any) => {
+      const newState = options.getStateChange(e);
       if (isControlled) {
-        onChange(e, formInput);
+        onChange(
+          {
+            target: {
+              value,
+              checked: newState,
+            },
+          },
+          formInput
+        );
         return;
       }
 
-      const newState = options.getStateChange(e);
-
       setEnabled(newState);
 
-      onChange(e, formInput);
+      onChange(
+        {
+          target: {
+            value,
+            checked: newState,
+          },
+        },
+        formInput
+      );
     };
 
     useEffect(() => {
@@ -79,7 +94,7 @@ export function withCheckboxInput<T>(
           <HiddenInput name={name} value={uncheckedValue} />
         )}
         <Component
-          styles={theme => ({
+          styles={(theme) => ({
             label: {
               cursor: "pointer",
               color: options.inputColor(theme),
