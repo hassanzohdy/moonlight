@@ -1,3 +1,4 @@
+import { trans } from "@mongez/localization";
 import { get, merge } from "@mongez/reinforcements";
 import { moonlightTranslations } from "../locales";
 import { MoonlightConfigurations } from "./types";
@@ -50,7 +51,7 @@ const defaultConfigurations: MoonlightConfigurations = {
     defaultColSize: 12,
     openInModal: false,
     submitButton: {
-      label: moonlightTranslations.submit,
+      label: trans(moonlightTranslations.submit),
     },
   },
 };
