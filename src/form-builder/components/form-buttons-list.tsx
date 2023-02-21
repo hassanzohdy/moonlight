@@ -1,8 +1,13 @@
 import { trans } from "@mongez/localization";
 import React from "react";
+import { getMoonlightConfig } from "../../config";
 import { FormButton } from "./FormButton";
 
-export function submitButton(content: React.ReactNode = trans("submit")) {
+export function submitButton(
+  content: React.ReactNode = trans(
+    getMoonlightConfig("reactiveForm.submitButtonText")
+  )
+) {
   return new FormButton()
     .content(content)
     .color("green")
@@ -23,7 +28,7 @@ export function resetButton(content: React.ReactNode = trans("reset")) {
     .type("button")
     .variant("light")
     .size("xs")
-    .onClick(reactiveForm => {
+    .onClick((reactiveForm) => {
       reactiveForm.reset();
     });
 }
@@ -36,13 +41,13 @@ export function cancelButton(content: React.ReactNode = trans("cancel")) {
     .type("button")
     .variant("light")
     .size("xs")
-    .onClick(reactiveForm => {
+    .onClick((reactiveForm) => {
       reactiveForm.close();
     });
 }
 
 export function saveAndClearButton(
-  content: React.ReactNode = trans("saveAndClear"),
+  content: React.ReactNode = trans("saveAndClear")
 ) {
   return new FormButton()
     .content(content)
@@ -51,7 +56,7 @@ export function saveAndClearButton(
     .type("button")
     .variant("light")
     .size("xs")
-    .onClick(reactiveForm => {
+    .onClick((reactiveForm) => {
       reactiveForm.saveAndClear();
     });
 }

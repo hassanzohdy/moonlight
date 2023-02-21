@@ -7,6 +7,14 @@ export const moonlightTranslations = {
     en: "Remove",
     ar: "حذف",
   },
+  save: {
+    en: "Save",
+    ar: "حفظ",
+  },
+  submit: {
+    en: "Submit",
+    ar: "إرسال",
+  },
   notFound: {
     en: "Not Found",
     ar: "غير موجود",
