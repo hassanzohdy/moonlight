@@ -51,7 +51,7 @@ export type MoonlightConfigurations = {
   uploads?: {
     route?: string;
     deleteRoute?: string;
-    responseCallback?: (response: any) => any;
+    resolveResponse?: (response: any) => any;
     key?: string;
   };
   table?: {

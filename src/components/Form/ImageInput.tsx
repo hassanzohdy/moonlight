@@ -18,11 +18,7 @@ import {
 import { requiredRule } from "@mongez/validator";
 import { IconEdit, IconTrash } from "@tabler/icons";
 import React, { useRef, useState } from "react";
-import {
-  deleteUploadedFile,
-  uploadFiles,
-  uploadsHandler,
-} from "../../services/upload-service";
+import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
 import { acceptImagesOnly } from "../../utils/extensions";
 import { toastError } from "../Toast";
 import { Tooltip } from "../Tooltip";
@@ -97,19 +93,8 @@ export function ImageInput({
   const upload = (file: any) => {
     uploading(true);
 
-    const formData = new FormData();
-
-    formData.append(uploadsHandler.uploadsKey(), file);
-
-    uploadFiles(formData)
-      .then(response => {
-        uploading(false);
-        const file = response[0];
-
-        if (!file) {
-          return setUploadError(true);
-        }
-
+    uploadFile(file)
+      .then((file) => {
         setUploadedFile(file);
 
         onChange({
@@ -121,6 +106,9 @@ export function ImageInput({
       })
       .catch(() => {
         setUploadError(true);
+      })
+      .finally(() => {
+        uploading(false);
       });
   };
 
@@ -190,13 +178,15 @@ export function ImageInput({
         error={uploadError || error}
         hint={hint || <span>{trans("clickOrDarg")}</span>}
         description={description}
-        id={id}>
+        id={id}
+      >
         <Popover
           opened={imageOptionsOpened}
           onChange={toggleImageOptionsPopup}
           position="top"
           withArrow
-          shadow="md">
+          shadow="md"
+        >
           <Popover.Target>
             <UnstyledButton id={id} type="button" onClick={openImageSelector}>
               <ImageComponent

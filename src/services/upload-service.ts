@@ -2,20 +2,27 @@ import { getMoonlightConfig } from "../config";
 
 export function uploadFiles(
   data: any,
-  progressPercentageCallback?: (percentage: number) => void,
+  progressPercentageCallback?: (percentage: number) => void
 ) {
   const endpoint = getMoonlightConfig("endpoint");
   const uploadsRoute = getMoonlightConfig("uploads.route", "/uploads");
-  return endpoint.post(uploadsRoute, data, {
-    onUploadProgress(progressEvent) {
-      if (!progressEvent.total) return;
+  return new Promise((resolve, reject) => {
+    endpoint
+      .post(uploadsRoute, data, {
+        onUploadProgress(progressEvent) {
+          if (!progressEvent.total) return;
 
-      const percentCompleted = Math.round(
-        (progressEvent.loaded * 100) / progressEvent.total,
-      );
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
 
-      progressPercentageCallback?.(percentCompleted);
-    },
+          progressPercentageCallback?.(percentCompleted);
+        },
+      })
+      .then((response) => {
+        resolve(uploadsHandler.resolveResponse(response));
+      })
+      .catch(reject);
   });
 }
 
@@ -27,7 +34,7 @@ export function deleteUploadedFile(fileId: string | number) {
 
 export function uploadFile(
   file: File,
-  progressPercentageCallback?: (percentage: number) => void,
+  progressPercentageCallback?: (percentage: number) => void
 ): Promise<any> {
   const formData = new FormData();
 
@@ -35,8 +42,8 @@ export function uploadFile(
 
   return new Promise((resolve, reject) => {
     uploadFiles(formData, progressPercentageCallback)
-      .then(response => {
-        resolve(uploadsHandler.resolveResponse(response));
+      .then((files: any) => {
+        resolve(files[0]);
       })
       .catch(reject);
   });
@@ -44,8 +51,8 @@ export function uploadFile(
 
 export const uploadsHandler = {
   resolveResponse: getMoonlightConfig(
-    "uploads.responseCallback",
-    response => response.data.uploads,
+    "uploads.resolveResponse",
+    (response) => response.data.uploads
   ),
   uploadsKey: () => getMoonlightConfig("uploads.key", "uploads[]"),
 };
