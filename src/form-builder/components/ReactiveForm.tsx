@@ -74,7 +74,7 @@ export class ReactiveForm {
   protected _submit?: (
     e: any,
     form: FormInterface,
-    reactiveForm: ReactiveForm,
+    reactiveForm: ReactiveForm
   ) => Promise<any>;
 
   /**
@@ -194,7 +194,7 @@ export class ReactiveForm {
    */
   protected defaultColSize?: ColSpan = getMoonlightConfig(
     "reactiveForm.defaultColSize",
-    12,
+    12
   );
 
   /**
@@ -364,7 +364,7 @@ export class ReactiveForm {
    * Get tab by name
    */
   public getTab(name: string): FormTab | undefined {
-    return this.tabs.find(tab => tab.name() === name);
+    return this.tabs.find((tab) => tab.name() === name);
   }
 
   /**
@@ -449,8 +449,8 @@ export class ReactiveForm {
     handler: (
       formElement: React.FormEvent,
       form: FormInterface,
-      reactiveForm: ReactiveForm,
-    ) => Promise<any> | any,
+      reactiveForm: ReactiveForm
+    ) => Promise<any> | any
   ) {
     this._submit = handler;
     return this;
@@ -575,16 +575,16 @@ export class ReactiveForm {
 
     this.rendered.heading = null;
     this.rendered.content = null;
-    this.inputs.forEach(input => {
+    this.inputs.forEach((input) => {
       input.setForm(this).clearCache().setRecord(this.record);
     });
 
-    this.tabs.forEach(tab => {
+    this.tabs.forEach((tab) => {
       tab
         .setForm(this)
         .setRecord(this.record)
         .inputs()
-        .forEach(input => {
+        .forEach((input) => {
           input.setForm(this).clearCache().setRecord(this.record);
         });
     });
@@ -624,7 +624,7 @@ export class ReactiveForm {
    * Get form input by name
    */
   public input(name: string): InputBuilder | undefined {
-    return this.inputs.find(input => input.name() === name);
+    return this.inputs.find((input) => input.name() === name);
   }
 
   /**
@@ -685,26 +685,26 @@ export class ReactiveForm {
     }
 
     if (this._closeButton) {
-      if (!this.buttonsList.find(button => button.getName() === "close")) {
+      if (!this.buttonsList.find((button) => button.getName() === "close")) {
         this.buttonsList.push(cancelButton());
       }
     }
 
     if (this._withResetButton) {
-      if (!this.buttonsList.find(button => button.getName() === "reset")) {
+      if (!this.buttonsList.find((button) => button.getName() === "reset")) {
         this.buttonsList.push(resetButton());
       }
     }
 
     if (!this._recordId && this._withSaveAndClearButton) {
       if (
-        !this.buttonsList.find(button => button.getName() === "saveAndClear")
+        !this.buttonsList.find((button) => button.getName() === "saveAndClear")
       ) {
         this.buttonsList.push(saveAndClearButton());
       }
     }
 
-    if (!this.buttonsList.find(button => button.getName() === "submit")) {
+    if (!this.buttonsList.find((button) => button.getName() === "submit")) {
       this.buttonsList.push(submitButton());
     }
 
@@ -764,7 +764,7 @@ export class ReactiveForm {
     // check if its in tabs mode
     // if so focus on first input on first found tab that has inputs
     if (this.tabs.length > 0) {
-      const foundTab = this.tabs.find(tab => tab.inputs().length > 0);
+      const foundTab = this.tabs.find((tab) => tab.inputs().length > 0);
 
       if (foundTab) {
         const inputBuilder = foundTab.inputs()[0];
@@ -774,7 +774,7 @@ export class ReactiveForm {
       if (!input && foundTab) {
         // find another tab
         const tab = this.tabs.find(
-          tab => foundTab.id !== tab.id && tab.inputs().length > 0,
+          (tab) => foundTab.id !== tab.id && tab.inputs().length > 0
         );
 
         if (tab) {
@@ -817,7 +817,7 @@ export class ReactiveForm {
     const tabsHeadings: React.ReactNode[] = [];
     const tabsContent: React.ReactNode[] = [];
 
-    const tabs = this.tabs.filter(tab => {
+    const tabs = this.tabs.filter((tab) => {
       if (typeof tab.shouldBeRendered === "function") {
         return tab.shouldBeRendered(this) === true;
       }
@@ -833,11 +833,11 @@ export class ReactiveForm {
       });
 
       tabsHeadings.push(
-        <React.Fragment key={index}>{tab.renderHeading()}</React.Fragment>,
+        <React.Fragment key={index}>{tab.renderHeading()}</React.Fragment>
       );
 
       tabsContent.push(
-        <React.Fragment key={index}>{tab.renderContent()}</React.Fragment>,
+        <React.Fragment key={index}>{tab.renderContent()}</React.Fragment>
       );
     });
 
@@ -850,7 +850,8 @@ export class ReactiveForm {
         <Tabs
           orientation={this.tabsSettings.vertical ? "vertical" : "horizontal"}
           onTabChange={this.goToTab.bind(this)}
-          value={this.activeTab}>
+          value={this.activeTab}
+        >
           <Tabs.List position={this.tabsSettings.position}>
             {tabsHeadings}
           </Tabs.List>
@@ -875,10 +876,10 @@ export class ReactiveForm {
    */
   protected manageSubmitForm(
     setIslLoading: (loading: boolean) => void,
-    onClose: () => void,
+    onClose: () => void
   ) {
     return async (e: React.FormEvent, form: FormInterface) => {
-      this.callbacks.onSubmit.forEach(callback => callback(e, form, this));
+      this.callbacks.onSubmit.forEach((callback) => callback(e, form, this));
 
       let loader;
 
@@ -906,8 +907,10 @@ export class ReactiveForm {
           loader.success(trans("success"), message);
 
           setTimeout(() => {
-            this.callbacks.onSave.forEach(callback => callback(response, this));
-          }, 250);
+            this.callbacks.onSave.forEach((callback) =>
+              callback(response, this)
+            );
+          }, getMoonlightConfig("reactiveForm.saveEventDelay", 250));
         } else if (this._submit) {
           await this._submit(e, form, this);
           if (this._closeOnSave) {
@@ -992,7 +995,7 @@ export class ReactiveForm {
       for (const tab of this.tabs) {
         const input = tab
           .inputs()
-          .find(input => input.name() === firstInvalidInput.name);
+          .find((input) => input.name() === firstInvalidInput.name);
 
         if (input) {
           this.goToTab(tab.name());
@@ -1005,7 +1008,7 @@ export class ReactiveForm {
       }
     } else {
       const input = this.inputs.find(
-        input => input.name() === firstInvalidInput.name,
+        (input) => input.name() === firstInvalidInput.name
       );
 
       input?.focus();
@@ -1020,15 +1023,15 @@ export class ReactiveForm {
 
     this.trigger("formReady", form);
 
-    this.inputs.forEach(input => {
+    this.inputs.forEach((input) => {
       input.setForm(this);
     });
 
-    this.tabs.forEach(tab => {
+    this.tabs.forEach((tab) => {
       tab
         .setForm(this)
         .inputs()
-        .forEach(input => {
+        .forEach((input) => {
           input.setForm(this);
         });
     });
@@ -1093,10 +1096,10 @@ export class ReactiveForm {
 
         setIsLoading(true);
 
-        reactForm._service.get(recordId).then(response => {
+        reactForm._service.get(recordId).then((response) => {
           const dataKey = getMoonlightConfig(
             "reactiveForm.singleRecordKey",
-            "record",
+            "record"
           );
           const data: any = get(response.data, dataKey, "record");
           reactForm.setRecord(data);
@@ -1161,7 +1164,7 @@ export class ReactiveForm {
           setTimeout(() => {
             reactForm.clearCache();
           }, 300);
-        }),
+        })
       );
 
       useOnce(() => {
@@ -1212,13 +1215,14 @@ export class ReactiveForm {
             <LoadingOverlay visible={isLoading} />
             <Form
               onError={reactForm.manageFormError.bind(reactForm)}
-              ref={form => {
+              ref={(form) => {
                 reactForm.setForm(form as FormInterface);
               }}
               onSubmit={reactForm.manageSubmitForm(
                 setIsLoading,
-                reactForm.close.bind(reactForm),
-              )}>
+                reactForm.close.bind(reactForm)
+              )}
+            >
               {content}
             </Form>
           </Wrapper>

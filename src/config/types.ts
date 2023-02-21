@@ -20,6 +20,11 @@ export type MoonlightConfigurations = {
     singleRecordKey?: string;
     defaultColSize?: ColSpan;
     openInModal?: boolean;
+    /**
+     * The delay in milliseconds after the form is saved
+     * Works only when service is used not `onSubmit` method
+     */
+    saveEventDelay?: number;
     submitButton?: {
       label?: React.ReactNode;
     };
