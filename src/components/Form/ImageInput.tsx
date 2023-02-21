@@ -159,6 +159,8 @@ export function ImageInput({
 
   const theme = useMantineTheme();
 
+  console.log(value, value?.id || "");
+
   return (
     <>
       <HiddenInput name={name} value={value?.id || ""} />
