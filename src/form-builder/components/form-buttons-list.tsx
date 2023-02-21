@@ -4,7 +4,9 @@ import { getMoonlightConfig } from "../../config";
 import { FormButton } from "./FormButton";
 
 export function submitButton(
-  content: React.ReactNode = getMoonlightConfig("reactiveForm.submitButtonText")
+  content: React.ReactNode = getMoonlightConfig(
+    "reactiveForm.submitButton.label"
+  )
 ) {
   return new FormButton()
     .content(content)
