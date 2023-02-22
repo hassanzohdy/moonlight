@@ -27,7 +27,8 @@ import {
   CachedRender,
   Callbacks,
   OnErrorCallback,
-  ReactFormComponentProps,
+  reactiveFormComponentProps,
+  ReactiveFormEvent,
   SaveCallback,
   SubmitCallback,
 } from "./../types";
@@ -470,15 +471,15 @@ export class ReactiveForm {
   /**
    * Trigger the given event
    */
-  public trigger(eventName: string, ...args: any[]) {
-    return events.trigger(`reactForm.${this.id}.${eventName}`, ...args);
+  public trigger(eventName: ReactiveFormEvent, ...args: any[]) {
+    return events.trigger(`reactiveForm.${this.id}.${eventName}`, ...args);
   }
 
   /**
    * Listen to the given event
    */
-  public on(eventName: string, callback: any) {
-    return events.subscribe(`reactForm.${this.id}.${eventName}`, callback);
+  public on(eventName: ReactiveFormEvent, callback: any) {
+    return events.subscribe(`reactiveForm.${this.id}.${eventName}`, callback);
   }
 
   /**
@@ -1070,7 +1071,7 @@ export class ReactiveForm {
    */
   public asComponent() {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const reactForm = this;
+    const reactiveForm = this;
 
     function Component({
       open,
@@ -1080,42 +1081,42 @@ export class ReactiveForm {
       rowIndex: _index,
       onSave,
       ...modalProps
-    }: ReactFormComponentProps & Partial<ModalProps>) {
+    }: reactiveFormComponentProps & Partial<ModalProps>) {
       const [isLoading, setIsLoading] = useState(false);
       const [record, setRecord] = useState(incomingRecord);
       const [opened, setOpen] = useState(open);
 
-      reactForm.reRenderer = useForceUpdate();
+      reactiveForm.reRenderer = useForceUpdate();
 
-      if (!reactForm.record && record) {
-        reactForm.record = record;
+      if (!reactiveForm.record && record) {
+        reactiveForm.record = record;
       }
 
       useEffect(() => {
-        if (!reactForm._service || !opened || !recordId) return;
+        if (!reactiveForm._service || !opened || !recordId) return;
 
         setIsLoading(true);
 
-        reactForm._service.get(recordId).then((response) => {
+        reactiveForm._service.get(recordId).then((response) => {
           const dataKey = getMoonlightConfig(
             "reactiveForm.singleRecordKey",
             "record"
           );
           const data: any = get(response.data, dataKey, "record");
-          reactForm.setRecord(data);
+          reactiveForm.setRecord(data);
           setIsLoading(false);
         });
       }, [recordId, opened]);
 
       useEffect(() => {
-        if (!reactForm._enableKeyboardShortcuts) return;
+        if (!reactiveForm._enableKeyboardShortcuts) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
           // if pressed ctrl + s or in mac pressed cmd + s
           // then trigger form submit
           if ((e.ctrlKey || e.metaKey) && e.key === "s") {
             e.preventDefault();
-            const form = reactForm.form;
+            const form = reactiveForm.form;
             if (!form || form.isSubmitting()) return;
 
             form.submit();
@@ -1130,80 +1131,84 @@ export class ReactiveForm {
       }, []);
 
       useEffect(() => {
-        if (reactForm.openInModal === false) return;
+        if (reactiveForm.openInModal === false) return;
         if (incomingRecord === undefined) return;
 
-        reactForm.setRecord(incomingRecord);
+        reactiveForm.setRecord(incomingRecord);
         setRecord(incomingRecord);
 
         if (!opened) {
           setTimeout(() => {
-            reactForm.setRecord(undefined);
+            reactiveForm.setRecord(undefined);
             setRecord(undefined);
-            reactForm.activeTab = null;
+            reactiveForm.activeTab = null;
           }, 400);
         }
       }, [opened, incomingRecord]);
 
       useEffect(() => {
-        if (reactForm.openInModal === true) return;
+        if (reactiveForm.openInModal === true) return;
 
-        reactForm.setRecord(incomingRecord);
+        reactiveForm.setRecord(incomingRecord);
         setRecord(incomingRecord);
       }, [incomingRecord]);
 
       useEffect(() => {
-        if (open === undefined || reactForm.openInModal === false) return;
+        if (open === undefined || reactiveForm.openInModal === false) return;
 
         setOpen(open);
       }, [open]);
 
       useEvent(() =>
-        reactForm.on("close", () => {
+        reactiveForm.on("close", () => {
           onClose?.();
           setTimeout(() => {
-            reactForm.clearCache();
+            reactiveForm.clearCache();
           }, 300);
         })
       );
 
       useOnce(() => {
         if (onSave) {
-          reactForm.onSave(onSave);
+          reactiveForm.onSave(onSave);
         }
+
+        reactiveForm.trigger("rendering", reactiveForm);
       });
 
-      const heading = reactForm.renderHeading();
+      const heading = reactiveForm.renderHeading();
 
-      const shouldBeRendered = reactForm.openInModal
-        ? Boolean(opened || reactForm.rendered.content)
+      const shouldBeRendered = reactiveForm.openInModal
+        ? Boolean(opened || reactiveForm.rendered.content)
         : true;
 
-      const content = shouldBeRendered ? reactForm.render() : null;
+      const content = shouldBeRendered ? reactiveForm.render() : null;
 
-      const Wrapper = reactForm.getWrapper();
+      const Wrapper = reactiveForm.getWrapper();
 
-      const wrapperProps = reactForm.openInModal
+      const wrapperProps = reactiveForm.openInModal
         ? {
             title: heading,
             opened: opened,
-            ...reactForm.defaultModalProps,
-            ...reactForm.wrapperProps,
+            ...reactiveForm.defaultModalProps,
+            ...reactiveForm.wrapperProps,
             ...modalProps,
             onClose: () => {
-              reactForm.close();
+              reactiveForm.close();
               setOpen(false);
             },
           }
         : {
-            ...reactForm.defaultStaticFormProps,
-            ...reactForm.wrapperProps,
+            ...reactiveForm.defaultStaticFormProps,
+            ...reactiveForm.wrapperProps,
             ...modalProps,
           };
 
-      const modalTrigger = reactForm.openInModal ? (
+      const modalTrigger = reactiveForm.openInModal ? (
         <>
-          <span onClick={() => setOpen(true)}>{reactForm._triggerButton}</span>
+          <span onClick={() => setOpen(true)}>
+            {reactiveForm._triggerButton}
+          </span>
         </>
       ) : null;
 
@@ -1211,16 +1216,18 @@ export class ReactiveForm {
         <>
           {modalTrigger}
           <Wrapper {...wrapperProps}>
-            {!reactForm.openInModal && <Title align="center">{heading}</Title>}
+            {!reactiveForm.openInModal && (
+              <Title align="center">{heading}</Title>
+            )}
             <LoadingOverlay visible={isLoading} />
             <Form
-              onError={reactForm.manageFormError.bind(reactForm)}
+              onError={reactiveForm.manageFormError.bind(reactiveForm)}
               ref={(form) => {
-                reactForm.setForm(form as FormInterface);
+                reactiveForm.setForm(form as FormInterface);
               }}
-              onSubmit={reactForm.manageSubmitForm(
+              onSubmit={reactiveForm.manageSubmitForm(
                 setIsLoading,
-                reactForm.close.bind(reactForm)
+                reactiveForm.close.bind(reactiveForm)
               )}
             >
               {content}

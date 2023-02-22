@@ -13,6 +13,12 @@ export type CachedRender = {
   content: React.ReactNode;
 };
 
+export type ReactiveFormEvent =
+  | "close"
+  | "formReady"
+  | "rendered"
+  | "rendering";
+
 export type OnErrorCallback = (
   invalidFormControls: FormControl[],
   form: FormInterface,
@@ -28,7 +34,7 @@ export type ShouldTabBeRendered =
   | boolean
   | ((reactiveForm: ReactiveForm) => boolean);
 
-export type ReactFormComponentProps = {
+export type reactiveFormComponentProps = {
   record?: any;
   rowIndex?: number;
   recordId?: number | string;

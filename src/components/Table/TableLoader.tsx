@@ -1,6 +1,7 @@
 import { LoadingOverlay } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useRef } from "react";
+import { moonlightTranslations } from "../../locales";
 import { toastLoading } from "../Toast";
 import { useSuperTable } from "./hooks/useSuperTable";
 import { useTableChange } from "./hooks/useTableChange";
@@ -23,8 +24,8 @@ export function TableLoader() {
       loaderRef.current = null;
     } else {
       loaderRef.current = toastLoading(
-        trans("loading"),
-        trans("pleaseWaitTableIsLoading"),
+        trans(moonlightTranslations.pleaseWaitTableIsLoading),
+        trans(moonlightTranslations.loading)
       );
     }
   }, 10);

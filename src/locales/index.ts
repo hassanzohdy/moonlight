@@ -15,6 +15,14 @@ export const moonlightTranslations = {
     en: "Submit",
     ar: "إرسال",
   },
+  pleaseWaitTableIsLoading: {
+    en: "Please wait while we load the table data",
+    ar: "يرجى الانتظار حتى نحمل بيانات الجدول",
+  },
+  loading: {
+    en: "Loading",
+    ar: "جاري التحميل",
+  },
   notFound: {
     en: "Not Found",
     ar: "غير موجود",
@@ -38,6 +46,14 @@ export const moonlightTranslations = {
   selectFile: {
     en: "Please select a file",
     ar: "ارفع ملف",
+  },
+  deleteSuccess: {
+    en: "Deleted successfully",
+    ar: "تم الحذف بنجاح",
+  },
+  deleteError: {
+    en: "Error in deleting",
+    ar: "حدث خطأ أثناء الحذف",
   },
   uploadingFile: {
     en: "Uploading file",
