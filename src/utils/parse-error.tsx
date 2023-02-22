@@ -1,3 +1,4 @@
+import { Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import Is from "@mongez/supportive-is";
 
@@ -37,7 +38,7 @@ export function parseError(error: any) {
       return error;
     });
   } else {
-    errorContent = <p>{error}</p>;
+    errorContent = <Text color="gray">{error}</Text>;
   }
 
   return errorContent;

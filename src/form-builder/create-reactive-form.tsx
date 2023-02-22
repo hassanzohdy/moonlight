@@ -9,10 +9,12 @@ import {
   saveAndClearButton,
   submitButton,
 } from "./";
-import { ReactFormComponentProps } from "./types";
+import { reactiveFormComponentProps } from "./types";
 
-export function createReactForm(callback: (reactForm: ReactiveForm) => void) {
-  function ReactiveFormComponent(props: ReactFormComponentProps) {
+export function createReactiveForm(
+  callback: (reactForm: ReactiveForm) => void
+) {
+  function ReactiveFormComponent(props: reactiveFormComponentProps) {
     const Form = useMemo(() => {
       const reactiveForm = new ReactiveForm();
       callback(reactiveForm);
@@ -28,13 +30,15 @@ export function createReactForm(callback: (reactForm: ReactiveForm) => void) {
   return memo(ReactiveFormComponent);
 }
 
+export const createReactForm = createReactiveForm;
+
 export function createSimpleReactiveForm(
   singleName: string,
   service: RestfulEndpoint,
   inputs: InputBuilder[],
-  callback?: (reactiveForm: ReactiveForm) => void,
+  callback?: (reactiveForm: ReactiveForm) => void
 ) {
-  return createReactForm(reactiveForm => {
+  return createReactiveForm((reactiveForm) => {
     reactiveForm
       .setInputs(inputs)
       .service(service)
@@ -42,7 +46,7 @@ export function createSimpleReactiveForm(
       .buttons([
         cancelButton(),
         resetButton(),
-        saveAndClearButton().when(button => {
+        saveAndClearButton().when((button) => {
           return button.reactiveForm.hasRecordId() === false;
         }),
         submitButton(trans("save")),
