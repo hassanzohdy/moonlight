@@ -21,7 +21,7 @@ import {
   IntegerInput,
   NumberInput,
   SelectInput,
-  SwitchInput,
+  SwitchInput
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
 import { toastError, toastLoading } from "../../Toast";
@@ -35,7 +35,7 @@ import {
   TableFilter,
   TableHeaderButtons,
   TablePlainColumn,
-  TableProps,
+  TableProps
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
 import { EditColumn } from "./EditColumn";
@@ -44,7 +44,7 @@ import {
   LoadMode,
   PaginationInfo,
   RegisteredBulkSelectionRow,
-  TableEvent,
+  TableEvent
 } from "./SuperTable.types";
 
 const defaultCallback = () => {
@@ -62,6 +62,12 @@ export class SuperTable {
     total: 0,
     pages: 0,
   };
+
+  /**
+   * Default record data
+   * Used with create form usually
+   */
+  protected defaultRecord: any = {};
 
   /**
    * Table data
@@ -249,6 +255,22 @@ export class SuperTable {
         this.castPaginationInfo(paginationInfoHandler);
       }
     }
+  }
+
+  /**
+   * Set default record
+   */
+  public setDefaultRecord(record: any) {
+    this.defaultRecord = record;
+
+    return this;
+  }
+
+  /**
+   * Get default record
+   */
+  public getDefaultRecord() {
+    return this.defaultRecord;
   }
 
   /**

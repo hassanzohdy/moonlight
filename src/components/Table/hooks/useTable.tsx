@@ -44,6 +44,7 @@ export function useTable({
   limitOptions,
   onPageSizeChange,
   total,
+  defaultRecord,
   sortCallback,
   ...otherProps
 }: TableProps & BaseTableProps): SuperTable {
@@ -63,6 +64,10 @@ export function useTable({
 
   if (sortCallback) {
     superTable.setSortMethod(sortCallback);
+  }
+
+  if (defaultRecord) {
+    superTable.setDefaultRecord(defaultRecord);
   }
 
   useEffect(() => {
@@ -96,7 +101,7 @@ export function useTable({
       // results will be number of results for current page
       paginationInfo.results = Math.min(
         limit,
-        totalResults - (page - 1) * limit,
+        totalResults - (page - 1) * limit
       );
     }
 

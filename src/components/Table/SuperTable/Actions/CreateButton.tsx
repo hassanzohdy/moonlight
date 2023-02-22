@@ -26,7 +26,12 @@ export function createButton(Form: React.ComponentType<any>) {
           {trans("create")}
         </Button>
 
-        <Form open={open} onSave={pushRow} onClose={() => setOpen(false)} />
+        <Form
+          record={superTable.getDefaultRecord()}
+          open={open}
+          onSave={pushRow}
+          onClose={() => setOpen(false)}
+        />
       </>
     );
   }

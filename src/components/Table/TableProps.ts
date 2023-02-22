@@ -118,6 +118,12 @@ export type TableProps = {
    */
   role?: string;
   /**
+   * Default record to be used when creating new records
+   */
+  defaultRecord?: {
+    [key: string]: any;
+  };
+  /**
    * Table Permissions
    * This can override the role permission, for example if user has access to `users.create`
    * And the `create` permission is set to false, the user will not be able to create new users.
@@ -228,7 +234,7 @@ export type TableProps = {
    */
   sortCallback?: (
     columnName: string,
-    sortDirection: SortDirection,
+    sortDirection: SortDirection
   ) => (a: any, b: any) => number;
   /**
    * Triggered when table is filtered
