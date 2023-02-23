@@ -1,6 +1,6 @@
 {
     "name": "@mongez/moonlight",
-    "version": "1.0.26",
+    "version": "1.0.27",
     "description": "A Massive React Builder and ready-made components for web apps.",
     "main": "src/index.ts",
     "dependencies": {
@@ -10,6 +10,7 @@
         "@mantine/dates": "^5.10.4",
         "@mantine/dropzone": "^5.10.4",
         "@mantine/modals": "^5.10.4",
+        "@mantine/hooks": "^5.10.4",
         "@mantine/notifications": "^5.10.4",
         "@mantine/tiptap": "^5.10.4",
         "@mongez/events": "^1.0.9",

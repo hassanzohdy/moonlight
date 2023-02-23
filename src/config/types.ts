@@ -31,11 +31,12 @@ export type MoonlightConfigurations = {
     navigateTo?: (route: string, params?: any) => any;
     notFoundRoute?: string;
     queryString?: {
-      all?: {
-        [key: string]: string;
+      all: () => {
+        [key: string]: any;
       };
-      update?: (query: any) => any;
-      get?: (key: string, defaultValue?: any) => any;
+      update: (query: any) => any;
+      get: (key: string, defaultValue?: any) => any;
+      [key: string]: any;
     };
   };
   current?: {
