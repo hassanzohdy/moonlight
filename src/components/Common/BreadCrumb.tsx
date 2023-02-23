@@ -1,7 +1,7 @@
 import { Anchor, Breadcrumbs } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { Link } from "@mongez/react-router";
 import React, { useMemo } from "react";
+import { components } from "../../utils/resolvers";
 
 export type BreadCrumbType = {
   title: React.ReactNode;
@@ -25,7 +25,7 @@ export function BreadCrumbList({ list, withHome }: BreadcrumbListProps) {
     }
 
     return returnedList.map((item, index) => (
-      <Anchor component={Link} key={index} to={item.href}>
+      <Anchor component={components.link} key={index} to={item.href}>
         {item.title}
       </Anchor>
     ));

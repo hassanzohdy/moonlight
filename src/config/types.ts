@@ -12,6 +12,32 @@ export type MoonlightConfigurations = {
       flag?: any;
     };
   };
+  user?: {
+    can: (permission: string) => boolean;
+    [key: string]: any;
+  };
+  cache?: {
+    handler: {
+      set: (key: string, value: any) => any;
+      get: (key: string, defaultValue?: any) => any;
+    };
+  };
+  components?: {
+    link?: React.ComponentType<any>;
+    helmet?: React.ComponentType<any>;
+  };
+  router?: {
+    currentRoute?: () => string;
+    navigateTo?: (route: string, params?: any) => any;
+    notFoundRoute?: string;
+    queryString?: {
+      all?: {
+        [key: string]: string;
+      };
+      update?: (query: any) => any;
+      get?: (key: string, defaultValue?: any) => any;
+    };
+  };
   current?: {
     direction?: () => "rtl" | "ltr";
     localeCode?: () => string;

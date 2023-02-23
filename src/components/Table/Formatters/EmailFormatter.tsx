@@ -1,10 +1,11 @@
 import { Anchor } from "@mantine/core";
-import { Link } from "@mongez/react-router";
 import { FormatterProps } from "../TableProps";
 
 export function EmailFormatter({ value }: FormatterProps) {
+  const href = `mailto:${value}`;
+
   return (
-    <Anchor component={Link} email={value} newTab>
+    <Anchor component={"a"} href={href} newTab>
       {value}
     </Anchor>
   );

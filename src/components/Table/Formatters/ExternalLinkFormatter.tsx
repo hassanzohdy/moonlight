@@ -1,5 +1,4 @@
 import { Anchor } from "@mantine/core";
-import { Link } from "@mongez/react-router";
 import { FormatterProps } from "../TableProps";
 
 export function ExternalLinkFormatter({
@@ -8,7 +7,12 @@ export function ExternalLinkFormatter({
   settings,
 }: Partial<FormatterProps>) {
   return (
-    <Anchor component={Link} to={value} newTab>
+    <Anchor
+      component={"a"}
+      to={value}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {settings.content ? settings.content(row) : value}
     </Anchor>
   );

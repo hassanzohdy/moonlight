@@ -1,6 +1,6 @@
 import { TableProps as BaseTableProps } from "@mantine/core";
-import { navigateTo } from "@mongez/react-router";
 import React from "react";
+import { router } from "../../utils/resolvers";
 import { SuperTableContext } from "./Context/SuperTableContext";
 import { useTable } from "./hooks/useTable";
 import { Pagination } from "./Pagination";
@@ -17,9 +17,7 @@ function _Table(props: TableProps & BaseTableProps) {
   const superTable = useTable(props);
 
   if (!superTable.hasPermission("list")) {
-    navigateTo("/404");
-
-    return null;
+    return router.navigateTo(router.notFoundRoute);
   }
 
   return (

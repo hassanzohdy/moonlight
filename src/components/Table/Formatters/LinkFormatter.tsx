@@ -1,7 +1,7 @@
 import { Anchor } from "@mantine/core";
-import { Link } from "@mongez/react-router";
 import { IconEye } from "@tabler/icons";
 import React from "react";
+import { components } from "../../../utils/resolvers";
 import { FormatterProps } from "../TableProps";
 
 export type LinkFormatterProps = Pick<FormatterProps, "row" | "rowIndex"> & {
@@ -30,8 +30,15 @@ export function LinkFormatter({ row, rowIndex, settings }: LinkFormatterProps) {
     <Icon color={linkSettings.iconColor} />
   );
 
+  const props: any = {};
+
+  if (linkSettings.newTab) {
+    props["target"] = "_blank";
+    props["rel"] = "noopener noreferrer";
+  }
+
   return (
-    <Anchor component={Link} newTab={settings?.newTab} to={route}>
+    <Anchor component={components.link} {...props} to={route}>
       {content}
     </Anchor>
   );

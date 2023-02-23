@@ -1,8 +1,8 @@
 import { Box, Collapse, Flex, Group, Paper, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import Helmet from "@mongez/react-helmet";
-import { useMemo, useState } from "react";
 import { IconFilter, IconFilterOff } from "@tabler/icons";
+import { useMemo, useState } from "react";
+import { components } from "../../../utils/resolvers";
 import { useSuperTable } from "../hooks/useSuperTable";
 import LimitOptions from "../Pagination/LimitOptions";
 import { TableFilter } from "../TableFilter/Filters/TableFilter";
@@ -31,9 +31,11 @@ export function TableHeader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const Helmet = components.link;
+
   return (
     <>
-      <Helmet title={superTable.title} />
+      {Helmet && <Helmet title={superTable.title} />}
       <Paper mb={50} shadow="md" radius="md" p="xs">
         <Wrapper>
           <Box>

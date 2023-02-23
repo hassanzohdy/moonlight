@@ -1,19 +1,17 @@
 // Change
-import cache from "@mongez/cache";
 import events, { EventSubscription } from "@mongez/events";
 import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
 import { FormInterface, getForm } from "@mongez/react-form";
-import { queryString, routerEvents } from "@mongez/react-router";
 import { debounce, get, Random } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
-import { getCurrentUser } from "@mongez/user";
 import { AxiosResponse } from "axios";
 import serialize from "form-serialize";
 import React from "react";
 import { createReactForm } from "../../../form-builder/create-reactive-form";
 import { moonlightTranslations } from "../../../locales";
 import { parseError } from "../../../utils/parse-error";
+import { queryString } from "../../../utils/resolvers";
 import { scrollTop } from "../../../utils/scroll";
 import {
   DatePickerInput,
@@ -21,7 +19,7 @@ import {
   IntegerInput,
   NumberInput,
   SelectInput,
-  SwitchInput
+  SwitchInput,
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
 import { toastError, toastLoading } from "../../Toast";
@@ -35,7 +33,7 @@ import {
   TableFilter,
   TableHeaderButtons,
   TablePlainColumn,
-  TableProps
+  TableProps,
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
 import { EditColumn } from "./EditColumn";
@@ -44,7 +42,7 @@ import {
   LoadMode,
   PaginationInfo,
   RegisteredBulkSelectionRow,
-  TableEvent
+  TableEvent,
 } from "./SuperTable.types";
 
 const defaultCallback = () => {
@@ -240,6 +238,11 @@ export class SuperTable {
   protected paginationEnabled = true;
 
   /**
+   * Cache handler
+   */
+  public cacheHandler: any = getMoonlightConfig("cache.handler");
+
+  /**
    * Constructor
    */
   public constructor(public lazyTable = false) {
@@ -393,7 +396,7 @@ export class SuperTable {
    * Get current user
    */
   public get user() {
-    return getCurrentUser();
+    return getMoonlightConfig("user");
   }
 
   /**
@@ -599,10 +602,6 @@ export class SuperTable {
 
     // Send the first request and filter it using query string (if has any)
     this.load(params);
-
-    return routerEvents.onNavigating(() => {
-      this.reset();
-    });
   }
 
   /**
@@ -915,11 +914,11 @@ export class SuperTable {
       )
       .map(this.parseColumn.bind(this));
 
-    const cachedData = cache.get(this.cacheKey, {});
+    const cachedData = this.cacheHandler?.get(this.cacheKey, {}) || {};
 
     delete cachedData.displayedColumns;
 
-    cache.set(this.cacheKey, cachedData);
+    this.cacheHandler && this.cacheHandler.set(this.cacheKey, cachedData);
 
     this.trigger("displayedColumns", this.displayedColumns);
 
@@ -930,7 +929,9 @@ export class SuperTable {
    * Get the given cached key
    */
   public getCached(key: string, defaultValue: any = null) {
-    const cachedData = cache.get(this.cacheKey, {});
+    if (!this.cacheHandler) return defaultValue;
+
+    const cachedData = this.cacheHandler.get(this.cacheKey, {});
     return cachedData[key] !== undefined ? cachedData[key] : defaultValue;
   }
 
@@ -951,10 +952,11 @@ export class SuperTable {
    * Cache the given value
    */
   public cache(key: string, value: any) {
-    const cacheData = cache.get(this.cacheKey, {}); // st => super table
+    if (!this.cacheHandler) return;
+    const cacheData = this.cacheHandler.get(this.cacheKey, {}); // st => super table
     cacheData[key] = value;
 
-    cache.set(this.cacheKey, cacheData);
+    this.cacheHandler.set(this.cacheKey, cacheData);
   }
 
   /**

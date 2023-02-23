@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { Avatar, Flex, MantineTheme, Text } from "@mantine/core";
-import { Link } from "@mongez/react-router";
 import { extension } from "@mongez/reinforcements";
 import { IconFile } from "@tabler/icons";
 import React from "react";
@@ -81,7 +80,7 @@ const IconWrapper = styled.div`
   margin-inline-end: 0.5rem;
 `;
 
-const FileLink = styled(Link)`
+const FileLink = styled.a`
   label: FileLink;
   text-decoration: none;
   color: ${({ theme }) => theme.colors.gray[6]};
@@ -97,7 +96,13 @@ export function File({ name, size, url, rightIcon }: any) {
 
   const Wrapper = url ? FileLink : React.Fragment;
 
-  const wrapperProps = url ? { to: url, newTab: true } : {};
+  const wrapperProps = url
+    ? {
+        href: url,
+        target: "_blank",
+        rel: "noopener noreferrer",
+      }
+    : {};
 
   return (
     <Flex justify={"space-between"} align="center">

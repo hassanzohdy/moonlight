@@ -1,13 +1,13 @@
 import { Col, MantineSize } from "@mantine/core";
 import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import { trans } from "@mongez/localization";
-import { queryString } from "@mongez/react-router";
 import { clone, get, Random, rtrim } from "@mongez/reinforcements";
 import { RuleResponse } from "@mongez/validator";
 import { IconHelp } from "@tabler/icons";
 import React from "react";
 import { TextInput } from "../../components/Form/TextInput";
 import { Tooltip } from "../../components/Tooltip";
+import { queryString } from "../../utils/resolvers";
 import { FormTab } from "./FormTab";
 import { InputRenderer } from "./InputRenderer";
 import { ReactiveForm } from "./ReactiveForm";
@@ -540,7 +540,8 @@ export class InputBuilder {
         Wrapper={Col}
         inputBuilder={this}
         key={this._key}
-        wrapperProps={wrapperProps}>
+        wrapperProps={wrapperProps}
+      >
         <Component {...props} />
       </InputRenderer>
     );
@@ -624,7 +625,8 @@ export class InputBuilder {
                 verticalAlign: "middle",
                 marginInlineStart: "0.2rem",
                 display: "inline-block",
-              }}>
+              }}
+            >
               <IconHelp size="1.0rem" />
             </span>
           </Tooltip>
@@ -688,7 +690,7 @@ export class InputBuilder {
       if (this.valueFromQueryString) {
         defaultValue = queryString.get(
           this.valueFromQueryString,
-          this.inputDefaultValue,
+          this.inputDefaultValue
         );
       } else {
         defaultValue = this.inputDefaultValue;
@@ -709,7 +711,7 @@ export class InputBuilder {
     return get(
       this.record,
       this.data.defaultValueKey,
-      this.data.defaultChecked,
+      this.data.defaultChecked
     );
   }
 
