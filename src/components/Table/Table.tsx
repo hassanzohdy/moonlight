@@ -17,7 +17,7 @@ function _Table(props: TableProps & BaseTableProps) {
   const superTable = useTable(props);
 
   if (!superTable.hasPermission("list")) {
-    return router.navigateTo(router.notFoundRoute);
+    return router.navigateTo(router.notFoundRoute());
   }
 
   return (
