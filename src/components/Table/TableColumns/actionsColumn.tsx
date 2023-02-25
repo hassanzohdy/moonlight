@@ -2,7 +2,7 @@ import { Group } from "@mantine/core";
 import React from "react";
 import { getMoonlightConfig } from "../../../config";
 import { DeleteButton } from "../SuperTable/Actions/DeleteButton";
-import { EditBUtton } from "../SuperTable/Actions/EditButton";
+import { EditButton } from "../SuperTable/Actions/EditButton";
 import { ViewButton } from "../SuperTable/Actions/ViewButton";
 import { FormatterProps, TableColumn } from "../TableProps";
 import { tableColumn } from "./tableColumn";
@@ -10,10 +10,10 @@ import { tableColumn } from "./tableColumn";
 export function actionsColumn(
   buttons: React.FC<FormatterProps>[] = getMoonlightConfig("table.actions", [
     ViewButton,
-    EditBUtton,
+    EditButton,
     DeleteButton,
   ]),
-  column: Partial<TableColumn> = {},
+  column: Partial<TableColumn> = {}
 ) {
   return tableColumn("actions", "actions")
     .merge(column)
@@ -30,7 +30,7 @@ export function actionsColumn(
         return true;
       });
     })
-    .validate(column => {
+    .validate((column) => {
       return column.settings.buttons.length > 0;
     })
     .settings({
@@ -53,7 +53,7 @@ function ActionsFormatter({ row, rowIndex, column }: FormatterProps) {
             row={row}
             rowIndex={rowIndex}
           />
-        ),
+        )
       )}
     </Group>
   );
