@@ -13,9 +13,8 @@ export const StyledTable = styled(Table)`
 
 export const TableWrapper = styled(ScrollArea)`
   label: TableWrapper;
-  min-width: 100%;
+  max-width: 100%;
   margin: 2rem 0;
   position: relative;
-  min-height: 400px;
   overflow: auto;
 `;

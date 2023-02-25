@@ -22,16 +22,16 @@ function _Table(props: TableProps & BaseTableProps) {
 
   return (
     <SuperTableContext.Provider value={superTable}>
+      <TableLoader />
+      <TableHeader />
       <TableWrapper>
-        <TableLoader />
-        <TableHeader />
         <StyledTable {...superTable.props}>
           <TableHeading />
           <TableBody />
         </StyledTable>
-        <PaginationResults />
-        <Pagination />
       </TableWrapper>
+      <PaginationResults />
+      <Pagination />
     </SuperTableContext.Provider>
   );
 }

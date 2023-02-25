@@ -105,12 +105,10 @@ export type TableFormProps = {
 };
 
 export type TableKeys = {
-  keys?: {
-    records?: string;
-    record?: string;
-    createRecord?: string;
-    updateRecord?: string;
-  };
+  records?: string;
+  record?: string;
+  createRecord?: string;
+  updateRecord?: string;
 };
 
 export type TableProps = {
@@ -243,7 +241,7 @@ export type TableProps = {
    */
   sortCallback?: (
     columnName: string,
-    sortDirection: SortDirection
+    sortDirection: SortDirection,
   ) => (a: any, b: any) => number;
   /**
    * Triggered when table is filtered

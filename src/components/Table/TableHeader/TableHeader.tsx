@@ -58,16 +58,14 @@ export function TableHeader() {
                     variant="light"
                     color="lime"
                     onClick={toggleFilterState}
-                    leftIcon={<IconFilter cursor="pointer" />}
-                  >
+                    leftIcon={<IconFilter cursor="pointer" />}>
                     {trans("filters")}
                   </Button>
                 ) : (
                   <Button
                     variant="outline"
                     onClick={toggleFilterState}
-                    leftIcon={<IconFilterOff cursor="pointer" />}
-                  >
+                    leftIcon={<IconFilterOff cursor="pointer" />}>
                     {trans("filters")}
                   </Button>
                 )}

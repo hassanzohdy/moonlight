@@ -72,7 +72,7 @@ export class InputBuilder {
   /**
    * Default col size
    */
-  protected defaultColSize = 12;
+  protected defaultColSize: ColSpan = 12;
 
   /**
    * cache rendered content
@@ -540,8 +540,7 @@ export class InputBuilder {
         Wrapper={Col}
         inputBuilder={this}
         key={this._key}
-        wrapperProps={wrapperProps}
-      >
+        wrapperProps={wrapperProps}>
         <Component {...props} />
       </InputRenderer>
     );
@@ -565,6 +564,13 @@ export class InputBuilder {
    * Get Wrapper props
    */
   public getWrapperProps() {
+    return this.getColSize();
+  }
+
+  /**
+   * Get col size
+   */
+  public getColSize() {
     if (this.data.breakpoint) {
       const props: any = {};
 
@@ -625,8 +631,7 @@ export class InputBuilder {
                 verticalAlign: "middle",
                 marginInlineStart: "0.2rem",
                 display: "inline-block",
-              }}
-            >
+              }}>
               <IconHelp size="1.0rem" />
             </span>
           </Tooltip>
@@ -691,7 +696,7 @@ export class InputBuilder {
         defaultValue =
           queryString.get?.(
             this.valueFromQueryString,
-            this.inputDefaultValue
+            this.inputDefaultValue,
           ) || this.inputDefaultValue;
       } else {
         defaultValue = this.inputDefaultValue;
@@ -712,7 +717,7 @@ export class InputBuilder {
     return get(
       this.record,
       this.data.defaultValueKey,
-      this.data.defaultChecked
+      this.data.defaultChecked,
     );
   }
 
@@ -723,7 +728,13 @@ export class InputBuilder {
     const builder = new (this.constructor as any)(this.data.name);
 
     for (const key in this) {
-      builder[key] = clone(this[key]);
+      const value: any = this[key];
+
+      if (value?.clone) {
+        builder[key] = value.clone();
+      } else {
+        builder[key] = clone(this[key]);
+      }
     }
 
     // builder.data = clone(this.data);

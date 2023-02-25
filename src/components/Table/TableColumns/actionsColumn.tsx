@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Box } from "@mantine/core";
 import React from "react";
 import { getMoonlightConfig } from "../../../config";
 import { DeleteButton } from "../SuperTable/Actions/DeleteButton";
@@ -13,7 +13,7 @@ export function actionsColumn(
     EditButton,
     DeleteButton,
   ]),
-  column: Partial<TableColumn> = {}
+  column: Partial<TableColumn> = {},
 ) {
   return tableColumn("actions", "actions")
     .merge(column)
@@ -30,7 +30,7 @@ export function actionsColumn(
         return true;
       });
     })
-    .validate((column) => {
+    .validate(column => {
       return column.settings.buttons.length > 0;
     })
     .settings({
@@ -44,17 +44,19 @@ function ActionsFormatter({ row, rowIndex, column }: FormatterProps) {
   if (!buttons) return null;
 
   return (
-    <Group>
+    <>
       {buttons.map(
         (Button: React.FC<Partial<FormatterProps>>, buttonIndex: number) => (
-          <Button
-            key={buttonIndex}
-            column={column}
-            row={row}
-            rowIndex={rowIndex}
-          />
-        )
+          <Box display="inline-block" mx={5} key={buttonIndex}>
+            <Button
+              key={buttonIndex}
+              column={column}
+              row={row}
+              rowIndex={rowIndex}
+            />
+          </Box>
+        ),
       )}
-    </Group>
+    </>
   );
 }

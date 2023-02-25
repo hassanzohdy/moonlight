@@ -230,7 +230,7 @@ export class SuperTable {
   /**
    * Pagination info cast callback
    */
-  protected paginationInfoCast = (response) => response.data.paginationInfo;
+  protected paginationInfoCast = response => response.data.paginationInfo;
 
   /**
    * Determine if pagination is enabled
@@ -324,7 +324,7 @@ export class SuperTable {
    * Listen to table page change
    */
   public onPageChange(
-    callback: (page: number, paramsList: any) => void = defaultCallback
+    callback: (page: number, paramsList: any) => void = defaultCallback,
   ) {
     return this.on("pageChange", callback);
   }
@@ -343,8 +343,8 @@ export class SuperTable {
     callback: (
       sortingColumn: string,
       sortDirection: SortDirection,
-      column: Column
-    ) => void = defaultCallback
+      column: Column,
+    ) => void = defaultCallback,
   ) {
     return this.on("sort", callback);
   }
@@ -376,7 +376,7 @@ export class SuperTable {
    * Cast pagination info
    */
   public castPaginationInfo(
-    callback: (response: AxiosResponse) => PaginationInfo
+    callback: (response: AxiosResponse) => PaginationInfo,
   ) {
     this.paginationInfoCast = callback;
 
@@ -476,7 +476,7 @@ export class SuperTable {
    * Register bulk selection
    */
   public registerBulkSelection(
-    bulkSelectionRow: BulkSelectionRow
+    bulkSelectionRow: BulkSelectionRow,
   ): RegisteredBulkSelectionRow {
     this.registeredBulkSelection.push(bulkSelectionRow);
 
@@ -487,7 +487,7 @@ export class SuperTable {
 
         // update the registered bulk selection
         this.registeredBulkSelection = this.registeredBulkSelection.map(
-          (registeredBulkSelectionRow) => {
+          registeredBulkSelectionRow => {
             if (
               registeredBulkSelectionRow.row === bulkSelectionRow.row &&
               registeredBulkSelectionRow.rowIndex === bulkSelectionRow.rowIndex
@@ -496,19 +496,19 @@ export class SuperTable {
             }
 
             return registeredBulkSelectionRow;
-          }
+          },
         );
 
         this.trigger("bulkSelection", this.registeredBulkSelection);
       },
-      updateState: (checked) => {
+      updateState: checked => {
         bulkSelectionRow.checked = checked;
         bulkSelectionRow.setChecked(checked);
       },
       unregister: () => {
         this.unregisterBulkSelection(
           bulkSelectionRow.row,
-          bulkSelectionRow.rowIndex
+          bulkSelectionRow.rowIndex,
         );
       },
     };
@@ -519,11 +519,11 @@ export class SuperTable {
    */
   public unregisterBulkSelection(row: any, rowIndex) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return (
           bulkSelectionRow.row !== row || bulkSelectionRow.rowIndex !== rowIndex
         );
-      }
+      },
     );
 
     return this;
@@ -533,7 +533,7 @@ export class SuperTable {
    * Toggle all bulk selection
    */
   public toggleAllBulkSelection(checked: boolean) {
-    this.registeredBulkSelection.forEach((bulkSelectionRow) => {
+    this.registeredBulkSelection.forEach(bulkSelectionRow => {
       bulkSelectionRow.setChecked(checked);
       bulkSelectionRow.checked = checked;
     });
@@ -548,7 +548,7 @@ export class SuperTable {
    */
   public getSelectedBulkRows() {
     return this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => bulkSelectionRow.checked
+      bulkSelectionRow => bulkSelectionRow.checked,
     );
   }
 
@@ -557,13 +557,13 @@ export class SuperTable {
    */
   public removeBulkRows(rows: BulkSelectionRow[]) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return !rows.find(
-          (row) =>
+          row =>
             row.row === bulkSelectionRow.row &&
-            row.rowIndex === bulkSelectionRow.rowIndex
+            row.rowIndex === bulkSelectionRow.rowIndex,
         );
-      }
+      },
     );
 
     return this;
@@ -647,7 +647,7 @@ export class SuperTable {
    */
   public load(
     params: any = {},
-    loadMode: LoadMode = "full"
+    loadMode: LoadMode = "full",
   ): Promise<SuperTable> {
     return new Promise((resolve, reject) => {
       if (!this.service) {
@@ -668,7 +668,7 @@ export class SuperTable {
 
       this.service
         .list(finalParams)
-        .then((response) => {
+        .then(response => {
           scrollTop();
           this.setData(get(response.data, this.getKey("records")));
           this.setPaginationInfo(this.paginationInfoCast(response));
@@ -684,7 +684,7 @@ export class SuperTable {
 
           resolve(this);
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = error;
           this.isLoading = false;
           this.setLoading(false);
@@ -779,7 +779,7 @@ export class SuperTable {
    * Get column by key
    */
   public getColumn(key: string) {
-    return this.columns.find((column) => column.key === key);
+    return this.columns.find(column => column.key === key);
   }
 
   /**
@@ -811,10 +811,10 @@ export class SuperTable {
 
     const filteredColumns =
       cachedDisplayedColumns.length > 0
-        ? this.columns.filter((column) =>
-            cachedDisplayedColumns.includes(column.data.key)
+        ? this.columns.filter(column =>
+            cachedDisplayedColumns.includes(column.data.key),
           )
-        : this.columns.filter((column) => {
+        : this.columns.filter(column => {
             return ["always", "default"].includes(column.getDisplayMode());
           });
 
@@ -828,7 +828,7 @@ export class SuperTable {
    */
   protected parseColumn(
     incomingColumn: Column,
-    columnIndex: number
+    columnIndex: number,
   ): TablePlainColumn {
     const columnStyle = (column: TablePlainColumn) => {
       const style: React.CSSProperties = {};
@@ -880,17 +880,17 @@ export class SuperTable {
         if (editOptions.enabled) {
           Wrapper = EditColumn;
 
-          const FormComponent = createReactForm((reactiveForm) => {
+          const FormComponent = createReactForm(reactiveForm => {
             reactiveForm
               .heading(trans("quickEdit"))
               .withResetButton(false)
               .withSaveAndClearButton(false)
               .closeOnEscape()
-              .onSave((record) => {
+              .onSave(record => {
                 this.updateRow(record, rowIndex);
               })
               .setInputs(
-                editOptions.inputs({ row, rowIndex, column: incomingColumn })
+                editOptions.inputs({ row, rowIndex, column: incomingColumn }),
               )
               .submitter((event: React.FormEvent, form: FormInterface) => {
                 const formElement = event.target as HTMLFormElement;
@@ -941,9 +941,7 @@ export class SuperTable {
    */
   public resetDisplayedColumns() {
     this.displayedColumns = this.columns
-      .filter((column) =>
-        ["always", "default"].includes(column.getDisplayMode())
-      )
+      .filter(column => ["always", "default"].includes(column.getDisplayMode()))
       .map(this.parseColumn.bind(this));
 
     const cachedData = this.cacheHandler?.get(this.cacheKey, {}) || {};
@@ -973,7 +971,7 @@ export class SuperTable {
   public setDisplayedColumns(displayedColumns: string[]) {
     this.cache("displayedColumns", displayedColumns);
     this.displayedColumns = this.columns
-      .filter((column) => displayedColumns.includes(column.data.key))
+      .filter(column => displayedColumns.includes(column.data.key))
       .map(this.parseColumn.bind(this));
 
     this.trigger("displayedColumns", displayedColumns);
@@ -995,7 +993,7 @@ export class SuperTable {
    * Get only the columns that are marked as displayed
    */
   public getDisplayedColumns() {
-    return this.displayedColumns.filter((column) => {
+    return this.displayedColumns.filter(column => {
       if (column.validate) {
         return column.validate(column, this);
       }
@@ -1034,7 +1032,7 @@ export class SuperTable {
   public setData(data: any[]) {
     const dataChanged = data !== this.data;
 
-    this.data = data.map((data) => {
+    this.data = data.map(data => {
       if (!data.uniqueId) {
         data.uniqueId = Random.string(36);
       }
@@ -1061,7 +1059,7 @@ export class SuperTable {
    */
   public on(
     event: TableEvent,
-    callback: (...args: any[]) => void
+    callback: (...args: any[]) => void,
   ): EventSubscription {
     return events.subscribe(`table.${this.tableName}.${event}`, callback);
   }
@@ -1105,7 +1103,7 @@ export class SuperTable {
     if (this.service) {
       const loader = toastLoading(
         trans("deletingInProgress"),
-        trans("deleting")
+        trans("deleting"),
       );
 
       this.service
@@ -1114,10 +1112,10 @@ export class SuperTable {
           deleteRowFromTable();
           loader.success(trans(moonlightTranslations.deleteSuccess));
         })
-        .catch((error) => {
+        .catch(error => {
           loader.error(
             parseError(error),
-            trans(moonlightTranslations.deleteError)
+            trans(moonlightTranslations.deleteError),
           );
         });
     } else {
@@ -1160,7 +1158,7 @@ export class SuperTable {
     this.paginationInfo.total += numberOfRows;
     this.paginationInfo.results += numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1173,7 +1171,7 @@ export class SuperTable {
     this.paginationInfo.total -= numberOfRows;
     this.paginationInfo.results -= numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1251,7 +1249,7 @@ export class SuperTable {
    * Manager table filters to return it properly
    */
   public getFilters(): TableFilter[] {
-    return this.filters.map((filter) => {
+    return this.filters.map(filter => {
       let Component = filter.component;
       if (filter.type) {
         switch (filter.type) {
@@ -1362,7 +1360,7 @@ export class SuperTable {
    * Get initial filter open state
    */
   public isFiltersOpened() {
-    return this.getCached("filterState", true);
+    return this.getCached("filterState", Is.desktop());
   }
 
   /**

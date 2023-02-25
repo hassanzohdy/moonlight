@@ -1,6 +1,7 @@
 import { trans } from "@mongez/localization";
 import { get, merge } from "@mongez/reinforcements";
 import { moonlightTranslations } from "../locales";
+import { components } from "../utils/resolvers";
 import { MoonlightConfigurations } from "./types";
 
 const defaultConfigurations: MoonlightConfigurations = {
@@ -38,7 +39,7 @@ const defaultConfigurations: MoonlightConfigurations = {
       updateRecord: "record",
     },
     limitOptions: [10, 20, 50, 100, 200, 250, 500],
-    paginationInfo: (response) => {
+    paginationInfo: response => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -61,9 +62,16 @@ const defaultConfigurations: MoonlightConfigurations = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations
+  configurations: MoonlightConfigurations,
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
+
+  if (configurations.components) {
+    currentConfigurations.components = configurations.components;
+
+    // merge configurations components with components const
+    Object.assign(components, configurations.components);
+  }
 }
 
 export function getMoonlightConfigurations() {

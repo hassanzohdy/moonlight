@@ -1,4 +1,5 @@
 import { Col, Grid } from "@mantine/core";
+import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import { transFrom } from "@mongez/localization";
 import { HiddenInput } from "@mongez/react-form";
 import { get } from "@mongez/reinforcements";
@@ -12,6 +13,11 @@ export class MultiLingualBuilder extends InputBuilder {
    * Input builder
    */
   protected input!: InputBuilder;
+
+  /**
+   * Default col size
+   */
+  protected defaultColSize: ColSpan = "auto";
 
   /**
    * Set input builder
@@ -29,7 +35,7 @@ export class MultiLingualBuilder extends InputBuilder {
       return this.content;
     }
 
-    const size = "auto";
+    const sizes = this.getColSize();
 
     this.input.setRecord(this.record);
 
@@ -55,6 +61,8 @@ export class MultiLingualBuilder extends InputBuilder {
 
     const localeCodes = value ? getFromValue() : getLocaleCodes();
 
+    const baseInputName = this.name();
+
     const renderedComponents = localeCodes.map((localeCodeObject, index) => {
       const { localeCode } = localeCodeObject;
       const input = this.input.clone();
@@ -63,7 +71,7 @@ export class MultiLingualBuilder extends InputBuilder {
         input.autoFocus(false);
       }
 
-      const originalName = input.name();
+      const originalName = baseInputName + input.name();
 
       const inputName = originalName + "." + index;
 
@@ -101,7 +109,7 @@ export class MultiLingualBuilder extends InputBuilder {
       }
 
       const content = (
-        <Grid.Col span={size} key={input.name() + localeCode}>
+        <Grid.Col {...sizes} key={input.name() + localeCode}>
           <HiddenInput name={`${inputName}.localeCode`} value={localeCode} />
 
           {input.render()}

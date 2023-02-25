@@ -35,8 +35,7 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
         radius={10000}
         variant="light"
         onClick={openDeleteModal}
-        color="red"
-      >
+        color="red">
         <Tooltip withArrow label={trans("delete")} position="top">
           <span>
             <IconTrash size={16} stroke={1.5} />
