@@ -624,6 +624,8 @@ export class SuperTable {
    * Initialize table manager
    */
   public init() {
+    if (!this.service) return;
+
     const cachedSortByOptions = this.getCached("sortByOptions");
 
     const params = queryString.all?.() || {};

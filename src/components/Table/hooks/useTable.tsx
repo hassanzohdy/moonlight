@@ -139,9 +139,7 @@ export function useTable({
     }
     if (!superTable.hasPermission("list")) return;
 
-    const event = superTable.init();
-
-    return () => event.unsubscribe();
+    superTable.init();
   });
 
   if (id) {
