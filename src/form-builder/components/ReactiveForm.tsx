@@ -8,7 +8,7 @@ import {
   Paper,
   Tabs,
   TabsListProps,
-  Title,
+  Title
 } from "@mantine/core";
 import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import events from "@mongez/events";
@@ -30,13 +30,13 @@ import {
   reactiveFormComponentProps,
   ReactiveFormEvent,
   SaveCallback,
-  SubmitCallback,
+  SubmitCallback
 } from "./../types";
 import {
   cancelButton,
   resetButton,
   saveAndClearButton,
-  submitButton,
+  submitButton
 } from "./form-buttons-list";
 import { FormButton } from "./FormButton";
 import { FormTab } from "./FormTab";
@@ -359,6 +359,13 @@ export class ReactiveForm {
     this.wrapperProps.closeOnEscape = close;
 
     return this;
+  }
+
+  /**
+   * {@alias} closeOnEscape
+   */
+  public esc(close = true) {
+    return this.closeOnEscape(close);
   }
 
   /**

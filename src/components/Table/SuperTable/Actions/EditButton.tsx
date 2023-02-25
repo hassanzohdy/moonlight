@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
 
-export function EditBUtton({ row, rowIndex }: FormatterProps) {
+export function EditButton({ row, rowIndex }: FormatterProps) {
   const superTable = useSuperTable();
 
   const [open, setOpen] = useState(false);
@@ -46,4 +46,4 @@ export function EditBUtton({ row, rowIndex }: FormatterProps) {
   );
 }
 
-EditBUtton.permission = "update";
+EditButton.permission = "update";
