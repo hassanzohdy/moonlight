@@ -12,7 +12,12 @@ export const components = {
 };
 
 export const router = {
-  currentRoute: getMoonlightConfig("router.currentRoute"),
+  currentRoute: () => {
+    console.log(getMoonlightConfig("router"));
+    console.log(getMoonlightConfig("router.currentRoute"));
+
+    return getMoonlightConfig("router.currentRoute");
+  },
   navigateTo: getMoonlightConfig("router.navigateTo"),
   notFoundRoute: getMoonlightConfig("router.notFoundRoute"),
 };
