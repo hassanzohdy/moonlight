@@ -3,7 +3,7 @@ import events, { EventSubscription } from "@mongez/events";
 import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
 import { FormInterface, getForm } from "@mongez/react-form";
-import { debounce, get, Random } from "@mongez/reinforcements";
+import { debounce, get, merge, Random } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { AxiosResponse } from "axios";
 import serialize from "form-serialize";
@@ -19,7 +19,7 @@ import {
   IntegerInput,
   NumberInput,
   SelectInput,
-  SwitchInput,
+  SwitchInput
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
 import { toastError, toastLoading } from "../../Toast";
@@ -33,7 +33,7 @@ import {
   TableFilter,
   TableHeaderButtons,
   TablePlainColumn,
-  TableProps,
+  TableProps
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
 import { EditColumn } from "./EditColumn";
@@ -42,7 +42,7 @@ import {
   LoadMode,
   PaginationInfo,
   RegisteredBulkSelectionRow,
-  TableEvent,
+  TableEvent
 } from "./SuperTable.types";
 
 const defaultCallback = () => {
@@ -243,11 +243,28 @@ export class SuperTable {
   public cacheHandler: any = getMoonlightConfig("cache.handler");
 
   /**
+   * Keys names for records and record
+   */
+  protected keysList: {
+    records: string;
+    record: string;
+    createRecord: string;
+    updateRecord: string;
+  } = {
+    records: "records",
+    record: "record",
+    createRecord: "record",
+    updateRecord: "record",
+  };
+
+  /**
    * Constructor
    */
   public constructor(public lazyTable = false) {
     this.setId(Random.id());
-    this.currentQueryString = queryString.all();
+    this.currentQueryString = queryString.all?.() || {};
+
+    this.keysList = merge(this.keysList, getMoonlightConfig("table.keys", {}));
 
     if (lazyTable) {
       this.isLoading = true;
@@ -258,6 +275,22 @@ export class SuperTable {
         this.castPaginationInfo(paginationInfoHandler);
       }
     }
+  }
+
+  /**
+   * Merge keys
+   */
+  public mergeKeys(keys: any) {
+    this.keysList = merge(this.keysList, keys);
+
+    return this;
+  }
+
+  /**
+   * Get name of the given key
+   */
+  public getKey(key: string, defaultValue?: any) {
+    return this.keysList[key] || defaultValue;
   }
 
   /**
@@ -590,7 +623,7 @@ export class SuperTable {
   public init() {
     const cachedSortByOptions = this.getCached("sortByOptions");
 
-    const params = queryString.all();
+    const params = queryString.all?.() || {};
 
     if (cachedSortByOptions) {
       this.sortByOptions = {
@@ -632,18 +665,12 @@ export class SuperTable {
         .list(finalParams)
         .then((response) => {
           scrollTop();
-          this.setData(
-            get(
-              response,
-              `data.${getMoonlightConfig("table.recordsKey")}`,
-              "data.records"
-            )
-          );
+          this.setData(get(response.data, this.getKey("records")));
           this.setPaginationInfo(this.paginationInfoCast(response));
           this.setLoading(false);
 
           if (this.updateQueryString) {
-            queryString.update(params);
+            queryString.update?.(params);
           }
 
           if (finalParams.orderBy) {

@@ -3,7 +3,6 @@ import { trans } from "@mongez/localization";
 import { get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
 import React, { useState } from "react";
-import { getMoonlightConfig } from "../../../..//config";
 import { useSuperTable } from "../../hooks/useSuperTable";
 
 export function createButton(Form: React.ComponentType<any>) {
@@ -12,8 +11,7 @@ export function createButton(Form: React.ComponentType<any>) {
     const [open, setOpen] = useState(false);
 
     const pushRow = (response: AxiosResponse) => {
-      const recordKey = getMoonlightConfig("table.createRecordKey", "record");
-      const record = get(response.data, recordKey, "record");
+      const record = get(response.data, superTable.getKey("createRecord"));
 
       if (record) {
         superTable.unshiftRow(record);

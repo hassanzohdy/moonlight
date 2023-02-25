@@ -31,10 +31,12 @@ const defaultConfigurations: MoonlightConfigurations = {
     responseDataKey: "records",
   },
   table: {
-    recordsKey: "records",
-    recordKey: "record",
-    createRecordKey: "record",
-    updateRecordKey: "record",
+    keys: {
+      records: "records",
+      record: "record",
+      createRecord: "record",
+      updateRecord: "record",
+    },
     limitOptions: [10, 20, 50, 100, 200, 250, 500],
     paginationInfo: (response) => {
       return {

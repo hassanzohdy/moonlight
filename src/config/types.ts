@@ -3,6 +3,7 @@ import Endpoint from "@mongez/http";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { PaginationInfo } from "../components";
+import { TableKeys } from "../components/Table/TableProps";
 
 export type MoonlightConfigurations = {
   localeCodes?: {
@@ -81,11 +82,7 @@ export type MoonlightConfigurations = {
     resolveResponse?: (response: any) => any;
     key?: string;
   };
-  table?: {
-    recordsKey?: string;
-    recordKey?: string;
-    createRecordKey?: string;
-    updateRecordKey?: string;
+  table?: TableKeys;
     limitOptions?: number[];
     actions?: React.ComponentType<any>[];
     paginationInfo?: (response: AxiosResponse) => PaginationInfo;

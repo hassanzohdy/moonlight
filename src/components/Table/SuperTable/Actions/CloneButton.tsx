@@ -4,7 +4,6 @@ import { except, get } from "@mongez/reinforcements";
 import { IconCopy } from "@tabler/icons";
 import { AxiosResponse } from "axios";
 import React, { useState } from "react";
-import { getMoonlightConfig } from "../../../../config";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
 
@@ -17,8 +16,7 @@ function _CloneButton({ row }: FormatterProps) {
   if (!Form) return null;
 
   const updateRowData = (response: AxiosResponse) => {
-    const recordKey = getMoonlightConfig("table.createRecordKey", "record");
-    const record = get(response.data, recordKey, "record");
+    const record = get(response.data, superTable.getKey("createRecord"));
 
     if (record) {
       superTable.unshiftRow(record);

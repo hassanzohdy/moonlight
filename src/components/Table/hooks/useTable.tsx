@@ -43,6 +43,7 @@ export function useTable({
   responseDataHandler,
   limitOptions,
   onPageSizeChange,
+  keys,
   total,
   defaultRecord,
   sortCallback,
@@ -68,6 +69,10 @@ export function useTable({
 
   if (defaultRecord) {
     superTable.setDefaultRecord(defaultRecord);
+  }
+
+  if (keys) {
+    superTable.mergeKeys(keys);
   }
 
   useEffect(() => {

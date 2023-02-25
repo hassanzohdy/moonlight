@@ -6,7 +6,6 @@ import { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
-import { getMoonlightConfig } from "./../../../../config";
 
 export function EditBUtton({ row, rowIndex }: FormatterProps) {
   const superTable = useSuperTable();
@@ -19,8 +18,7 @@ export function EditBUtton({ row, rowIndex }: FormatterProps) {
   if (!Form) return null;
 
   const updateRowData = (response: AxiosResponse) => {
-    const recordKey = getMoonlightConfig("table.updateRecordKey", "record");
-    const record = get(response.data, recordKey, "record");
+    const record = get(response.data, superTable.getKey("updateRecord"));
 
     superTable.updateRow(record, rowIndex);
   };

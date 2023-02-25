@@ -688,10 +688,11 @@ export class InputBuilder {
 
     if (!defaultValue) {
       if (this.valueFromQueryString) {
-        defaultValue = queryString.get(
-          this.valueFromQueryString,
-          this.inputDefaultValue
-        );
+        defaultValue =
+          queryString.get?.(
+            this.valueFromQueryString,
+            this.inputDefaultValue
+          ) || this.inputDefaultValue;
       } else {
         defaultValue = this.inputDefaultValue;
       }

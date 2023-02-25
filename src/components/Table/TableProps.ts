@@ -104,6 +104,15 @@ export type TableFormProps = {
   record?: any;
 };
 
+export type TableKeys = {
+  keys?: {
+    records?: string;
+    record?: string;
+    createRecord?: string;
+    updateRecord?: string;
+  };
+};
+
 export type TableProps = {
   /**
    * Table name
@@ -303,10 +312,7 @@ export type TableProps = {
    */
   responseDataHandler?: (response: AxiosResponse) => any[];
   /**
-   * Response records key
-   * Can be set in the configurations settings
-   *
-   * @default records
+   * Resolving keys for dynamic response
    */
-  responseRecordsKey?: string;
+  keys?: TableKeys;
 };
