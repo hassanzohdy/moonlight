@@ -15,6 +15,10 @@ export const moonlightTranslations = {
     en: "Submit",
     ar: "إرسال",
   },
+  clone: {
+    en: "Clone",
+    ar: "نسخ",
+  },
   pleaseWaitTableIsLoading: {
     en: "Please wait while we load the table data",
     ar: "يرجى الانتظار حتى نحمل بيانات الجدول",
