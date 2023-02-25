@@ -24,9 +24,16 @@ function _CloneButton({ row }: FormatterProps) {
     }
   };
 
+  console.log(except(row, ["id"]));
+
   return (
     <>
-      <ActionIcon color="indigo" onClick={() => setOpen(true)}>
+      <ActionIcon
+        variant="light"
+        radius={10000}
+        color="indigo"
+        onClick={() => setOpen(true)}
+      >
         <Tooltip
           withArrow
           label={trans(moonlightTranslations.clone)}

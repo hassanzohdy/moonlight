@@ -25,7 +25,12 @@ export function EditButton({ row, rowIndex }: FormatterProps) {
 
   return (
     <>
-      <ActionIcon onClick={() => setOpen(true)}>
+      <ActionIcon
+        variant="light"
+        color="green"
+        radius={10000}
+        onClick={() => setOpen(true)}
+      >
         <Tooltip withArrow label={trans("edit")} position="top">
           <span>
             <IconPencil size={16} stroke={1.5} />
