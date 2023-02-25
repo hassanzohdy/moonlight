@@ -82,7 +82,8 @@ export type MoonlightConfigurations = {
     resolveResponse?: (response: any) => any;
     key?: string;
   };
-  table?: TableKeys;
+  table?: {
+    keys?: TableKeys;
     limitOptions?: number[];
     actions?: React.ComponentType<any>[];
     paginationInfo?: (response: AxiosResponse) => PaginationInfo;

@@ -19,7 +19,7 @@ import {
   IntegerInput,
   NumberInput,
   SelectInput,
-  SwitchInput
+  SwitchInput,
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
 import { toastError, toastLoading } from "../../Toast";
@@ -33,7 +33,7 @@ import {
   TableFilter,
   TableHeaderButtons,
   TablePlainColumn,
-  TableProps
+  TableProps,
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
 import { EditColumn } from "./EditColumn";
@@ -42,7 +42,7 @@ import {
   LoadMode,
   PaginationInfo,
   RegisteredBulkSelectionRow,
-  TableEvent
+  TableEvent,
 } from "./SuperTable.types";
 
 const defaultCallback = () => {
@@ -422,7 +422,10 @@ export class SuperTable {
     if (this.permissions?.[permission] === false) return false;
 
     if (!this.hasRole()) return true;
-    return this.hasRole() && this.user.can(`${this.role}.${permission}`);
+
+    if (!this.user) return true;
+
+    return this.user.can(`${this.role}.${permission}`);
   }
 
   /**
@@ -1246,8 +1249,6 @@ export class SuperTable {
    * Manager table filters to return it properly
    */
   public getFilters(): TableFilter[] {
-    const query = queryString;
-
     return this.filters.map((filter) => {
       let Component = filter.component;
       if (filter.type) {
@@ -1295,16 +1296,15 @@ export class SuperTable {
       if (
         filter.type &&
         ["switch", "checkbox"].includes(filter.type) &&
-        query.get(filter.name)
+        queryString.get?.(filter.name)
       ) {
         componentProps.defaultChecked = true;
       } else {
-        componentProps.defaultValue = query.get(
-          filter.name,
+        componentProps.defaultValue =
+          queryString.get?.(filter.name) ||
           componentProps.defaultValue !== undefined
             ? componentProps.defaultValue
-            : ""
-        );
+            : "";
       }
 
       filter.componentProps = componentProps;
