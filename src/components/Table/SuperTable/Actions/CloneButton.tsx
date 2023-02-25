@@ -24,8 +24,6 @@ function _CloneButton({ row }: FormatterProps) {
     }
   };
 
-  console.log(except(row, ["id"]));
-
   return (
     <>
       <ActionIcon

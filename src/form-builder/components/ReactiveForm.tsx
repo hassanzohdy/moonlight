@@ -677,6 +677,8 @@ export class ReactiveForm {
 
     let InputBuildersContent: React.ReactNode = null;
 
+    console.log(this.record);
+
     if (this.tabs.length > 0) {
       InputBuildersContent = this.renderTabs();
     } else {

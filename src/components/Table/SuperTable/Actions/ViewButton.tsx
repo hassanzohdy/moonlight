@@ -13,11 +13,11 @@ export function ViewButton({ row, rowIndex, settings }: FormatterProps) {
   const route = settings?.route || router.currentRoute() + "/" + row.id;
 
   return (
-    <ActionIcon>
+    <ActionIcon color="orange" radius={1000} variant="light">
       <Anchor component={components.link} to={route}>
         <Tooltip withArrow label={trans("view")} position="top">
           <span>
-            <IconLogout size={16} stroke={1.5} color="green" />
+            <IconLogout size={16} stroke={1.5} />
           </span>
         </Tooltip>
       </Anchor>
