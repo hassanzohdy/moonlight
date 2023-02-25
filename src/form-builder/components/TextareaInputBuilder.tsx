@@ -13,7 +13,7 @@ export class TextareaInputBuilder extends InputBuilder {
    * Determine whether to display the confirm password input
    */
   public rows(rows: number) {
-    this.componentProps.rows = rows;
+    this.componentProps.minRows = rows;
     return this;
   }
 }
