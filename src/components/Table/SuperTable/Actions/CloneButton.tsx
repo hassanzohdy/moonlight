@@ -4,6 +4,7 @@ import { except, get } from "@mongez/reinforcements";
 import { IconCopy } from "@tabler/icons";
 import { AxiosResponse } from "axios";
 import React, { useState } from "react";
+import { moonlightTranslations } from "../../../../locales";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
 
@@ -26,7 +27,11 @@ function _CloneButton({ row }: FormatterProps) {
   return (
     <>
       <ActionIcon color="indigo" onClick={() => setOpen(true)}>
-        <Tooltip withArrow label={trans("clone")} position="top">
+        <Tooltip
+          withArrow
+          label={trans(moonlightTranslations.clone)}
+          position="top"
+        >
           <span>
             <IconCopy size={16} stroke={1.5} />
           </span>
