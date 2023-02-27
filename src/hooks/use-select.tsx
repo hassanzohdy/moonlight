@@ -48,7 +48,7 @@ export function useSelect(
   const [dataList, setData] = useState(mapData(data, except, mapOption));
   const [isOpen, setOpen] = useState(false);
 
-  const setDataList = (data) => {
+  const setDataList = (data: any[]) => {
     setData(data);
 
     const currentValue = multiple
@@ -136,8 +136,10 @@ export function useSelect(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lazyRequest]);
 
-  const changeValue = (value: any) => {
-    onChange(onChangeProp(value, dataList));
+  const changeValue = (newValue: any) => {
+    if (newValue === value) return;
+
+    onChange(onChangeProp(newValue, dataList));
   };
 
   useEvent(() =>
