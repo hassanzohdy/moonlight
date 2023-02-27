@@ -26,7 +26,7 @@ export function useSelect(
     autoSelectFirstOption,
     ...props
   }: any,
-  { onChange: onChangeProp, parseValue, multiple = false }: SelectHookOptions,
+  { onChange: onChangeProp, parseValue, multiple = false }: SelectHookOptions
 ) {
   const {
     id,
@@ -48,18 +48,18 @@ export function useSelect(
   const [dataList, setData] = useState(mapData(data, except, mapOption));
   const [isOpen, setOpen] = useState(false);
 
-  const setDataList = data => {
+  const setDataList = (data) => {
     setData(data);
 
     const currentValue = multiple
-      ? (value || []).map(value => String(value))
+      ? (value || []).map((value) => String(value))
       : String(value);
 
     if (!Is.empty(value)) {
       if (multiple) {
-        const stringedData = data.map(item => String(item.value));
+        const stringedData = data.map((item) => String(item.value));
         // check for each value if it exists in the new data
-        const totalFound = currentValue.filter(value => {
+        const totalFound = currentValue.filter((value) => {
           return stringedData.includes(value);
         });
 
@@ -67,7 +67,7 @@ export function useSelect(
           changeValue([]);
         }
       } else {
-        if (!data.find(option => String(option.value) === currentValue)) {
+        if (!data.find((option) => String(option.value) === currentValue)) {
           changeValue("");
         }
       }
@@ -88,7 +88,7 @@ export function useSelect(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
-  const loadRequest = request => {
+  const loadRequest = (request) => {
     if (!request) return;
 
     loading(true);
@@ -143,8 +143,15 @@ export function useSelect(
   useEvent(() =>
     formInput.on("reset", () => {
       changeValue(formInput.initialValue);
-    }),
+    })
   );
+
+  useEffect(() => {
+    if (data === undefined) return;
+
+    setDataList(mapData(data, except, mapOption));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, except]);
 
   const onSelectOpen = () => {
     onDropdownOpen && onDropdownOpen();

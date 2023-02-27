@@ -6,6 +6,7 @@ import { Location } from "./types";
 
 export function GoogleMapLocation({ location }: { location: Location }) {
   const [opened, toggleOpen] = useBooleanState();
+
   return (
     <Marker onClick={toggleOpen} position={location.location}>
       {opened && (

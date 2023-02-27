@@ -7,9 +7,21 @@ export function money(value: any) {
 }
 
 export function currentDirection() {
-  return getMoonlightConfig("current.direction")?.() || "ltr";
+  const direction = getMoonlightConfig("current.direction");
+
+  if (direction) return direction();
+
+  if (getMoonlightConfig("current.autoDetect") === false) return "ltr";
+
+  return document.documentElement.dir || "ltr";
 }
 
 export function currentLocaleCode() {
-  return getMoonlightConfig("current.localeCode")?.() || "en";
+  const localeCode = getMoonlightConfig("current.localeCode");
+
+  if (localeCode) return localeCode();
+
+  if (getMoonlightConfig("current.autoDetect") === false) return "en";
+
+  return document.documentElement.lang || "en";
 }

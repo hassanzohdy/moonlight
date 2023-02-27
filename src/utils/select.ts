@@ -6,7 +6,6 @@ import {
   minLengthRule,
   requiredRule,
 } from "@mongez/validator";
-import { currentLocaleCode } from "./helpers";
 import { getLocalizedValue } from "./localization";
 
 export function defaultMapOption(option: any, _index: number): any {
@@ -18,8 +17,7 @@ export function defaultMapOption(option: any, _index: number): any {
   }
 
   const label = getLocalizedValue(
-    option.name || option.text || option.title || option.label,
-    currentLocaleCode()
+    option.name || option.text || option.title || option.label
   );
 
   return {

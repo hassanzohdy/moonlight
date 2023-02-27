@@ -1,4 +1,3 @@
-import Is from "@mongez/supportive-is";
 import { getMoonlightConfig } from "../config";
 import { currentLocaleCode } from "./helpers";
 
@@ -12,7 +11,7 @@ export function getLocalizedValue(
 
   if (value[localeCode]) return value[localeCode];
 
-  if (Is.array(value)) {
+  if (Array.isArray(value)) {
     return value.find((item) => item[localeCodeKey] === localeCode)?.[textKey];
   }
 

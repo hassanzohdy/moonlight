@@ -4,12 +4,13 @@ import { moonlightTranslations } from "../locales";
 import { components } from "../utils/resolvers";
 import { MoonlightConfigurations } from "./types";
 
-const defaultConfigurations: MoonlightConfigurations = {
+const defaultConfigurations: Partial<MoonlightConfigurations> = {
   localeCodes: {},
-  endpoint: undefined,
-  autoDetectDarkMode: true,
   date: {
     dateFormat: "dd-MM-yyyy",
+  },
+  current: {
+    autoDetect: true,
   },
   google: {
     map: {
@@ -39,7 +40,7 @@ const defaultConfigurations: MoonlightConfigurations = {
       updateRecord: "record",
     },
     limitOptions: [10, 20, 50, 100, 200, 250, 500],
-    paginationInfo: response => {
+    paginationInfo: (response) => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -62,7 +63,7 @@ const defaultConfigurations: MoonlightConfigurations = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations,
+  configurations: MoonlightConfigurations
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
 

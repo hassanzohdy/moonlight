@@ -30,7 +30,8 @@ export function InputWrapper({
               verticalAlign: "middle",
               marginInlineStart: "0.2rem",
               display: "inline-block",
-            }}>
+            }}
+          >
             <IconHelp size="1.0rem" />
           </span>
         </Tooltip>
@@ -50,7 +51,7 @@ export function InputWrapper({
       label={label}
       dir={dir}
       description={inputDescription}
-      styles={theme => ({
+      styles={(theme) => ({
         root: {
           position: "relative",
         },
@@ -67,7 +68,8 @@ export function InputWrapper({
         },
       })}
       withAsterisk={required}
-      labelProps={labelProps}>
+      labelProps={labelProps}
+    >
       <LoadingOverlay visible={loading} overlayBlur={2} />
 
       <ContentWrapper {...contentProps}>
