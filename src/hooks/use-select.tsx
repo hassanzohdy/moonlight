@@ -1,5 +1,5 @@
-import { useFormInput } from "@mongez/react-form";
-import { useEvent } from "@mongez/react-hooks";
+import { useFormControl } from "@mongez/react-form";
+import { useOnce } from "@mongez/react-hooks";
 import { get, trim } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { useEffect, useRef, useState } from "react";
@@ -24,29 +24,28 @@ export function useSelect(
     searchRequest,
     autoSelectSingleOption,
     autoSelectFirstOption,
+    responseDataKey,
     ...props
   }: any,
   { onChange: onChangeProp, parseValue, multiple = false }: SelectHookOptions
 ) {
   const {
     id,
-    label,
-    required,
     error,
-    placeholder,
-    onChange,
+    changeValue: changeFormControlValue,
     disabled,
-    name,
     value,
     otherProps,
     formInput,
     visibleElementRef,
-  } = useFormInput(props);
+  } = useFormControl(props);
 
   const [isLoading, loading] = useState(request !== undefined);
 
   const [dataList, setData] = useState(mapData(data, except, mapOption));
   const [isOpen, setOpen] = useState(false);
+
+  const initialRender = useRef(false);
 
   const setDataList = (data: any[]) => {
     setData(data);
@@ -63,13 +62,14 @@ export function useSelect(
           return stringedData.includes(value);
         });
 
-        if (totalFound === 0) {
+        if (totalFound === 0 && initialRender.current) {
           changeValue([]);
         }
-      } else {
-        if (!data.find((option) => String(option.value) === currentValue)) {
-          changeValue("");
-        }
+      } else if (
+        initialRender.current &&
+        !data.find((option) => String(option.value) === currentValue)
+      ) {
+        changeValue("");
       }
     }
 
@@ -88,13 +88,21 @@ export function useSelect(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  useOnce(() => {
+    setTimeout(() => {
+      initialRender.current = true;
+    }, 0);
+  });
+
   const loadRequest = (request) => {
     if (!request) return;
 
     loading(true);
 
     request().then((response: any) => {
-      const dataKey = getMoonlightConfig("select.responseDataKey", "records");
+      const dataKey =
+        responseDataKey ||
+        getMoonlightConfig("select.responseDataKey", "records");
 
       const data: any[] = get(response.data, dataKey, "records");
 
@@ -114,6 +122,7 @@ export function useSelect(
   const lazyRequested = useRef(false);
 
   useEffect(() => {
+    if (!request) return;
     return loadRequest(request);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,7 +135,7 @@ export function useSelect(
   }, [dynamicRequest]);
 
   useEffect(() => {
-    if (Is.empty(props.defaultValue)) return;
+    if (props.defaultValue === undefined || props.defaultValue === null) return;
     if (!lazyRequest) return;
 
     if (!lazyRequested.current) {
@@ -139,14 +148,8 @@ export function useSelect(
   const changeValue = (newValue: any) => {
     if (newValue === value) return;
 
-    onChange(onChangeProp(newValue, dataList));
+    changeFormControlValue(...onChangeProp(newValue, dataList));
   };
-
-  useEvent(() =>
-    formInput.on("reset", () => {
-      changeValue(formInput.initialValue);
-    })
-  );
 
   useEffect(() => {
     if (data === undefined) return;
@@ -175,20 +178,16 @@ export function useSelect(
   };
 
   return {
-    name,
     value: parseValue(value),
     id,
     onSearchChange,
     setOpen,
     isOpen,
-    required,
-    label,
     disabled,
     isLoading,
     changeValue,
     error,
     onSelectOpen,
-    placeholder,
     otherProps,
     dataList,
     visibleElementRef,

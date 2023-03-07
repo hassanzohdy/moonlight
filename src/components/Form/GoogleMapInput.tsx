@@ -1,9 +1,8 @@
 import { Grid, List, Modal, ThemeIcon } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { HiddenInput, useFormInput } from "@mongez/react-form";
+import { requiredRule, useFormControl } from "@mongez/react-form";
 import { useOuterClick } from "@mongez/react-hooks";
 import { readMoreChars } from "@mongez/reinforcements";
-import { requiredRule } from "@mongez/validator";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { IconCircleCheck, IconMapPin, IconTrash } from "@tabler/icons";
 import { useState } from "react";
@@ -31,6 +30,10 @@ export function GoogleMapInput({
   defaultValue,
   description,
   hint,
+  label,
+  autoFocus,
+  placeholder,
+  required,
   zoom = googleMapConfig("zoom", 18),
   libraries = googleMapConfig("libraries", [
     "drawing",
@@ -47,17 +50,10 @@ export function GoogleMapInput({
   searchScope = ["address"],
   ...props
 }: any) {
-  const {
-    name,
-    label,
-    placeholder,
-    required,
-    error,
-    visibleElementRef,
-    id,
-    autoFocus,
-    onChange,
-  } = useFormInput({ ...props, defaultValue });
+  const { error, visibleElementRef, id, changeValue } = useFormControl({
+    ...props,
+    defaultValue,
+  });
 
   // initializing google map
   const { isLoaded, loadError } = useLoadScript({
@@ -71,7 +67,7 @@ export function GoogleMapInput({
 
   const styles = { ...defaultStyles, ...incomingStyles };
 
-  const onMapClick = e => {
+  const onMapClick = (e) => {
     getAddressByLatLng(e.latLng.lat(), e.latLng.lng()).then((response: any) => {
       const newLocation = {
         lat: e.latLng.lat(),
@@ -99,7 +95,7 @@ export function GoogleMapInput({
     clearSuggestions();
   });
 
-  const handleInput = e => {
+  const handleInput = (e) => {
     setValue(e.target.value);
   };
 
@@ -115,11 +111,7 @@ export function GoogleMapInput({
 
         setLocation(newLocation);
         setValue(newLocation.address, false);
-        onChange({
-          target: {
-            value: newLocation,
-          },
-        });
+        changeValue(newLocation);
       });
 
       setValue(description, false);
@@ -127,7 +119,7 @@ export function GoogleMapInput({
     };
 
   const renderSuggestions = () =>
-    data.map(suggestion => {
+    data.map((suggestion) => {
       const {
         place_id,
         structured_formatting: { main_text, secondary_text },
@@ -139,7 +131,8 @@ export function GoogleMapInput({
             cursor: "pointer",
           }}
           key={place_id}
-          onClick={handleSelect(suggestion)}>
+          onClick={handleSelect(suggestion)}
+        >
           <strong>{main_text}</strong> <small>{secondary_text}</small>
         </List.Item>
       );
@@ -152,19 +145,11 @@ export function GoogleMapInput({
   const clearLocation = () => {
     setValue("", false);
     setLocation(defaultCenter);
-    onChange({
-      target: {
-        value: "",
-        location: {},
-      },
-    });
+    changeValue("");
   };
 
   return (
     <>
-      <HiddenInput name={`${name}.lat`} value={location.lat} />
-      <HiddenInput name={`${name}.lng`} value={location.lng} />
-      <HiddenInput name={`${name}.address`} value={location.address} />
       <InputWrapper
         error={error}
         description={description}
@@ -173,11 +158,12 @@ export function GoogleMapInput({
         label={label}
         required={required}
         tooltip={location.address}
-        id={id}>
+        id={id}
+      >
         <TextInput
           // name={`${name}_location`}
           value={readMoreChars(location.address || "", 80)}
-          placeholder={placeholder}
+          placeholder={placeholder && trans(placeholder)}
           id={id}
           onClick={() => setOpen(true)}
           readOnly
@@ -193,7 +179,8 @@ export function GoogleMapInput({
                       cursor: "pointer",
                     }}
                     size="sm"
-                    color="red">
+                    color="red"
+                  >
                     <IconTrash onClick={clearLocation} size={15} />
                   </ThemeIcon>
                 </Tooltip>
@@ -205,7 +192,8 @@ export function GoogleMapInput({
                   }}
                   mt={4}
                   size="sm"
-                  color={location?.address ? "green" : "gray"}>
+                  color={location?.address ? "green" : "gray"}
+                >
                   <IconMapPin size={15} onClick={() => setOpen(true)} />
                 </ThemeIcon>
               </Tooltip>
@@ -218,7 +206,8 @@ export function GoogleMapInput({
         size="xl"
         exitTransitionDuration={300}
         opened={open}
-        onClose={() => setOpen(false)}>
+        onClose={() => setOpen(false)}
+      >
         <Grid ref={searchRef}>
           <Grid.Col mb={10}>
             <TextInput
@@ -240,7 +229,8 @@ export function GoogleMapInput({
                   <ThemeIcon color="teal" size={24} radius="xl">
                     <IconCircleCheck size={16} />
                   </ThemeIcon>
-                }>
+                }
+              >
                 {renderSuggestions()}
               </List>
             </Grid.Col>
@@ -251,7 +241,8 @@ export function GoogleMapInput({
           mapContainerStyle={styles.container}
           zoom={zoom}
           center={location}
-          onClick={onMapClick}>
+          onClick={onMapClick}
+        >
           <Marker position={{ lat: location.lat, lng: location.lng }} />
         </GoogleMap>
       </Modal>

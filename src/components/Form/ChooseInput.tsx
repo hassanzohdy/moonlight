@@ -1,8 +1,11 @@
 import { SegmentedControl, SegmentedControlProps } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { FormInputProps, HiddenInput, useFormInput } from "@mongez/react-form";
+import {
+  FormInputProps,
+  requiredRule,
+  useFormControl,
+} from "@mongez/react-form";
 import { Random } from "@mongez/reinforcements";
-import { requiredRule } from "@mongez/validator";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
@@ -13,7 +16,7 @@ export type ChooseInputProps = FormInputProps &
   };
 
 function mapData(data: SegmentedControlProps["data"]) {
-  return data.map(item => {
+  return data.map((item) => {
     if (typeof item === "string") {
       return {
         label: trans(item),
@@ -32,7 +35,7 @@ export function ChooseInput({
   data: incomingData,
   ...props
 }: ChooseInputProps) {
-  const { value, onChange, name, otherProps, ...rest } = useFormInput(props);
+  const { value, changeValue, otherProps, ...rest } = useFormControl(props);
   const previousValue = useRef(value);
   const keyRef = useRef(Random.string(6));
 
@@ -50,10 +53,6 @@ export function ChooseInput({
 
   const [data, setData] = useState(() => mapData(incomingData));
 
-  const updateValue = (value: string) => {
-    onChange({ target: { value, name } });
-  };
-
   useEffect(() => {
     setData(mapData(incomingData));
   }, [incomingData]);
@@ -65,12 +64,11 @@ export function ChooseInput({
   return (
     <Wrapper {...wrapperProps}>
       <span>
-        <HiddenInput name={name} value={value} />
         <InputWrapper dir={dir} description={description} {...rest}>
           <SegmentedControl
             value={value}
             key={segmentKey}
-            onChange={updateValue}
+            onChange={changeValue}
             data={data}
             {...otherProps}
           />

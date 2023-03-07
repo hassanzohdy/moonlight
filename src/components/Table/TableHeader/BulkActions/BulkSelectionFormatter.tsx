@@ -34,7 +34,7 @@ export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
       <CheckboxInput
         checked={checked}
         key={String(row.id) + String(rowIndex)}
-        onChange={e => updateCheckedState(e.target.checked)}
+        onChange={updateCheckedState}
       />
     </>
   );

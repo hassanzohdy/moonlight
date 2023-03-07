@@ -1,8 +1,6 @@
 import { EventSubscription } from "@mongez/events";
 import { RestfulEndpoint } from "@mongez/http";
-import { FormControl } from "@mongez/react-form";
 import { debounce, get } from "@mongez/reinforcements";
-import Is from "@mongez/supportive-is";
 import { MultiSelectInput, SelectInput } from "../../components/Form/Select";
 import { InputBuilder } from "./InputBuilder";
 import { SelectInputBuilderRenderer } from "./SelectInputBuilderRenderer";
@@ -117,7 +115,7 @@ export class SelectInputBuilder extends InputBuilder {
    */
   public spawns(
     input: SelectInputBuilder,
-    searchAs: typeof this.spawning.searchAs,
+    searchAs: typeof this.spawning.searchAs
   ) {
     this.spawning.selectBuilder = input;
     this.spawning.searchAs = searchAs;
@@ -149,14 +147,14 @@ export class SelectInputBuilder extends InputBuilder {
       return get(
         this.record,
         this.data.defaultValueKey,
-        this.inputDefaultValue || [],
-      ).map(value => value.id || value);
+        this.inputDefaultValue || []
+      ).map((value) => value.id || value);
     }
 
     const value = get(
       this.record,
       this.data.defaultValueKey,
-      this.inputDefaultValue || "",
+      this.inputDefaultValue || ""
     );
 
     return value?.id || value;
@@ -254,10 +252,8 @@ export class SelectInputBuilder extends InputBuilder {
 
       const selectInput = this.spawning.selectBuilder;
 
-      this.componentProps.onChange = (e: any, formControl: FormControl) => {
-        userOnChangeProp && userOnChangeProp(e, formControl);
-
-        const value = e.target.value;
+      this.componentProps.onChange = (value, options) => {
+        userOnChangeProp && userOnChangeProp(value, options);
 
         this.spawning.displayed = true;
 
@@ -292,7 +288,7 @@ export class SelectInputBuilder extends InputBuilder {
     if (this.exceptKey) {
       let exceptValue = get(this.record, this.exceptKey);
 
-      if (!Is.array(exceptValue)) {
+      if (!Array.isArray(exceptValue)) {
         exceptValue = exceptValue ? [exceptValue] : undefined;
       }
 

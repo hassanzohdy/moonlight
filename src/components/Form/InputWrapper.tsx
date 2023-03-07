@@ -46,7 +46,7 @@ export function InputWrapper({
   return (
     <Input.Wrapper
       ref={visibleElementRef}
-      error={error?.errorMessage ? trans(error?.errorMessage) : undefined}
+      error={error}
       id={id}
       label={label}
       dir={dir}

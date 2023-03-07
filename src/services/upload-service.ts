@@ -1,9 +1,10 @@
+import { Fileable } from "../components/Form/DropzoneInput.types";
 import { getMoonlightConfig } from "../config";
 
 export function uploadFiles(
   data: any,
   progressPercentageCallback?: (percentage: number) => void
-) {
+): Promise<Fileable[]> {
   const endpoint = getMoonlightConfig("endpoint");
   const uploadsRoute = getMoonlightConfig("uploads.route", "/uploads");
   return new Promise((resolve, reject) => {
@@ -35,14 +36,14 @@ export function deleteUploadedFile(fileId: string | number) {
 export function uploadFile(
   file: File,
   progressPercentageCallback?: (percentage: number) => void
-): Promise<any> {
+): Promise<Fileable> {
   const formData = new FormData();
 
   formData.append(uploadsHandler.uploadsKey(), file);
 
   return new Promise((resolve, reject) => {
     uploadFiles(formData, progressPercentageCallback)
-      .then((files: any) => {
+      .then((files) => {
         resolve(files[0]);
       })
       .catch(reject);

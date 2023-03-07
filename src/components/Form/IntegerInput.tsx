@@ -1,4 +1,9 @@
-import { integerRule, maxRule, minRule, requiredRule } from "@mongez/validator";
+import {
+  integerRule,
+  maxRule,
+  minRule,
+  requiredRule,
+} from "@mongez/react-form";
 import { BaseInputProps } from "./BaseInput";
 import { NumberInput } from "./NumberInput";
 

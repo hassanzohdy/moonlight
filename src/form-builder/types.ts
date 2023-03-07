@@ -2,11 +2,12 @@ import { FormControl, FormInterface } from "@mongez/react-form";
 import { AxiosResponse } from "axios";
 import { ReactiveForm } from "./components";
 
-export type SubmitCallback = (
-  event: React.FormEvent,
-  form: FormInterface,
-  reactiveForm: ReactiveForm
-) => void;
+export type SubmitCallback = (options: {
+  values: Record<string, any>;
+  reactiveForm: ReactiveForm;
+  form: FormInterface;
+  formData: FormData;
+}) => void;
 
 export type CachedRender = {
   heading: React.ReactNode;

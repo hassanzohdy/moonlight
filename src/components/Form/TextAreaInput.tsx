@@ -1,29 +1,17 @@
 import { Textarea } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { useFormInput } from "@mongez/react-form";
-import { requiredRule } from "@mongez/validator";
+import { requiredRule, useFormControl } from "@mongez/react-form";
 import React from "react";
 import { left } from "../../utils/directions";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
 
 function _TextAreaInput(
-  { dir, description, ...props }: BaseInputProps,
-  ref: any,
+  { dir, label, required, placeholder, description, ...props }: BaseInputProps,
+  ref: any
 ) {
-  const {
-    name,
-    id,
-    value,
-    label,
-    visibleElementRef,
-    placeholder,
-    required,
-    onChange,
-    onBlur,
-    error,
-    otherProps,
-  } = useFormInput(props);
+  const { id, value, visibleElementRef, changeValue, error, otherProps } =
+    useFormControl(props);
 
   return (
     <>
@@ -34,20 +22,19 @@ function _TextAreaInput(
         label={label}
         dir={dir}
         description={description}
-        required={required}>
+        required={required}
+      >
         <Textarea
           id={id}
           ref={ref}
-          name={name}
           styles={() => ({
             input: {
               textAlign: left(dir),
             },
           })}
           required={required}
-          placeholder={trans(placeholder as string)}
-          onChange={onChange}
-          onBlur={onBlur as any}
+          placeholder={placeholder && trans(placeholder) + (required && " *")}
+          onChange={(e) => changeValue(e.currentTarget.value)}
           value={value}
           {...otherProps}
         />

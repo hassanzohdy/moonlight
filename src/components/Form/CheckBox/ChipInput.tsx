@@ -6,7 +6,6 @@ export const ChipInput = withCheckboxInput<Partial<ChipProps>>(Chip as any, {
     children: props.label,
     ...otherProps,
   }),
-  getStateChange: (e) => e,
 });
 
 ChipInput.displayName = "ChipInput";

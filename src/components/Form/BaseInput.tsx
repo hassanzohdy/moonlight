@@ -1,8 +1,8 @@
 import { Input, Loader, useMantineTheme } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { FormInputProps, useFormInput } from "@mongez/react-form";
+import { FormInputProps, useFormControl } from "@mongez/react-form";
 import { IconAlertCircle } from "@tabler/icons";
-import React, { useEffect } from "react";
+import React from "react";
 import { left, right } from "../../utils/directions";
 import { currentDirection } from "../../utils/helpers";
 import { Tooltip } from "../Tooltip";
@@ -17,36 +17,15 @@ function _BaseInput({
   component: Component = Input,
   loading,
   description,
-  onChangeInput = (e) => e,
+  placeholder,
   ...props
 }: BaseInputProps) {
-  const {
-    name,
-    value,
-    placeholder,
-    onChange,
-    onBlur,
-    inputRef,
-    autoFocus,
-    error,
-    id,
-    formInput,
-    otherProps,
-    ...rest
-  } = useFormInput(props);
+  const { value, changeValue, inputRef, error, id, otherProps, ...rest } =
+    useFormControl(props);
 
   let rightSection: React.ReactNode = null;
 
   const theme = useMantineTheme();
-
-  useEffect(() => {
-    const onReset = formInput.on("reset", () => {
-      onChangeInput({ target: { value: undefined } });
-    });
-
-    return () => onReset.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formInput]);
 
   if (error) {
     rightSection = (
@@ -77,8 +56,7 @@ function _BaseInput({
         error={error}
       >
         <Component
-          invalid={error !== null}
-          name={name}
+          invalid={Boolean(error)}
           ref={inputRef}
           id={id}
           readOnly={loading}
@@ -89,13 +67,10 @@ function _BaseInput({
             },
           })}
           placeholder={
-            placeholder &&
-            trans(placeholder as string) + (props.required ? " *" : "")
+            placeholder && trans(placeholder) + (props.required ? " *" : "")
           }
-          onChange={(e) => onChange(onChangeInput(e))}
-          onBlur={onBlur as any}
+          onChange={changeValue}
           value={value}
-          autoFocus={autoFocus}
           {...otherProps}
         />
       </InputWrapper>

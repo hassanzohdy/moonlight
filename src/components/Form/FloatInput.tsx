@@ -1,5 +1,10 @@
-import { FormInputProps } from "@mongez/react-form";
-import { floatRule, maxRule, minRule, requiredRule } from "@mongez/validator";
+import {
+  floatRule,
+  FormInputProps,
+  maxRule,
+  minRule,
+  requiredRule,
+} from "@mongez/react-form";
 import { NumberInput } from "./NumberInput";
 
 export function FloatInput(props: FormInputProps) {

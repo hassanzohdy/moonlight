@@ -10,13 +10,10 @@ const CheckBoxWrapper = styled.div`
 
 export function BulkSelectionHeading() {
   const superTable = useSuperTable();
-  const toggleSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
-    superTable.toggleAllBulkSelection(event.target.checked);
-  };
 
   return (
     <CheckBoxWrapper>
-      <CheckboxInput onChange={toggleSelection} />
+      <CheckboxInput onChange={superTable.toggleAllBulkSelection} />
     </CheckBoxWrapper>
   );
 }

@@ -16,8 +16,8 @@ export default function LimitOptions() {
       placeholder={trans("limit")}
       data={limitOptions}
       clearable={false}
-      value={superTable.paginationInfo.limit}
-      onChange={e => superTable.updateLimit(Number(e.target.value))}
+      value={String(superTable.paginationInfo.limit)}
+      onChange={(value) => superTable.updateLimit(Number(value))}
     />
   );
 }

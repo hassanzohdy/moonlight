@@ -3,6 +3,7 @@ import Endpoint from "@mongez/http";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { PaginationInfo } from "../components";
+import { Fileable } from "../components/Form/DropzoneInput.types";
 import { TableKeys } from "../components/Table/TableProps";
 
 export type MoonlightConfigurations = {
@@ -45,8 +46,17 @@ export type MoonlightConfigurations = {
      */
     autoDetect?: boolean;
   };
+  /**
+   * Current user object
+   */
   user?: {
+    /**
+     * Determine if the current user has the given permission
+     */
     can: (permission: string) => boolean;
+    /**
+     * Any other data related to the current user
+     */
     [key: string]: any;
   };
   cache?: {
@@ -55,20 +65,52 @@ export type MoonlightConfigurations = {
       get: (key: string, defaultValue?: any) => any;
     };
   };
+  /**
+   * Components to be used in the app
+   */
   components?: {
+    /**
+     * Link component is used for navigation
+     */
     link?: React.ComponentType<any>;
     helmet?: React.ComponentType<any>;
   };
   router: {
+    /**
+     * A function that returns the current route
+     */
     currentRoute: () => string;
-    navigateTo: (route: string, params?: any) => any;
+    /**
+     * Navigate to the given route
+     */
+    navigateTo: (route: string) => any;
+    /**
+     * Not found route
+     *
+     * @default "/404"
+     */
     notFoundRoute: string;
+    /**
+     * Query string options
+     */
     queryString?: {
-      all: () => {
-        [key: string]: any;
-      };
-      update: (query: any) => any;
+      /**
+       * Get all query parameters
+       */
+      all: () => Record<string, any>;
+      /**
+       * Update query parameters
+       */
+      update: (query: Record<string, any>) => any;
+      /**
+       * Get a specific query parameter
+       *
+       * It should also accept a default value as the second parameter
+       */
       get: (key: string, defaultValue?: any) => any;
+      /**
+       * Any other query string options won't be used
+       */
       [key: string]: any;
     };
   };
@@ -85,13 +127,34 @@ export type MoonlightConfigurations = {
       label?: React.ReactNode;
     };
   };
-  select?: {
-    responseDataKey?: string;
+  /**
+   * Form options
+   */
+  form?: {
+    /**
+     * Form date picker options
+     */
+    date?: {
+      /**
+       * Set default date format
+       *
+       * @default "dd-MM-yyyy"
+       */
+      dateFormat?: string;
+    };
+    /**
+     * Select options
+     */
+    select?: {
+      /**
+       * Request response data key
+       * Can be overridden in the select component using `responseDataKey` prop
+       * @default "records"
+       */
+      responseDataKey?: string;
+    };
   };
   endpoint?: Endpoint;
-  date?: {
-    dateFormat?: string;
-  };
   google?: {
     map?: {
       apiKey: string;
@@ -106,7 +169,7 @@ export type MoonlightConfigurations = {
   uploads?: {
     route?: string;
     deleteRoute?: string;
-    resolveResponse?: (response: any) => any;
+    resolveResponse?: (response: AxiosResponse) => Fileable[];
     key?: string;
   };
   table?: {

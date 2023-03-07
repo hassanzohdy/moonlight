@@ -443,7 +443,8 @@ export class SuperTable {
   public allows(permission: string, ...args: any[]) {
     const permissionCallback = this.permissions?.[permission];
 
-    if (!Is.callable(permissionCallback)) return this.hasPermission(permission);
+    if (typeof permissionCallback === "function")
+      return this.hasPermission(permission);
 
     return permissionCallback(...args) === true;
   }
@@ -698,7 +699,7 @@ export class SuperTable {
    * Update sort by options
    */
   public updateSortByOptions(orderBy: string[]) {
-    if (Is.empty(orderBy)) {
+    if (orderBy.length === 0) {
       return;
     }
 

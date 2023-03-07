@@ -20,7 +20,6 @@ export { numberInput } from "./numberInput";
 export { passwordInput } from "./passwordInput";
 export { publishedInput } from "./publishedInput";
 export { renderWhen } from "./renderWhen";
-export { richTextInput } from "./richTextInput";
 export { selectOptions } from "./selectOptions";
 export { selectRequest } from "./selectRequest";
 export { switchInput } from "./switchInput";

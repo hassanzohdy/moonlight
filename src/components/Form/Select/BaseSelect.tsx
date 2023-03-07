@@ -1,6 +1,6 @@
 import { trans } from "@mongez/localization";
-import { FormInputProps, HiddenInput } from "@mongez/react-form";
-import Is from "@mongez/supportive-is";
+import { FormInputProps } from "@mongez/react-form";
+import { AxiosResponse } from "axios";
 import React from "react";
 import { SelectHookOptions, useSelect } from "../../../hooks/use-select";
 import { defaultSelectProps } from "../../../utils/select";
@@ -8,29 +8,40 @@ import { InputWrapper } from "../InputWrapper";
 
 export type SelectInputProps = FormInputProps & {
   data?: any;
-  request?: any;
-  lazyRequest?: any;
-  dynamicRequest?: any;
+  request?: () => Promise<AxiosResponse>;
+  lazyRequest?: () => Promise<AxiosResponse>;
+  dynamicRequest?: () => Promise<AxiosResponse>;
+  responseDataKey?: string;
   except?: any[];
   description?: React.ReactNode;
-  mapOption?: (option: any, index: number) => any;
+  mapOption?: (
+    option: any,
+    index: number
+  ) => {
+    value: string;
+    label: React.ReactNode;
+  };
   autoSelectSingleOption?: boolean;
   autoSelectFirstOption?: boolean;
-  searchRequest?: (keywords: string) => Promise<any>;
+  searchRequest?: (keywords: string) => Promise<AxiosResponse>;
 };
 
 export const BaseSelect = (
   Component: React.ComponentType<any>,
   selectHookOptions: SelectHookOptions,
-  defaultProps = defaultSelectProps,
+  defaultProps = defaultSelectProps
 ) => {
-  function _SelectInput({ description, ...props }: SelectInputProps) {
+  function _SelectInput({
+    required,
+    label,
+    placeholder,
+    description,
+    icon,
+    ...props
+  }: SelectInputProps) {
     const {
-      name,
       value,
       id,
-      required,
-      label,
       disabled,
       isLoading,
       changeValue,
@@ -38,39 +49,35 @@ export const BaseSelect = (
       onSelectOpen,
       visibleElementRef,
       onSearchChange,
-      placeholder,
       otherProps,
       dataList,
     } = useSelect(props, selectHookOptions);
 
     return (
       <>
-        {!Is.empty(value) && value !== "null" && (
-          <HiddenInput name={name} value={value} />
-        )}
-
         <InputWrapper
           visibleElementRef={visibleElementRef}
           error={error}
           id={id}
           label={label}
           description={description}
-          required={required}>
+          required={required}
+        >
           <Component
             clearable={!required}
             data={dataList}
             disabled={disabled}
             value={value}
-            error={error !== null}
+            error={Boolean(error)}
             onChange={changeValue}
             id={id}
+            icon={icon}
             onFocus={onSelectOpen}
             onSearchChange={onSearchChange}
             placeholder={
               isLoading
                 ? trans("loading")
-                : placeholder &&
-                  trans(placeholder as any) + (required ? " *" : "")
+                : placeholder && trans(placeholder as any) + (required && " *")
             }
             {...otherProps}
           />

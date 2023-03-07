@@ -19,3 +19,11 @@ export type UploadedFile = {
   id: string | number;
   url?: string;
 };
+
+export type Fileable = {
+  id: string | number;
+  url: string;
+  name: string;
+  size?: number;
+  type?: string;
+};

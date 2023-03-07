@@ -6,9 +6,6 @@ import { MoonlightConfigurations } from "./types";
 
 const defaultConfigurations: Partial<MoonlightConfigurations> = {
   localeCodes: {},
-  date: {
-    dateFormat: "dd-MM-yyyy",
-  },
   current: {
     autoDetect: true,
   },
@@ -29,8 +26,13 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
       },
     },
   },
-  select: {
-    responseDataKey: "records",
+  form: {
+    select: {
+      responseDataKey: "records",
+    },
+    date: {
+      dateFormat: "dd-MM-yyyy",
+    },
   },
   table: {
     keys: {
@@ -40,7 +42,7 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
       updateRecord: "record",
     },
     limitOptions: [10, 20, 50, 100, 200, 250, 500],
-    paginationInfo: (response) => {
+    paginationInfo: response => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -63,7 +65,7 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations
+  configurations: MoonlightConfigurations,
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
 

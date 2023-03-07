@@ -11,11 +11,10 @@ import {
 import { trans } from "@mongez/localization";
 import {
   FormInputProps,
-  HiddenInput,
+  requiredRule,
   useForm,
-  useFormInput,
+  useFormControl,
 } from "@mongez/react-form";
-import { requiredRule } from "@mongez/validator";
 import { IconEdit, IconTrash } from "@tabler/icons";
 import React, { useRef, useState } from "react";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
@@ -38,11 +37,12 @@ export function ImageInput({
   circle,
   description,
   hint,
+  label,
+  required,
   withPlaceholder,
   ...props
 }: ImageInputProps) {
-  const { name, id, value, label, required, onChange, error, otherProps } =
-    useFormInput(props);
+  const { id, value, changeValue, error, otherProps } = useFormControl(props);
 
   const [isUploading, setUploading] = useState(false);
   const [imageOptionsOpened, toggleImageOptionsPopup] = useState(false);
@@ -97,11 +97,8 @@ export function ImageInput({
       .then((file) => {
         setUploadedFile(file);
 
-        onChange({
-          target: {
-            value: file,
-            file,
-          },
+        changeValue(file.id, {
+          file,
         });
       })
       .catch(() => {
@@ -119,10 +116,8 @@ export function ImageInput({
       toggleImageOptionsPopup(false);
     }
 
-    onChange({
-      target: {
-        value: null,
-      },
+    changeValue("", {
+      file: null,
     });
   };
 
@@ -161,7 +156,6 @@ export function ImageInput({
 
   return (
     <>
-      <HiddenInput name={name} value={value?.id || ""} />
       <input
         style={{ width: "100%", display: "none" }}
         type="file"

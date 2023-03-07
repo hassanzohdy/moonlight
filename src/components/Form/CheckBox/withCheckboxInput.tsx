@@ -1,8 +1,9 @@
-import { FormInputProps, HiddenInput, useFormInput } from "@mongez/react-form";
-import { useEvent } from "@mongez/react-hooks";
-import { requiredRule } from "@mongez/validator";
-import React, { useEffect } from "react";
-import { useControlled } from "../../../hooks";
+import {
+  FormInputProps,
+  requiredRule,
+  useFormControl,
+} from "@mongez/react-form";
+import React from "react";
 
 const defaultOptions = {
   otherProps: (otherProps: any, _props: any) => otherProps,
@@ -15,84 +16,13 @@ export function withCheckboxInput<T>(
   incomingOptions: any = {}
 ) {
   function CheckboxInput(props: FormInputProps & T) {
-    const [checked, setEnabled, initialState, isControlled] = useControlled(
-      props,
-      "checked",
-      false
-    );
-
-    const [uncheckedValue] = useControlled(props, "uncheckedValue", "");
-
     const options = { ...defaultOptions, ...incomingOptions };
 
-    const {
-      value,
-      label,
-      name,
-      readOnly,
-      id,
-      disabled,
-      otherProps,
-      visibleElementRef,
-      formInput,
-      setChecked,
-      onChange,
-    } = useFormInput(props);
-
-    useEvent(() => formInput.on("reset", () => setEnabled(initialState)));
-
-    const updateChangeState = (e: any) => {
-      const newState = options.getStateChange(e);
-      if (isControlled) {
-        onChange(
-          {
-            target: {
-              value,
-              checked: newState,
-            },
-          },
-          formInput
-        );
-        return;
-      }
-
-      setEnabled(newState);
-
-      onChange(
-        {
-          target: {
-            value,
-            checked: newState,
-          },
-        },
-        formInput
-      );
-    };
-
-    useEffect(() => {
-      setChecked?.(checked);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [checked]);
-
-    useEffect(() => {
-      const onReset = formInput.on("reset", () => {
-        setEnabled(initialState);
-      });
-
-      return () => onReset.unsubscribe();
-    }, [formInput, initialState, setEnabled]);
-
-    const rest = options.otherProps(otherProps, props);
-
-    delete rest.defaultChecked;
-    delete rest.checked;
+    const { checked, id, disabled, otherProps, visibleElementRef, setChecked } =
+      useFormControl(props);
 
     return (
       <span ref={visibleElementRef}>
-        {checked && <HiddenInput name={name} value={value} />}
-        {!checked && uncheckedValue !== undefined && (
-          <HiddenInput name={name} value={uncheckedValue} />
-        )}
         <Component
           styles={(theme) => ({
             label: {
@@ -104,13 +34,10 @@ export function withCheckboxInput<T>(
             },
           })}
           disabled={disabled}
-          readOnly={readOnly}
-          label={label}
           id={id}
-          value={value}
           checked={checked}
-          onChange={updateChangeState}
-          {...rest}
+          onChange={(e) => setChecked(e.currentTarget.checked)}
+          {...options.otherProps(otherProps, props)}
         />
       </span>
     );

@@ -15,20 +15,20 @@ export const MultiSelectInput: React.FC<SelectInputProps> = BaseSelect(
       return (value || []).map(String);
     },
     onChange: (value, dataList) => {
-      return {
-        target: {
-          value,
+      return [
+        value,
+        {
+          options: dataList.filter((option) =>
+            value.includes(String(option.value))
+          ),
         },
-        options: dataList.filter(option =>
-          value.includes(String(option.value)),
-        ),
-      };
+      ];
     },
   },
   {
     ...defaultSelectProps,
     searchable: true,
-  },
+  }
 );
 
 MultiSelectInput.displayName = "MultiSelectInput";

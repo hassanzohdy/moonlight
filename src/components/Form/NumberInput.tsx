@@ -1,5 +1,5 @@
 import { NumberInput as BaseNumberInput } from "@mantine/core";
-import { maxRule, minRule, numberRule, requiredRule } from "@mongez/validator";
+import { maxRule, minRule, numberRule, requiredRule } from "@mongez/react-form";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export function NumberInput(props: BaseInputProps) {
@@ -11,13 +11,4 @@ NumberInput.defaultProps = {
   rule: "number",
   rules: [requiredRule, numberRule, minRule, maxRule],
   component: BaseNumberInput,
-  onChangeInput: value => {
-    if (value.target) return value;
-
-    return {
-      target: {
-        value,
-      },
-    };
-  },
 };

@@ -16,7 +16,6 @@ export * from "./MultiLingualInput";
 export * from "./NumberInput";
 export * from "./PasswordInput";
 export * from "./QuickInputs";
-export * from "./RichTextEditor";
 export * from "./Select";
 export * from "./SubmitButton";
 export * from "./TextAreaInput";

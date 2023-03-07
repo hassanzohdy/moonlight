@@ -6,7 +6,7 @@ import {
   minRule,
   patternRule,
   requiredRule,
-} from "@mongez/validator";
+} from "@mongez/react-form";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export function TextInput(props: BaseInputProps) {

@@ -1,4 +1,4 @@
-import { requiredRule, urlRule } from "@mongez/validator";
+import { requiredRule } from "@mongez/react-form";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export function UrlInput(props: BaseInputProps) {
@@ -7,5 +7,5 @@ export function UrlInput(props: BaseInputProps) {
 
 UrlInput.defaultProps = {
   type: "url",
-  rules: [requiredRule, urlRule],
+  rules: [requiredRule],
 };

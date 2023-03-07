@@ -886,7 +886,16 @@ export class ReactiveForm {
     onClose: () => void,
   ) {
     return async (e: React.FormEvent, form: FormInterface) => {
-      this.callbacks.onSubmit.forEach(callback => callback(e, form, this));
+      this.callbacks.onSubmit.forEach(callback =>
+        callback({
+          form,
+          values: form.values(),
+          reactiveForm: this,
+          get formData() {
+            return new FormData(e.target.value);
+          },
+        }),
+      );
 
       let loader;
 
@@ -1121,6 +1130,7 @@ export class ReactiveForm {
           if ((e.ctrlKey || e.metaKey) && e.key === "s") {
             e.preventDefault();
             const form = reactiveForm.form;
+
             if (!form || form.isSubmitting()) return;
 
             form.submit();

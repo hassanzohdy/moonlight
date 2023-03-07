@@ -1,9 +1,11 @@
 import { DatePicker, DatePickerProps } from "@mantine/dates";
 import { trans } from "@mongez/localization";
-import { getActiveForm, HiddenInput, useFormInput } from "@mongez/react-form";
+import {
+  getActiveForm,
+  requiredRule,
+  useFormControl,
+} from "@mongez/react-form";
 import { useOnce } from "@mongez/react-hooks";
-import Is from "@mongez/supportive-is";
-import { requiredRule } from "@mongez/validator";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { getMoonlightConfig } from "../../config";
@@ -21,25 +23,24 @@ export type DatePickerInputProps = DatePickerProps &
 export function DatePickerInput({
   minDateInput,
   maxDateInput,
+  hint,
+  label,
+  required,
+  placeholder,
   minDate: incomingMinDate,
   maxDate: incomingMaxDate,
   ...props
 }: DatePickerInputProps) {
   const {
-    name,
-    label,
     value,
-    placeholder,
-    onChange,
+    changeValue,
     id,
     error,
     description,
-    hint,
     visibleElementRef,
-    required,
     formInput,
     otherProps,
-  } = useFormInput(props);
+  } = useFormControl(props);
 
   const [minDate, setMinDate] = useState<Date | undefined>(incomingMaxDate);
   const [maxDate, setMaxDate] = useState<Date | undefined>(incomingMinDate);
@@ -47,7 +48,7 @@ export function DatePickerInput({
   const [date, setDate] = useState<Date | null | undefined>(() => {
     if (!value) return null;
 
-    if (Is.string(value)) {
+    if (typeof value === "string") {
       return dayjs(value, getMoonlightConfig("form.date.dateFormat")).toDate();
     }
 
@@ -132,22 +133,13 @@ export function DatePickerInput({
 
   const updateDate = (date: Date) => {
     setDate(date);
-    onChange({
-      target: {
-        value: getMoonlightConfig("date.dateFormat"), // 09-09-2022
-      },
+    changeValue(dayjs(date, getMoonlightConfig("date.dateFormat")), {
       date,
     });
   };
 
   return (
     <>
-      {date && (
-        <HiddenInput
-          name={name}
-          value={dayjs(date).format(getMoonlightConfig("date.dateFormat"))}
-        />
-      )}
       <InputWrapper
         required
         id={id}
@@ -165,7 +157,7 @@ export function DatePickerInput({
           inputFormat={getMoonlightConfig("date.dateFormat")}
           maxDate={maxDate}
           clearable={!required}
-          placeholder={trans(placeholder as string)}
+          placeholder={placeholder && trans(placeholder)}
           {...otherProps}
         />
       </InputWrapper>

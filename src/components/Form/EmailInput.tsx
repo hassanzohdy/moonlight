@@ -1,4 +1,4 @@
-import { emailRule, requiredRule } from "@mongez/validator";
+import { emailRule, requiredRule } from "@mongez/react-form";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export function EmailInput(props: BaseInputProps) {

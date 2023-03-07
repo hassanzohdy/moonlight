@@ -2,7 +2,6 @@ import { Col, MantineSize } from "@mantine/core";
 import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import { trans } from "@mongez/localization";
 import { clone, get, Random, rtrim } from "@mongez/reinforcements";
-import { RuleResponse } from "@mongez/validator";
 import { IconHelp } from "@tabler/icons";
 import React from "react";
 import { TextInput } from "../../components/Form/TextInput";
@@ -243,7 +242,9 @@ export class InputBuilder {
   /**
    * Add on change callback
    */
-  public onChange(callback: (e: any, inputBuilder: InputBuilder) => void) {
+  public onChange(
+    callback: (value: any, options: any, inputBuilder: InputBuilder) => void
+  ) {
     this.callbacks.onChange = callback;
     return this;
   }
@@ -540,7 +541,8 @@ export class InputBuilder {
         Wrapper={Col}
         inputBuilder={this}
         key={this._key}
-        wrapperProps={wrapperProps}>
+        wrapperProps={wrapperProps}
+      >
         <Component {...props} />
       </InputRenderer>
     );
@@ -614,8 +616,8 @@ export class InputBuilder {
     }
 
     if (this.callbacks.onChange) {
-      props.onChange = (e: any) => {
-        this.callbacks.onChange(e, this);
+      props.onChange = (...args: any[]) => {
+        this.callbacks.onChange(...args{}, this);
       };
     }
 
@@ -631,7 +633,8 @@ export class InputBuilder {
                 verticalAlign: "middle",
                 marginInlineStart: "0.2rem",
                 display: "inline-block",
-              }}>
+              }}
+            >
               <IconHelp size="1.0rem" />
             </span>
           </Tooltip>
@@ -667,7 +670,7 @@ export class InputBuilder {
     }
 
     if (this.callbacks.onError) {
-      props.onError = (error: RuleResponse) => {
+      props.onError = (error) => {
         if (this.callbacks.onError) {
           this.callbacks.onError(error, this);
         }
@@ -696,7 +699,7 @@ export class InputBuilder {
         defaultValue =
           queryString.get?.(
             this.valueFromQueryString,
-            this.inputDefaultValue,
+            this.inputDefaultValue
           ) || this.inputDefaultValue;
       } else {
         defaultValue = this.inputDefaultValue;
@@ -717,7 +720,7 @@ export class InputBuilder {
     return get(
       this.record,
       this.data.defaultValueKey,
-      this.data.defaultChecked,
+      this.data.defaultChecked
     );
   }
 

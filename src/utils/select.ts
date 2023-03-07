@@ -1,11 +1,11 @@
 import { trans } from "@mongez/localization";
-import Is from "@mongez/supportive-is";
 import {
   lengthRule,
   maxLengthRule,
   minLengthRule,
   requiredRule,
-} from "@mongez/validator";
+} from "@mongez/react-form";
+import Is from "@mongez/supportive-is";
 import { getLocalizedValue } from "./localization";
 
 export function defaultMapOption(option: any, _index: number): any {
