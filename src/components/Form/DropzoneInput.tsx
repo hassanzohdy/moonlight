@@ -18,7 +18,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { SortableItem, SortableList } from "@thaddeusjiang/react-sortable-list";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { moonlightTranslations } from "../../locales";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
@@ -91,6 +91,8 @@ export function DropzoneInput({
     });
 
   const theme = useMantineTheme();
+
+  const [uploadStats, setUploadsStats] = useState([]);
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileType[]>([]);
   const [filesList, setFilesList] = useState<any[]>(() =>
@@ -214,7 +216,7 @@ export function DropzoneInput({
 
     const progressPercentage = Math.round(totalPercentage / totalFiles);
 
-    return {
+    const stats = {
       uploadingFiles: uploadedFiles.filter(
         (file) => !["uploaded", "initial"].includes(file.state)
       ),
@@ -228,6 +230,14 @@ export function DropzoneInput({
         errors: uploadedFiles.filter((file) => file.state === "error").length,
       },
     };
+
+    setUploadsStats(stats);
+
+    setTimeout(() => {
+      getActiveForm()?.disable(stats.total.uploading > 0);
+    }, 50);
+
+    return stats;
   };
 
   const loaderRef = useRef<any>(null);
@@ -304,14 +314,14 @@ export function DropzoneInput({
     setUploadedFiles(uploadingFiles);
   };
 
-  const reuploadFile = (file: UploadedFileType) => {
+  const reuploadFile = async (file: UploadedFileType) => {
     file.state = "initial";
     file.error = null;
     file.progress = 0;
 
     const fileIndex = uploadedFiles.indexOf(file);
 
-    const stats = calculateStats(uploadedFiles);
+    const stats = await calculateStats(uploadedFiles);
 
     if (!loaderRef.current) {
       const loading = toastLoading(
@@ -332,16 +342,6 @@ export function DropzoneInput({
   const startUploading = (files: File[]) => {
     initializeUploading(files);
   };
-
-  const uploadStats = useMemo(async () => {
-    const stats = await calculateStats(uploadedFiles);
-
-    setTimeout(() => {
-      getActiveForm()?.disable(stats.total.uploading > 0);
-    }, 50);
-
-    return stats;
-  }, [uploadedFiles]);
 
   const removeFile = (fileId: string) => {
     const fileIndex = filesList.findIndex((file) => file.id === fileId);
