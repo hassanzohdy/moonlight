@@ -92,7 +92,16 @@ export function DropzoneInput({
 
   const theme = useMantineTheme();
 
-  const [uploadStats, setUploadsStats] = useState([]);
+  const [uploadStats, setUploadsStats] = useState({
+    uploadingFiles: [],
+    total: {
+      files: 0,
+      uploaded: 0,
+      errors: 0,
+      uploading: 0,
+      progressPercentage: 0,
+    },
+  });
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileType[]>([]);
   const [filesList, setFilesList] = useState<any[]>(() =>
