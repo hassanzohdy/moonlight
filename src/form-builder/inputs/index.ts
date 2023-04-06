@@ -9,6 +9,7 @@ export * from "./emailInput";
 export * from "./fileInput";
 export * from "./floatInput";
 export * from "./formRow";
+export * from "./googleMapInput";
 export * from "./hiddenInput";
 export * from "./imageInput";
 export * from "./integerInput";
