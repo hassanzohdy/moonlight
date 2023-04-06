@@ -9,6 +9,23 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
   current: {
     autoDetect: true,
   },
+  google: {
+    map: {
+      apiKey: "",
+      zoom: 18,
+      libraries: [
+        "drawing",
+        "geometry",
+        "localContext",
+        "places",
+        "visualization",
+      ],
+      center: {
+        lat: 30.044399831543025, // Tahrir Square
+        lng: 31.235718727111816,
+      },
+    },
+  },
   form: {
     select: {
       responseDataKey: "records",
@@ -68,4 +85,8 @@ export function getMoonlightConfigurations() {
 
 export function getMoonlightConfig(key: string, defaultValue?: any) {
   return get(currentConfigurations, key, defaultValue);
+}
+
+export function googleMapConfig(key: string, defaultValue?: any) {
+  return get(currentConfigurations, `google.map.${key}`, defaultValue);
 }

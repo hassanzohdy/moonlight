@@ -7,6 +7,7 @@ export * from "./EmailInput";
 export * from "./File";
 export * from "./FileInput";
 export * from "./FloatInput";
+export * from "./GoogleMapInput";
 export * from "./ImageInput";
 export * from "./InputError";
 export * from "./InputWrapper";

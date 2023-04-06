@@ -155,6 +155,17 @@ export type MoonlightConfigurations = {
     };
   };
   endpoint?: Endpoint;
+  google?: {
+    map?: {
+      apiKey: string;
+      zoom?: number;
+      libraries?: string[];
+      center?: {
+        lat: number;
+        lng: number;
+      };
+    };
+  };
   uploads?: {
     route?: string;
     deleteRoute?: string;
