@@ -34,12 +34,13 @@ import { File } from "./File";
 import { InputWrapper } from "./InputWrapper";
 import { UploadedFile } from "./UploadedFile";
 
-const DragHandler = props => (
+const DragHandler = (props) => (
   <Flex
     style={{
       display: "inline-flex",
     }}
-    {...props}>
+    {...props}
+  >
     <IconList
       color="gray"
       style={{
@@ -51,7 +52,7 @@ const DragHandler = props => (
 );
 function initializeUploadedFiles(
   uploadedFiles: UploadedFileType[],
-  files: File[],
+  files: File[]
 ): UploadedFileType[] {
   return uploadedFiles.concat(
     files.map((file, index) => ({
@@ -62,7 +63,7 @@ function initializeUploadedFiles(
       index: uploadedFiles.length + index,
       // generate a url for the file
       url: URL.createObjectURL(file),
-    })),
+    }))
   );
 }
 
@@ -85,28 +86,28 @@ export function DropzoneInput({
 }: DropzoneInputProps) {
   const { value, changeValue, formControl, error, id, otherProps } =
     useFormControl(props, {
-      transformValue: value => value,
-      collectValue: ({ value }) => (value || []).map(file => file.id),
+      transformValue: (value) => value,
+      collectValue: ({ value }) => (value || []).map((file) => file.id),
     });
 
   const theme = useMantineTheme();
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileType[]>([]);
   const [filesList, setFilesList] = useState<any[]>(() =>
-    (value || []).map(attachment => ({
+    (value || []).map((attachment) => ({
       ...attachment,
       id: attachment.id || Random.string(),
-    })),
+    }))
   );
 
   const updateFile = async (file: UploadedFileType, index: number) => {
-    setUploadedFiles(uploadedFiles => {
+    setUploadedFiles((uploadedFiles) => {
       uploadedFiles[index] = file;
 
       const updatedFiles = [...uploadedFiles];
 
-      setTimeout(() => {
-        const stats = calculateStats(updatedFiles);
+      setTimeout(async () => {
+        const stats = await calculateStats(updatedFiles);
 
         const loading = loaderRef.current;
 
@@ -124,11 +125,11 @@ export function DropzoneInput({
                       {
                         count: stats.total.files,
                         success: stats.total.uploaded,
-                      },
+                      }
                     )}
                   </div>
                   <Progress value={100} color={theme.colors.yellow[5]} />
-                </>,
+                </>
               );
             } else {
               loading.error(
@@ -139,11 +140,11 @@ export function DropzoneInput({
                       moonlightTranslations.uploadingFilesFailedDescription,
                       {
                         count: stats.total.files,
-                      },
+                      }
                     )}
                   </div>
                   <Progress value={100} color={theme.colors.red[5]} />
-                </>,
+                </>
               );
             }
           } else {
@@ -156,7 +157,7 @@ export function DropzoneInput({
                   })}
                 </div>
                 <Progress value={100} color={theme.colors.green[5]} />
-              </>,
+              </>
             );
           }
 
@@ -177,7 +178,7 @@ export function DropzoneInput({
               <Tooltip label={stats.total.progressPercentage + "%"}>
                 <Progress value={stats.total.progressPercentage} />
               </Tooltip>
-            </>,
+            </>
           );
         }
       }, 0);
@@ -186,7 +187,22 @@ export function DropzoneInput({
     });
   };
 
-  const calculateStats = (uploadedFiles: UploadedFileType[]) => {
+  const calculateStats = async (uploadedFiles: UploadedFileType[]) => {
+    uploadedFiles = await Promise.all(
+      uploadedFiles.filter(async (file) => {
+        return await isValidFile(file.file, {
+          minHeight,
+          maxHeight,
+          minWidth,
+          maxWidth,
+          minSize,
+          maxSize,
+          imageHeight,
+          imageWidth,
+        });
+      })
+    );
+
     // total progress percentage = average of all files that's its progress is not either 100 or 0 progress percentage
     let totalFiles = 0;
     const totalPercentage = uploadedFiles.reduce((total, file) => {
@@ -200,16 +216,16 @@ export function DropzoneInput({
 
     return {
       uploadingFiles: uploadedFiles.filter(
-        file => !["uploaded", "initial"].includes(file.state),
+        (file) => !["uploaded", "initial"].includes(file.state)
       ),
       total: {
         progressPercentage,
         files: uploadedFiles.length,
-        uploading: uploadedFiles.filter(file => file.state === "uploading")
+        uploading: uploadedFiles.filter((file) => file.state === "uploading")
           .length,
-        uploaded: uploadedFiles.filter(file => file.state === "uploaded")
+        uploaded: uploadedFiles.filter((file) => file.state === "uploaded")
           .length,
-        errors: uploadedFiles.filter(file => file.state === "error").length,
+        errors: uploadedFiles.filter((file) => file.state === "error").length,
       },
     };
   };
@@ -241,14 +257,14 @@ export function DropzoneInput({
       updateFile(file, index);
     };
 
-    uploadFile(file.file, progress => {
+    uploadFile(file.file, (progress) => {
       file.progress = progress;
 
       updateFile(file, index);
     })
-      .then(attachment => {
+      .then((attachment) => {
         file.state = "uploaded";
-        setFilesList(filesList => {
+        setFilesList((filesList) => {
           const attachments = [...filesList, attachment];
 
           changeValue(attachments);
@@ -256,7 +272,7 @@ export function DropzoneInput({
           return attachments;
         });
       })
-      .catch(error => {
+      .catch((error) => {
         file.state = "error";
         file.error = parseError(error);
       })
@@ -265,10 +281,10 @@ export function DropzoneInput({
       });
   };
 
-  const initializeUploading = (files: File[]) => {
+  const initializeUploading = async (files: File[]) => {
     const uploadingFiles = initializeUploadedFiles(uploadedFiles, files);
 
-    const stats = calculateStats(uploadingFiles);
+    const stats = await calculateStats(uploadingFiles);
 
     if (!loaderRef.current) {
       const loading = toastLoading(
@@ -277,7 +293,7 @@ export function DropzoneInput({
           current: 0,
         }),
         <Progress value={0} />,
-        2000,
+        2000
       );
 
       loaderRef.current = loading;
@@ -304,7 +320,7 @@ export function DropzoneInput({
           current: 0,
         }),
         <Progress value={0} />,
-        2000,
+        2000
       );
 
       loaderRef.current = loading;
@@ -317,8 +333,8 @@ export function DropzoneInput({
     initializeUploading(files);
   };
 
-  const uploadStats = useMemo(() => {
-    const stats = calculateStats(uploadedFiles);
+  const uploadStats = useMemo(async () => {
+    const stats = await calculateStats(uploadedFiles);
 
     setTimeout(() => {
       getActiveForm()?.disable(stats.total.uploading > 0);
@@ -328,7 +344,7 @@ export function DropzoneInput({
   }, [uploadedFiles]);
 
   const removeFile = (fileId: string) => {
-    const fileIndex = filesList.findIndex(file => file.id === fileId);
+    const fileIndex = filesList.findIndex((file) => file.id === fileId);
 
     if (fileIndex === -1) return;
 
@@ -336,7 +352,7 @@ export function DropzoneInput({
 
     const initialValue = formControl.initialValue || [];
 
-    if (initialValue.find(file => file.id === fileId)) {
+    if (initialValue.find((file) => file.id === fileId)) {
       // just remove it from the array and don't send a request to the server
       // why? becaus user may close the form without saving
 
@@ -344,10 +360,10 @@ export function DropzoneInput({
 
       const newFiles = [...filesList];
       changeValue(
-        newFiles.map(file => file.id),
+        newFiles.map((file) => file.id),
         {
           attachments: newFiles,
-        },
+        }
       );
 
       setFilesList(newFiles);
@@ -357,7 +373,7 @@ export function DropzoneInput({
 
     const loading = toastLoading(
       trans(moonlightTranslations.fileIsBeingForDeletion),
-      trans(moonlightTranslations.deletingFile),
+      trans(moonlightTranslations.deletingFile)
     );
 
     deleteUploadedFile(fileId)
@@ -367,36 +383,36 @@ export function DropzoneInput({
         const newFiles = [...filesList];
         loading.success(
           trans(moonlightTranslations.fileDeletedSuccessfully),
-          trans(moonlightTranslations.fileDeleted),
+          trans(moonlightTranslations.fileDeleted)
         );
         changeValue(
-          newFiles.map(file => file.id),
+          newFiles.map((file) => file.id),
           {
             attachments: newFiles,
-          },
+          }
         );
 
         setFilesList(newFiles);
       })
-      .catch(error => {
+      .catch((error) => {
         loading.error(
           trans(moonlightTranslations.deleteFileFailed),
-          parseError(error),
+          parseError(error)
         );
       });
   };
 
   const onFilesRejected = (files: FileRejection[]) => {
-    files.forEach(file => {
+    files.forEach((file) => {
       toastError(
-        file.errors.map(error => error.message)[0],
+        file.errors.map((error) => error.message)[0],
         trans(moonlightTranslations.invalidUploadedFile, {
           file: (
             <Text span color="cyan" inline>
               {file.file.name}
             </Text>
           ),
-        }),
+        })
       );
     });
   };
@@ -408,16 +424,19 @@ export function DropzoneInput({
       hint={hint}
       error={error}
       id={id}
-      required={required}>
+      required={required}
+    >
       <Dropzone
         onDrop={startUploading}
         onReject={onFilesRejected}
         accept={accept || (images ? IMAGE_MIME_TYPE : undefined)}
-        {...otherProps}>
+        {...otherProps}
+      >
         <Group
           position="center"
           spacing="xl"
-          style={{ minHeight: 220, pointerEvents: "none" }}>
+          style={{ minHeight: 220, pointerEvents: "none" }}
+        >
           <Dropzone.Accept>
             <IconUpload
               size={50}
@@ -447,7 +466,8 @@ export function DropzoneInput({
               color={theme.colors.gray[6]}
               style={{
                 marginTop: "-3rem",
-              }}>
+              }}
+            >
               Drag images here or click to select files
             </Text>
             <Text
@@ -457,13 +477,14 @@ export function DropzoneInput({
                 fontSize: "0.75rem",
               }}
               inline
-              mt={8}>
+              mt={8}
+            >
               Attach as many files as you like, each file should not exceed 5mb
             </Text>
           </Text>
         </Group>
       </Dropzone>
-      {uploadStats.uploadingFiles.map(file => {
+      {uploadStats.uploadingFiles.map((file) => {
         return (
           <UploadedFile
             reupload={() => reuploadFile(file)}
@@ -475,22 +496,25 @@ export function DropzoneInput({
 
       <SortableList items={filesList as any[]} setItems={setFilesList as any}>
         {({ items }: any) =>
-          items.map(file => {
+          items.map((file) => {
             return (
               <SortableItem
                 DragHandler={DragHandler}
                 key={file.id}
-                id={file.id}>
+                id={file.id}
+              >
                 <Flex
                   style={{
                     display: "inline-flex",
                     width: "calc(100% - 50px)",
                   }}
-                  justify="flex-start">
+                  justify="flex-start"
+                >
                   <span
                     style={{
                       flexGrow: 1,
-                    }}>
+                    }}
+                  >
                     <File
                       url={file.url}
                       key={file.id}
