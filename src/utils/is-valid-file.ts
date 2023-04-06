@@ -74,14 +74,11 @@ export const isValidFile = (
         // check width
         if (imageWidth && image.width !== imageWidth) {
           toastError(
-            trans(
-              "moonlight.imageWidthError",
-              {
-                file: file.name,
-                width: imageWidth,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageWidthError", {
+              file: file.name,
+              width: imageWidth,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
@@ -89,14 +86,11 @@ export const isValidFile = (
 
         if (minWidth && image.width < minWidth) {
           toastError(
-            trans(
-              "moonlight.imageMinWidthError",
-              {
-                file: file.name,
-                width: minWidth,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageMinWidthError", {
+              file: file.name,
+              width: minWidth,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
@@ -104,14 +98,11 @@ export const isValidFile = (
 
         if (maxWidth && image.width > maxWidth) {
           toastError(
-            trans(
-              "moonlight.imageMaxWidthError",
-              {
-                file: file.name,
-                width: maxWidth,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageMaxWidthError", {
+              file: file.name,
+              width: maxWidth,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
@@ -120,14 +111,11 @@ export const isValidFile = (
         // check height
         if (imageHeight && image.height !== imageHeight) {
           toastError(
-            trans(
-              "moonlight.imageHeightError",
-              {
-                file: file.name,
-                height: imageHeight,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageHeightError", {
+              file: file.name,
+              height: imageHeight,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
@@ -135,14 +123,11 @@ export const isValidFile = (
 
         if (minHeight && image.height < minHeight) {
           toastError(
-            trans(
-              "moonlight.imageMinHeightError",
-              {
-                file: file.name,
-                height: minHeight,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageMinHeightError", {
+              file: file.name,
+              height: minHeight,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
@@ -150,14 +135,11 @@ export const isValidFile = (
 
         if (maxHeight && image.height > maxHeight) {
           toastError(
-            trans(
-              "moonlight.imageMaxHeightError",
-              {
-                file: file.name,
-                height: maxHeight,
-              },
-              trans("moonlight.uploadError")
-            )
+            trans("moonlight.imageMaxHeightError", {
+              file: file.name,
+              height: maxHeight,
+            }),
+            trans("moonlight.uploadError")
           );
 
           return resolve(false);
