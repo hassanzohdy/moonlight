@@ -1,3 +1,5 @@
+import { groupedTranslations } from "@mongez/localization";
+
 export const moonlightTranslations = {
   somethingWentWrong: {
     en: "Something went wrong",
@@ -175,6 +177,14 @@ export const moonlightTranslations = {
     es: "Mostrar menos filtros",
     de: "Weniger Filter anzeigen",
   },
+  invalidImageFile: {
+    en: "Invalid image file",
+    ar: "ملف صورة غير صالح",
+    fr: "Fichier image invalide",
+    it: "File immagine non valido",
+    es: "Archivo de imagen no válido",
+    de: "Ungültige Bilddatei",
+  },
   notFound: {
     en: "Not Found",
     ar: "غير موجود",
@@ -324,3 +334,5 @@ export const moonlightTranslations = {
     ar: "تحكم في الصفوف",
   },
 };
+
+groupedTranslations("moonlight", moonlightTranslations);
