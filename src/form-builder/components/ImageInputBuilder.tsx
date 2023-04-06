@@ -15,7 +15,7 @@ export class ImageInputBuilder extends InputBuilder {
    * Set image width for that must be uploaded
    */
   public width(width: number) {
-    this.componentProps.imageWIdth = width;
+    this.componentProps.imageWidth = width;
     return this;
   }
 
