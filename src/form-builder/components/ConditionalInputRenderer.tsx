@@ -12,7 +12,7 @@ export function ConditionalInputRenderer({
   inputs,
   conditionalInputsRenderer,
 }: ConditionalInputRendererProps) {
-  const [content, setContent] = useState<any>(() => null);
+  const [content, setContent] = useState<any>(null);
 
   useEffect(() => {
     if (conditionalInputsRenderer.isMatched) {

@@ -1,9 +1,10 @@
 import { useOnce } from "@mongez/react-hooks";
 import { useRef, useState } from "react";
 import { CheckboxInput } from "../../../Form";
-import { useSuperTable } from "../../hooks/useSuperTable";
 import { RegisteredBulkSelectionRow } from "../../SuperTable";
 import { FormatterProps } from "../../TableProps";
+import { useRowHoverAction } from "../../hooks/useRowHoverAction";
+import { useSuperTable } from "../../hooks/useSuperTable";
 
 export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
   const [checked, setChecked] = useState(false);
@@ -11,6 +12,14 @@ export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
   const superTable = useSuperTable();
 
   const bulkSelection = useRef<RegisteredBulkSelectionRow>();
+
+  useRowHoverAction({
+    id: row.id,
+    keys: ["mod", "s"],
+    in: () => {
+      updateCheckedState(!bulkSelection.current?.checked);
+    },
+  });
 
   const updateCheckedState = (checked: boolean) => {
     bulkSelection.current?.setChecked(checked);
@@ -34,7 +43,7 @@ export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
       <CheckboxInput
         checked={checked}
         key={String(row.id) + String(rowIndex)}
-        onChange={updateCheckedState}
+        onChange={updateCheckedState as any}
       />
     </>
   );

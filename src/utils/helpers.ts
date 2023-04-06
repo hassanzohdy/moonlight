@@ -25,3 +25,9 @@ export function currentLocaleCode() {
 
   return document.documentElement.lang || "en";
 }
+
+const isMacOS = navigator.userAgent.match(/mac/i);
+
+export function modButtons(buttons: string[]) {
+  return `(${[isMacOS ? "⌘" : "Ctrl", ...buttons].join(" + ")})`;
+}

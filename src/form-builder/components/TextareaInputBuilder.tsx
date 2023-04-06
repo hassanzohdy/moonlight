@@ -7,6 +7,8 @@ export class TextareaInputBuilder extends InputBuilder {
    */
   public boot() {
     this.data.component = TextAreaInput;
+
+    this.minRows(6);
   }
 
   /**

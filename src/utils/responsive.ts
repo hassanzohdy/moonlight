@@ -1,6 +1,6 @@
 import { MantineTheme } from "@mantine/core";
 import { CSSProperties } from "react";
-import { themeAtom } from "../theme";
+import { themeAtom } from "../atoms";
 
 export type BreakpointValue =
   | ((theme: MantineTheme) => string | number)
@@ -19,13 +19,13 @@ export type BreakpointsList = {
 export function media(
   direction: "max" | "min",
   property: string,
-  breakpointsList: BreakpointsList
+  breakpointsList: BreakpointsList,
 ) {
   let text = "";
 
   // convert breakpoints to numbers
   const breakpoints = Object.keys(breakpointsList)
-    .map((breakpoint) => ({
+    .map(breakpoint => ({
       breakpoint:
         typeof breakpoint === "string"
           ? themeAtom.value.breakpoints[breakpoint]
@@ -38,7 +38,7 @@ export function media(
     .sort((a: any, b: any) =>
       direction === "min"
         ? a.breakpoint - b.breakpoint
-        : b.breakpoint - a.breakpoint
+        : b.breakpoint - a.breakpoint,
     );
 
   for (const { breakpoint, value } of breakpoints) {

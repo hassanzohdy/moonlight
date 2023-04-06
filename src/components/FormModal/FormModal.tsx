@@ -1,7 +1,7 @@
 import { Button, LoadingOverlay, Modal, ModalProps } from "@mantine/core";
 import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
-import { Form, FormInterface } from "@mongez/react-form";
+import { Form } from "@mongez/react-form";
 import React, { useMemo, useState } from "react";
 import { parseError } from "../../utils/parse-error";
 import { SubmitButton } from "../Form/SubmitButton";
@@ -32,14 +32,14 @@ export function FormModal({
 } & Partial<ModalProps>) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const submitForm = async (e: any, _form: FormInterface) => {
+  const submitForm = async ({ formData }) => {
     setIsLoading(true);
     const loader = toastLoading(trans("savingRecord"), trans("saving"));
 
     try {
       const response = record.id
-        ? await service.update(record.id, e.target)
-        : await service.create(e.target);
+        ? await service.update(record.id, formData)
+        : await service.create(formData);
 
       onSave(response);
 
@@ -101,7 +101,11 @@ export function FormModal({
 
 FormModal.defaultProps = {
   trapFocus: false,
-  overlayOpacity: 0.2,
+  overlayProps: {
+    opacity: 0.2,
+  },
+  transitionProps: {
+    exitDuration: 300,
+  },
   centered: true,
-  exitTransitionDuration: 300,
 };

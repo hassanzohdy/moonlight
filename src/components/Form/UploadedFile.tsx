@@ -1,6 +1,6 @@
 import { ActionIcon, Progress, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { IconRotateClockwise2 } from "@tabler/icons";
+import { IconRotateClockwise2 } from "@tabler/icons-react";
 import { Tooltip } from "../Tooltip";
 import { UploadedFile as UploadedFileType } from "./DropzoneInput.types";
 import { File } from "./File";

@@ -25,7 +25,7 @@ export function TableLoader() {
     } else {
       loaderRef.current = toastLoading(
         trans(moonlightTranslations.pleaseWaitTableIsLoading),
-        trans(moonlightTranslations.loading)
+        trans(moonlightTranslations.loading),
       );
     }
   }, 10);

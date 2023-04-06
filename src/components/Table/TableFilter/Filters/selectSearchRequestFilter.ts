@@ -4,7 +4,7 @@ export function selectSearchRequestFilter(
   name = "name",
   searchRequest: any,
   placeholder = name,
-  moreComponentProps: Partial<TableFilter> = {},
+  moreComponentProps: TableFilter["componentProps"] = {},
 ): TableFilter {
   return {
     name: name,

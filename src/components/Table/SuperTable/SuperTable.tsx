@@ -3,18 +3,17 @@ import events, { EventSubscription } from "@mongez/events";
 import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
 import { FormInterface, getForm } from "@mongez/react-form";
-import { debounce, get, merge, Random } from "@mongez/reinforcements";
+import { Random, areEqual, debounce, get, merge } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { AxiosResponse } from "axios";
-import serialize from "form-serialize";
 import React from "react";
-import { createReactForm } from "../../../form-builder/create-reactive-form";
 import { moonlightTranslations } from "../../../locales";
 import { parseError } from "../../../utils/parse-error";
 import { queryString } from "../../../utils/resolvers";
 import { scrollTop } from "../../../utils/scroll";
 import {
   DatePickerInput,
+  EmailInput,
   FloatInput,
   IntegerInput,
   NumberInput,
@@ -30,15 +29,15 @@ import { BulkSelectionHeading } from "../TableHeader/BulkActions/BulkSelectionHe
 import {
   ColumnSortBy,
   SortDirection,
+  SuperTableShortKeys,
   TableFilter,
   TableHeaderButtons,
-  TablePlainColumn,
   TableProps,
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
-import { EditColumn } from "./EditColumn";
 import {
   BulkSelectionRow,
+  HoveredRow,
   LoadMode,
   PaginationInfo,
   RegisteredBulkSelectionRow,
@@ -170,7 +169,7 @@ export class SuperTable {
   /**
    * Displayed columns keys
    */
-  public displayedColumns: TablePlainColumn[] = [];
+  public displayedColumns: Column[] = [];
 
   /**
    * Table role
@@ -200,7 +199,7 @@ export class SuperTable {
   /**
    * Cache displayed columns with bulk selection
    */
-  protected displayedColumnsWithBulkSelection: TablePlainColumn[] = [];
+  protected displayedColumnsWithBulkSelection: Column[] = [];
 
   /**
    * Registered bulk selection
@@ -230,7 +229,7 @@ export class SuperTable {
   /**
    * Pagination info cast callback
    */
-  protected paginationInfoCast = (response) => response.data.paginationInfo;
+  protected paginationInfoCast = response => response.data.paginationInfo;
 
   /**
    * Determine if pagination is enabled
@@ -241,6 +240,26 @@ export class SuperTable {
    * Cache handler
    */
   public cacheHandler: any = getMoonlightConfig("cache.handler");
+
+  /**
+   * Determine if shortcuts are enabled
+   */
+  public shortcutsEnabled = getMoonlightConfig("table.shortcutsEnabled", true);
+
+  /**
+   * Registered shortcuts for this table
+   */
+  public keyboardShortcuts: SuperTableShortKeys[] = [];
+
+  /**
+   * Determine if table has too many filters
+   */
+  public hasTooManyFilters = false;
+
+  /**
+   * Max filters to be displayed before hiding the rest
+   */
+  public maxFilters = 6;
 
   /**
    * Keys names for records and record
@@ -258,11 +277,16 @@ export class SuperTable {
   };
 
   /**
+   * Determine the current hovered row
+   */
+  public hoveredRow: HoveredRow = null;
+
+  /**
    * Constructor
    */
   public constructor(public lazyTable = false) {
     this.setId(Random.id());
-    this.currentQueryString = queryString.all?.() || {};
+    this.currentQueryString = queryString?.().all() || {};
 
     this.keysList = merge(this.keysList, getMoonlightConfig("table.keys", {}));
 
@@ -275,6 +299,92 @@ export class SuperTable {
         this.castPaginationInfo(paginationInfoHandler);
       }
     }
+  }
+
+  /**
+   * Register keyboard shortcut
+   */
+  public registerKeyboardShortcut(shortcut: SuperTableShortKeys) {
+    if (shortcut.order === undefined) {
+      shortcut.order = 9999;
+    }
+
+    if (shortcut.once) {
+      // check if the keys already exists
+      // if so then return
+      if (
+        this.keyboardShortcuts.find(s =>
+          areEqual([...s.keys], [...shortcut.keys]),
+        )
+      ) {
+        return;
+      }
+    }
+
+    this.keyboardShortcuts.push(shortcut);
+
+    // return () => {
+    //   this.keyboardShortcuts = this.keyboardShortcuts.filter(
+    //     s => areEqual(s.keys, shortcut.keys) === false,
+    //   );
+    // };
+  }
+
+  /**
+   * Get keyboard shortcuts in ascending order using `order` key if exists
+   */
+  public getKeyboardShortcuts() {
+    const isMacOS = navigator.userAgent.toLowerCase().includes("mac");
+
+    return this.keyboardShortcuts
+      .map(shortcut => {
+        // check if shortcut has `mod`
+        // if so then replace it based on current OS
+        // if macOS then replace `mod` with `⌘`
+        // otherwise, replace it with `ctrl`
+        if (shortcut.keys.includes("mod")) {
+          shortcut.keys = shortcut.keys.map(key => {
+            if (key === "mod") {
+              return isMacOS ? "⌘" : "CTRL";
+            }
+
+            return key.toUpperCase();
+          });
+        }
+
+        return shortcut;
+      })
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  }
+
+  /**
+   * Set current hovered row
+   */
+  public hovering(row: HoveredRow) {
+    const previousHoveredRow = this.hoveredRow;
+    this.hoveredRow = row;
+
+    this.trigger("hoveredRow", row);
+
+    if (previousHoveredRow) {
+      this.trigger(
+        ("hoveredRow." + previousHoveredRow.row.id) as TableEvent,
+        false,
+      );
+    }
+
+    if (row) {
+      this.trigger(("hoveredRow." + row.row.id) as TableEvent, true);
+    }
+
+    return this;
+  }
+
+  /**
+   * Listen to hovered row event
+   */
+  public onRowHovered(rowId: number, callback: (isHovered: boolean) => void) {
+    return this.on(("hoveredRow." + rowId) as TableEvent, callback);
   }
 
   /**
@@ -324,7 +434,7 @@ export class SuperTable {
    * Listen to table page change
    */
   public onPageChange(
-    callback: (page: number, paramsList: any) => void = defaultCallback
+    callback: (page: number, paramsList: any) => void = defaultCallback,
   ) {
     return this.on("pageChange", callback);
   }
@@ -343,8 +453,8 @@ export class SuperTable {
     callback: (
       sortingColumn: string,
       sortDirection: SortDirection,
-      column: Column
-    ) => void = defaultCallback
+      column: Column,
+    ) => void = defaultCallback,
   ) {
     return this.on("sort", callback);
   }
@@ -376,7 +486,7 @@ export class SuperTable {
    * Cast pagination info
    */
   public castPaginationInfo(
-    callback: (response: AxiosResponse) => PaginationInfo
+    callback: (response: AxiosResponse) => PaginationInfo,
   ) {
     this.paginationInfoCast = callback;
 
@@ -443,8 +553,9 @@ export class SuperTable {
   public allows(permission: string, ...args: any[]) {
     const permissionCallback = this.permissions?.[permission];
 
-    if (typeof permissionCallback === "function")
+    if (typeof permissionCallback !== "function") {
       return this.hasPermission(permission);
+    }
 
     return permissionCallback(...args) === true;
   }
@@ -477,42 +588,28 @@ export class SuperTable {
    * Register bulk selection
    */
   public registerBulkSelection(
-    bulkSelectionRow: BulkSelectionRow
+    bulkSelectionRow: BulkSelectionRow,
   ): RegisteredBulkSelectionRow {
-    this.registeredBulkSelection.push(bulkSelectionRow);
-
-    return {
+    const data = {
       ...bulkSelectionRow,
       setChecked: (checked: boolean) => {
         bulkSelectionRow.setChecked(checked);
 
-        // update the registered bulk selection
-        this.registeredBulkSelection = this.registeredBulkSelection.map(
-          (registeredBulkSelectionRow) => {
-            if (
-              registeredBulkSelectionRow.row === bulkSelectionRow.row &&
-              registeredBulkSelectionRow.rowIndex === bulkSelectionRow.rowIndex
-            ) {
-              registeredBulkSelectionRow.checked = checked;
-            }
-
-            return registeredBulkSelectionRow;
-          }
-        );
+        data.checked = checked;
 
         this.trigger("bulkSelection", this.registeredBulkSelection);
       },
-      updateState: (checked) => {
-        bulkSelectionRow.checked = checked;
-        bulkSelectionRow.setChecked(checked);
+      updateState: checked => {
+        data.setChecked(checked);
       },
       unregister: () => {
-        this.unregisterBulkSelection(
-          bulkSelectionRow.row,
-          bulkSelectionRow.rowIndex
-        );
+        this.unregisterBulkSelection(data.row, data.rowIndex);
       },
     };
+
+    this.registeredBulkSelection.push(data);
+
+    return data;
   }
 
   /**
@@ -520,11 +617,11 @@ export class SuperTable {
    */
   public unregisterBulkSelection(row: any, rowIndex) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return (
           bulkSelectionRow.row !== row || bulkSelectionRow.rowIndex !== rowIndex
         );
-      }
+      },
     );
 
     return this;
@@ -534,12 +631,12 @@ export class SuperTable {
    * Toggle all bulk selection
    */
   public toggleAllBulkSelection(checked: boolean) {
-    this.registeredBulkSelection.forEach((bulkSelectionRow) => {
+    this.registeredBulkSelection.forEach(bulkSelectionRow => {
       bulkSelectionRow.setChecked(checked);
       bulkSelectionRow.checked = checked;
     });
 
-    this.trigger("bulkSelection", this.registeredBulkSelection);
+    this.trigger("bulkSelection", [...this.registeredBulkSelection]);
 
     return this;
   }
@@ -549,7 +646,7 @@ export class SuperTable {
    */
   public getSelectedBulkRows() {
     return this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => bulkSelectionRow.checked
+      bulkSelectionRow => bulkSelectionRow.checked,
     );
   }
 
@@ -558,13 +655,13 @@ export class SuperTable {
    */
   public removeBulkRows(rows: BulkSelectionRow[]) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return !rows.find(
-          (row) =>
+          row =>
             row.row === bulkSelectionRow.row &&
-            row.rowIndex === bulkSelectionRow.rowIndex
+            row.rowIndex === bulkSelectionRow.rowIndex,
         );
-      }
+      },
     );
 
     return this;
@@ -629,7 +726,7 @@ export class SuperTable {
 
     const cachedSortByOptions = this.getCached("sortByOptions");
 
-    const params = queryString.all?.() || {};
+    const params = queryString?.().all() || {};
 
     if (cachedSortByOptions) {
       this.sortByOptions = {
@@ -648,7 +745,7 @@ export class SuperTable {
    */
   public load(
     params: any = {},
-    loadMode: LoadMode = "full"
+    loadMode: LoadMode = "full",
   ): Promise<SuperTable> {
     return new Promise((resolve, reject) => {
       if (!this.service) {
@@ -669,14 +766,14 @@ export class SuperTable {
 
       this.service
         .list(finalParams)
-        .then((response) => {
+        .then(response => {
           scrollTop();
           this.setData(get(response.data, this.getKey("records")));
           this.setPaginationInfo(this.paginationInfoCast(response));
           this.setLoading(false);
 
           if (this.updateQueryString) {
-            queryString.update?.(params);
+            queryString?.().update(params);
           }
 
           if (finalParams.orderBy) {
@@ -685,7 +782,7 @@ export class SuperTable {
 
           resolve(this);
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = error;
           this.isLoading = false;
           this.setLoading(false);
@@ -780,7 +877,7 @@ export class SuperTable {
    * Get column by key
    */
   public getColumn(key: string) {
-    return this.columns.find((column) => column.key === key);
+    return this.columns.find(column => column.key === key);
   }
 
   /**
@@ -810,142 +907,25 @@ export class SuperTable {
 
     const cachedDisplayedColumns = this.getCached("displayedColumns", []);
 
-    const filteredColumns =
+    this.displayedColumns =
       cachedDisplayedColumns.length > 0
-        ? this.columns.filter((column) =>
-            cachedDisplayedColumns.includes(column.data.key)
+        ? this.columns.filter(column =>
+            cachedDisplayedColumns.includes(column.data.key),
           )
-        : this.columns.filter((column) => {
+        : this.columns.filter(column => {
             return ["always", "default"].includes(column.getDisplayMode());
           });
 
-    this.displayedColumns = filteredColumns.map(this.parseColumn.bind(this));
-
     return this;
-  }
-
-  /**
-   * Parse the given column
-   */
-  protected parseColumn(
-    incomingColumn: Column,
-    columnIndex: number
-  ): TablePlainColumn {
-    const columnStyle = (column: TablePlainColumn) => {
-      const style: React.CSSProperties = {};
-
-      if (column.width) {
-        style.width = column.width;
-      }
-
-      if (column.align) {
-        let textAlign: React.CSSProperties["textAlign"] = column.align;
-        if (column.align === "left") {
-          textAlign = "start";
-        } else if (column.align === "right") {
-          textAlign = "end";
-        }
-
-        style.textAlign = textAlign;
-      }
-
-      return style;
-    };
-
-    const column = incomingColumn.getData();
-
-    return {
-      ...column,
-      column: incomingColumn,
-      display: column.display || "always",
-      className: column.className || "",
-      style: { ...columnStyle(column), ...(column.style || {}) },
-      headingStyle: {
-        ...columnStyle(column),
-        ...(column.headingStyle || {}),
-      },
-      heading:
-        typeof column.heading === "string"
-          ? trans(column.heading)
-          : column.heading,
-      render: (row: any, rowIndex: number) => {
-        const value = get(row, column.key, column.defaultValue);
-
-        const Formatter = column.formatter as React.ComponentType<any>;
-
-        const editOptions = incomingColumn.getEditColumnOptions();
-
-        let Wrapper: React.ComponentType<any> = React.Fragment;
-        let wrapperProps = {};
-
-        if (editOptions.enabled) {
-          Wrapper = EditColumn;
-
-          const FormComponent = createReactForm((reactiveForm) => {
-            reactiveForm
-              .heading(trans("quickEdit"))
-              .withResetButton(false)
-              .withSaveAndClearButton(false)
-              .closeOnEscape()
-              .onSave((record) => {
-                this.updateRow(record, rowIndex);
-              })
-              .setInputs(
-                editOptions.inputs({ row, rowIndex, column: incomingColumn })
-              )
-              .submitter((event: React.FormEvent, form: FormInterface) => {
-                const formElement = event.target as HTMLFormElement;
-                return editOptions.onEdit({
-                  row,
-                  rowIndex,
-                  column: incomingColumn,
-                  form,
-                  formElement,
-                  values: serialize(formElement, true),
-                });
-              });
-          });
-
-          wrapperProps = {
-            ...editOptions,
-            row,
-            rowIndex,
-            column: incomingColumn,
-            FormComponent,
-          };
-        }
-
-        const children = column.formatter ? (
-          <Formatter
-            {...{
-              row,
-              rowIndex,
-              column,
-              key: column.key,
-              columnIndex,
-              value,
-              defaultValue: column.defaultValue,
-              settings: column.settings || {},
-            }}
-          />
-        ) : (
-          value
-        );
-
-        return <Wrapper {...wrapperProps}>{children}</Wrapper>;
-      },
-    };
   }
 
   /**
    * Reset displayed columns
    */
   public resetDisplayedColumns() {
-    this.displayedColumns = this.columns
-      .filter((column) =>
-        ["always", "default"].includes(column.getDisplayMode())
-      )
-      .map(this.parseColumn.bind(this));
+    this.displayedColumns = this.columns.filter(column =>
+      ["always", "default"].includes(column.getDisplayMode()),
+    );
 
     const cachedData = this.cacheHandler?.get(this.cacheKey, {}) || {};
 
@@ -973,11 +953,11 @@ export class SuperTable {
    */
   public setDisplayedColumns(displayedColumns: string[]) {
     this.cache("displayedColumns", displayedColumns);
-    this.displayedColumns = this.columns
-      .filter((column) => displayedColumns.includes(column.data.key))
-      .map(this.parseColumn.bind(this));
+    this.displayedColumns = this.columns.filter(column =>
+      displayedColumns.includes(column.data.key),
+    );
 
-    this.trigger("displayedColumns", displayedColumns);
+    this.trigger("displayedColumns", this.displayedColumns);
     return this;
   }
 
@@ -996,13 +976,7 @@ export class SuperTable {
    * Get only the columns that are marked as displayed
    */
   public getDisplayedColumns() {
-    return this.displayedColumns.filter((column) => {
-      if (column.validate) {
-        return column.validate(column, this);
-      }
-
-      return true;
-    });
+    return this.displayedColumns.filter(column => column.validateColumn(this));
   }
 
   /**
@@ -1035,7 +1009,7 @@ export class SuperTable {
   public setData(data: any[]) {
     const dataChanged = data !== this.data;
 
-    this.data = data.map((data) => {
+    this.data = data.map(data => {
       if (!data.uniqueId) {
         data.uniqueId = Random.string(36);
       }
@@ -1062,7 +1036,7 @@ export class SuperTable {
    */
   public on(
     event: TableEvent,
-    callback: (...args: any[]) => void
+    callback: (...args: any[]) => void,
   ): EventSubscription {
     return events.subscribe(`table.${this.tableName}.${event}`, callback);
   }
@@ -1106,7 +1080,7 @@ export class SuperTable {
     if (this.service) {
       const loader = toastLoading(
         trans("deletingInProgress"),
-        trans("deleting")
+        trans("deleting"),
       );
 
       this.service
@@ -1115,10 +1089,10 @@ export class SuperTable {
           deleteRowFromTable();
           loader.success(trans(moonlightTranslations.deleteSuccess));
         })
-        .catch((error) => {
+        .catch(error => {
           loader.error(
             parseError(error),
-            trans(moonlightTranslations.deleteError)
+            trans(moonlightTranslations.deleteError),
           );
         });
     } else {
@@ -1161,7 +1135,7 @@ export class SuperTable {
     this.paginationInfo.total += numberOfRows;
     this.paginationInfo.results += numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1174,7 +1148,7 @@ export class SuperTable {
     this.paginationInfo.total -= numberOfRows;
     this.paginationInfo.results -= numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1245,6 +1219,7 @@ export class SuperTable {
    */
   public setFilters(filters: TableFilter[]) {
     this.filters = filters;
+    this.hasTooManyFilters = this.filters.length > this.maxFilters;
     return this;
   }
 
@@ -1252,12 +1227,15 @@ export class SuperTable {
    * Manager table filters to return it properly
    */
   public getFilters(): TableFilter[] {
-    return this.filters.map((filter) => {
+    return this.filters.map(filter => {
       let Component = filter.component;
       if (filter.type) {
         switch (filter.type) {
           case "text":
             Component = TextInput;
+            break;
+          case "email":
+            Component = EmailInput;
             break;
           case "number":
             Component = NumberInput;
@@ -1296,18 +1274,20 @@ export class SuperTable {
         componentProps.placeholder = trans(filter.placeholder);
       }
 
+      const valueFromQueryString = queryString?.().get(filter.name);
+
       if (
         filter.type &&
         ["switch", "checkbox"].includes(filter.type) &&
-        queryString.get?.(filter.name)
+        valueFromQueryString
       ) {
         componentProps.defaultChecked = true;
       } else {
         componentProps.defaultValue =
-          queryString.get?.(filter.name) ||
-          componentProps.defaultValue !== undefined
+          valueFromQueryString ||
+          (componentProps.defaultValue !== undefined
             ? componentProps.defaultValue
-            : "";
+            : "");
       }
 
       filter.componentProps = componentProps;
@@ -1338,7 +1318,7 @@ export class SuperTable {
   /**
    * Submit filter form for filtering table data
    */
-  public submitFilter(_e: React.FormEvent, form: FormInterface) {
+  public submitFilter({ form }) {
     this.loadFilter(form);
   }
 
@@ -1349,7 +1329,7 @@ export class SuperTable {
     if (this.isLoading) return;
 
     // const params: Record<string, any> = form.values();
-    const params: Record<string, any> = serialize(form.formElement, true);
+    const params = form.values();
 
     // reset page to 1
     params.page = 1;
@@ -1422,7 +1402,7 @@ export class SuperTable {
     this.isResettingFilter = true;
 
     // const values = tableFilterForm.values();
-    const values = serialize(tableFilterForm.formElement, true);
+    const values = tableFilterForm.values();
 
     values.orderBy = [name, order];
 
@@ -1457,8 +1437,7 @@ export class SuperTable {
 
     this.isResettingFilter = true;
 
-    // const values = tableFilterForm.values();
-    const values = serialize(tableFilterForm.formElement, true);
+    const values = tableFilterForm.values();
 
     values.limit = limit;
 

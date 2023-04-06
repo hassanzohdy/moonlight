@@ -10,7 +10,7 @@ export type FormatterProps = {
   row: any;
   rowIndex: number;
   columnIndex: number;
-  column: TablePlainColumn;
+  column: Column;
   value: any;
   key: string | number;
   settings: any;
@@ -31,14 +31,13 @@ export type TablePlainColumn = {
   heading?: React.ReactNode;
   headingComponent?: React.ComponentType<any>;
   headingStyle?: React.CSSProperties;
-  render?: (row: any, rowIndex: number) => React.ReactNode;
   formatter?: TableColumnFormatter;
   className?: string;
   align?: React.CSSProperties["textAlign"];
   width?: number | string;
   style?: React.CSSProperties;
   prepare?: (column: Column, superTable: SuperTable) => void;
-  validate?: (column: TablePlainColumn, superTable: SuperTable) => boolean;
+  validate?: (column: Column, superTable: SuperTable) => boolean;
   column?: Column;
 };
 
@@ -47,7 +46,6 @@ export type EditColumnCallback = (params: {
   rowIndex: number;
   column: Column;
   form: FormInterface;
-  formElement: React.FormEvent["target"];
   values: Record<string, any>;
 }) => Promise<any>;
 
@@ -76,6 +74,7 @@ export type TableFilter = {
   placeholder?: string;
   type?:
     | "text"
+    | "email"
     | "number"
     | "integer"
     | "float"
@@ -109,6 +108,13 @@ export type TableKeys = {
   record?: string;
   createRecord?: string;
   updateRecord?: string;
+};
+
+export type SuperTableShortKeys = {
+  keys: string[];
+  description: string;
+  order?: number;
+  once?: boolean;
 };
 
 export type TableProps = {

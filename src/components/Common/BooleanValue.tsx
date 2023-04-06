@@ -1,5 +1,5 @@
 import { Box } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons";
+import { IconCheck, IconX } from "@tabler/icons-react";
 
 export type BooleanValueProps = {
   value: boolean;

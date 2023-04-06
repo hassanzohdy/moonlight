@@ -17,7 +17,7 @@ export function defaultMapOption(option: any, _index: number): any {
   }
 
   const label = getLocalizedValue(
-    option.name || option.text || option.title || option.label
+    option.name || option.text || option.title || option.label,
   );
 
   return {

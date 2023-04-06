@@ -1,7 +1,7 @@
 import { SegmentedControl, SegmentedControlProps } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import {
-  FormInputProps,
+  FormControlProps,
   requiredRule,
   useFormControl,
 } from "@mongez/react-form";
@@ -10,13 +10,13 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
 
-export type ChooseInputProps = FormInputProps &
+export type ChooseInputProps = FormControlProps &
   SegmentedControlProps & {
     tooltip?: React.ReactNode;
   };
 
 function mapData(data: SegmentedControlProps["data"]) {
-  return data.map((item) => {
+  return data.map(item => {
     if (typeof item === "string") {
       return {
         label: trans(item),
@@ -32,6 +32,7 @@ export function ChooseInput({
   dir,
   description,
   tooltip,
+  label,
   data: incomingData,
   ...props
 }: ChooseInputProps) {
@@ -64,7 +65,12 @@ export function ChooseInput({
   return (
     <Wrapper {...wrapperProps}>
       <span>
-        <InputWrapper dir={dir} description={description} {...rest}>
+        <InputWrapper
+          label={label}
+          dir={dir}
+          description={description}
+          required={props.required}
+          {...rest}>
           <SegmentedControl
             value={value}
             key={segmentKey}

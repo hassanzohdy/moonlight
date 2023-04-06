@@ -71,6 +71,15 @@ export class SelectInputBuilder extends InputBuilder {
   }
 
   /**
+   * Set dropdown position
+   */
+  public dropdownPosition(position: "bottom" | "top" | "flip") {
+    this.componentProps.dropdownPosition = position;
+
+    return this;
+  }
+
+  /**
    * Determine if select input is multiple
    */
   public multiple(isMultiple = true) {
@@ -115,7 +124,7 @@ export class SelectInputBuilder extends InputBuilder {
    */
   public spawns(
     input: SelectInputBuilder,
-    searchAs: typeof this.spawning.searchAs
+    searchAs: typeof this.spawning.searchAs,
   ) {
     this.spawning.selectBuilder = input;
     this.spawning.searchAs = searchAs;
@@ -147,14 +156,14 @@ export class SelectInputBuilder extends InputBuilder {
       return get(
         this.record,
         this.data.defaultValueKey,
-        this.inputDefaultValue || []
-      ).map((value) => value.id || value);
+        this.inputDefaultValue || [],
+      ).map(value => value.id || value);
     }
 
     const value = get(
       this.record,
       this.data.defaultValueKey,
-      this.inputDefaultValue || ""
+      this.inputDefaultValue || "",
     );
 
     return value?.id || value;
@@ -213,7 +222,7 @@ export class SelectInputBuilder extends InputBuilder {
         this.resetEvent.unsubscribe();
       }
 
-      this.resetEvent = this.formControl.on("reset", () => {
+      this.resetEvent = this.formControl.onReset(() => {
         if (this.spawning.displayed) {
           this.hideSpawns();
           this.reRender();

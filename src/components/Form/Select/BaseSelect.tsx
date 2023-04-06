@@ -1,12 +1,12 @@
 import { trans } from "@mongez/localization";
-import { FormInputProps } from "@mongez/react-form";
+import { FormControlProps } from "@mongez/react-form";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { SelectHookOptions, useSelect } from "../../../hooks/use-select";
 import { defaultSelectProps } from "../../../utils/select";
 import { InputWrapper } from "../InputWrapper";
 
-export type SelectInputProps = FormInputProps & {
+export type SelectInputProps = FormControlProps & {
   data?: any;
   request?: () => Promise<AxiosResponse>;
   lazyRequest?: () => Promise<AxiosResponse>;
@@ -16,7 +16,7 @@ export type SelectInputProps = FormInputProps & {
   description?: React.ReactNode;
   mapOption?: (
     option: any,
-    index: number
+    index: number,
   ) => {
     value: string;
     label: React.ReactNode;
@@ -29,16 +29,12 @@ export type SelectInputProps = FormInputProps & {
 export const BaseSelect = (
   Component: React.ComponentType<any>,
   selectHookOptions: SelectHookOptions,
-  defaultProps = defaultSelectProps
+  defaultProps = defaultSelectProps,
 ) => {
-  function _SelectInput({
-    required,
-    label,
-    placeholder,
-    description,
-    icon,
-    ...props
-  }: SelectInputProps) {
+  function _SelectInput(
+    { label, placeholder, description, icon, ...props }: SelectInputProps,
+    ref: any,
+  ) {
     const {
       value,
       id,
@@ -61,13 +57,13 @@ export const BaseSelect = (
           id={id}
           label={label}
           description={description}
-          required={required}
-        >
+          required={props.required}>
           <Component
-            clearable={!required}
+            clearable={!props.required}
             data={dataList}
             disabled={disabled}
             value={value}
+            ref={ref}
             error={Boolean(error)}
             onChange={changeValue}
             id={id}
@@ -77,7 +73,9 @@ export const BaseSelect = (
             placeholder={
               isLoading
                 ? trans("loading")
-                : placeholder && trans(placeholder as any) + (required && " *")
+                : placeholder
+                ? trans(placeholder) + (props.required ? " *" : "")
+                : ""
             }
             {...otherProps}
           />
@@ -86,7 +84,9 @@ export const BaseSelect = (
     );
   }
 
-  _SelectInput.defaultProps = defaultProps;
+  const SelectRef = React.forwardRef(_SelectInput);
 
-  return React.memo(_SelectInput);
+  SelectRef.defaultProps = defaultProps;
+
+  return SelectRef;
 };

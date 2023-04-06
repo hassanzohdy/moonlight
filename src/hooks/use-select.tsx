@@ -27,7 +27,7 @@ export function useSelect(
     responseDataKey,
     ...props
   }: any,
-  { onChange: onChangeProp, parseValue, multiple = false }: SelectHookOptions
+  { onChange: onChangeProp, parseValue, multiple = false }: SelectHookOptions,
 ) {
   const {
     id,
@@ -36,9 +36,10 @@ export function useSelect(
     disabled,
     value,
     otherProps,
-    formInput,
     visibleElementRef,
-  } = useFormControl(props);
+  } = useFormControl(props, {
+    multiple,
+  });
 
   const [isLoading, loading] = useState(request !== undefined);
 
@@ -51,14 +52,14 @@ export function useSelect(
     setData(data);
 
     const currentValue = multiple
-      ? (value || []).map((value) => String(value))
+      ? (value || []).map(value => String(value))
       : String(value);
 
     if (!Is.empty(value)) {
       if (multiple) {
-        const stringedData = data.map((item) => String(item.value));
+        const stringedData = data.map(item => String(item.value));
         // check for each value if it exists in the new data
-        const totalFound = currentValue.filter((value) => {
+        const totalFound = currentValue.filter(value => {
           return stringedData.includes(value);
         });
 
@@ -67,7 +68,7 @@ export function useSelect(
         }
       } else if (
         initialRender.current &&
-        !data.find((option) => String(option.value) === currentValue)
+        !data.find(option => String(option.value) === currentValue)
       ) {
         changeValue("");
       }
@@ -94,12 +95,12 @@ export function useSelect(
     }, 0);
   });
 
-  const loadRequest = (request) => {
+  const loadRequest = (request, data = {}) => {
     if (!request) return;
 
     loading(true);
 
-    request().then((response: any) => {
+    request(data).then((response: any) => {
       const dataKey =
         responseDataKey ||
         getMoonlightConfig("select.responseDataKey", "records");
@@ -135,20 +136,30 @@ export function useSelect(
   }, [dynamicRequest]);
 
   useEffect(() => {
-    if (props.defaultValue === undefined || props.defaultValue === null) return;
-    if (!lazyRequest) return;
+    // if there is a default value and lazy request is set, then load the request
+    // this is because we need to display the selected value in the select
+    if (!props.defaultValue || props.defaultValue?.length === 0 || !lazyRequest)
+      return;
 
     if (!lazyRequested.current) {
       lazyRequested.current = true;
-      loadRequest(lazyRequest);
+      loadRequest(lazyRequest, {
+        id: props.defaultValue,
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lazyRequest]);
+  }, [props.defaultValue, lazyRequest]);
 
   const changeValue = (newValue: any) => {
+    if (!newValue) {
+      newValue = "";
+    }
+
     if (newValue === value) return;
 
-    changeFormControlValue(...onChangeProp(newValue, dataList));
+    const [parsedValue, options] = onChangeProp(newValue, dataList);
+
+    changeFormControlValue(parsedValue, options);
   };
 
   useEffect(() => {

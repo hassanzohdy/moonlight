@@ -2,7 +2,6 @@ import { TableProps as BaseTableProps } from "@mantine/core";
 import React from "react";
 import { router } from "../../utils/resolvers";
 import { SuperTableContext } from "./Context/SuperTableContext";
-import { useTable } from "./hooks/useTable";
 import { Pagination } from "./Pagination";
 import { PaginationResults } from "./Pagination/PaginationResults";
 import { StyledTable, TableWrapper } from "./Table.styles";
@@ -12,6 +11,7 @@ import { BulkDelete } from "./TableHeader/BulkActions/BulkDelete";
 import { TableHeading } from "./TableHeading";
 import { TableLoader } from "./TableLoader";
 import { TableProps } from "./TableProps";
+import { useTable } from "./hooks/useTable";
 
 function _Table(props: TableProps & BaseTableProps) {
   const superTable = useTable(props);

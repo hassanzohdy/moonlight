@@ -3,7 +3,7 @@ import { maxRule, minRule, numberRule, requiredRule } from "@mongez/react-form";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export function NumberInput(props: BaseInputProps) {
-  return <BaseInput {...props} />;
+  return <BaseInput {...props} handleValueChange={e => e} />;
 }
 
 NumberInput.defaultProps = {

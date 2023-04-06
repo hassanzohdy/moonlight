@@ -2,29 +2,31 @@ import {
   ActionIcon,
   Avatar,
   AvatarProps,
+  Image as BaseImage,
   Button,
-  Image,
   Popover,
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import {
-  FormInputProps,
+  FormControlProps,
   requiredRule,
   useForm,
   useFormControl,
 } from "@mongez/react-form";
-import { IconEdit, IconTrash } from "@tabler/icons";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React, { useRef, useState } from "react";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
+import { UploadingFileValidationOptions, isValidFile } from "../../utils";
 import { acceptImagesOnly } from "../../utils/extensions";
 import { toastError } from "../Toast";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
 
 export type ImageInputProps = AvatarProps &
-  FormInputProps & {
+  FormControlProps &
+  UploadingFileValidationOptions & {
     size?: AvatarProps;
     circle?: boolean;
     clearable?: boolean;
@@ -40,9 +42,21 @@ export function ImageInput({
   label,
   required,
   withPlaceholder,
+  minWidth,
+  maxWidth,
+  imageWidth,
+  minHeight,
+  maxHeight,
+  imageHeight,
+  minSize,
+  maxSize,
   ...props
 }: ImageInputProps) {
-  const { id, value, changeValue, error, otherProps } = useFormControl(props);
+  const { id, value, changeValue, error, otherProps } = useFormControl(props, {
+    transformValue: value => value,
+    collectValue: ({ value }) => value?.id,
+    isCollectable: ({ value }) => value?.id !== undefined,
+  });
 
   const [isUploading, setUploading] = useState(false);
   const [imageOptionsOpened, toggleImageOptionsPopup] = useState(false);
@@ -50,7 +64,7 @@ export function ImageInput({
 
   const [uploadedFile, setUploadedFile] = useState<any | null>(null);
 
-  const formProvider = useForm();
+  const form = useForm();
 
   const fileInputRef = useRef<any>();
 
@@ -74,8 +88,8 @@ export function ImageInput({
   const uploading = (isUploading: boolean) => {
     setUploading(isUploading);
 
-    if (formProvider) {
-      formProvider.form.disable(isUploading);
+    if (form) {
+      form.disable(isUploading);
     }
   };
 
@@ -90,16 +104,28 @@ export function ImageInput({
     e.target.value = "";
   };
 
-  const upload = (file: any) => {
+  const upload = async (file: File) => {
+    if (
+      !(await isValidFile(file, {
+        minWidth,
+        maxWidth,
+        minHeight,
+        maxHeight,
+        minSize,
+        maxSize,
+        imageWidth,
+        imageHeight,
+      }))
+    )
+      return;
+
     uploading(true);
 
     uploadFile(file)
-      .then((file) => {
+      .then(file => {
         setUploadedFile(file);
 
-        changeValue(file.id, {
-          file,
-        });
+        changeValue(file);
       })
       .catch(() => {
         setUploadError(true);
@@ -116,9 +142,7 @@ export function ImageInput({
       toggleImageOptionsPopup(false);
     }
 
-    changeValue("", {
-      file: null,
-    });
+    changeValue(null);
   };
 
   const handleDragEnter = (e: any) => {
@@ -150,7 +174,7 @@ export function ImageInput({
     upload(file);
   };
 
-  const ImageComponent = circle ? Avatar : Image;
+  const ImageComponent = circle ? Avatar : BaseImage;
 
   const theme = useMantineTheme();
 
@@ -172,15 +196,13 @@ export function ImageInput({
         error={uploadError || error}
         hint={hint || <span>{trans("clickOrDarg")}</span>}
         description={description}
-        id={id}
-      >
+        id={id}>
         <Popover
           opened={imageOptionsOpened}
           onChange={toggleImageOptionsPopup}
           position="top"
           withArrow
-          shadow="md"
-        >
+          shadow="md">
           <Popover.Target>
             <UnstyledButton id={id} type="button" onClick={openImageSelector}>
               <ImageComponent

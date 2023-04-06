@@ -1,4 +1,4 @@
-import { Button as PrimaryButton, ButtonProps } from "@mantine/core";
+import { ButtonProps, Button as PrimaryButton } from "@mantine/core";
 import { useSubmitButton } from "@mongez/react-form";
 import { HTMLAttributes } from "react";
 
@@ -15,8 +15,7 @@ export function SubmitButton({
         color="blue"
         {...props}
         loading={isSubmitting}
-        disabled={disabled || isSubmitting}
-      >
+        disabled={disabled || isSubmitting}>
         {children}
       </PrimaryButton>
     </>

@@ -1,14 +1,13 @@
 import { Button, ButtonProps, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import {
-  FormInputProps,
-  HiddenInput,
+  FormControlProps,
   requiredRule,
   useForm,
   useFormControl,
 } from "@mongez/react-form";
 import { readMoreChars } from "@mongez/reinforcements";
-import { IconRefresh, IconTrash } from "@tabler/icons";
+import { IconRefresh, IconTrash } from "@tabler/icons-react";
 import { useRef, useState } from "react";
 import { moonlightTranslations } from "../../locales";
 import {
@@ -22,7 +21,7 @@ import { Tooltip } from "../Tooltip";
 import { parseError } from "./../../utils/parse-error";
 import { InputWrapper } from "./InputWrapper";
 
-type FileInputProps = FormInputProps & {
+type FileInputProps = FormControlProps & {
   buttonLabel?: React.ReactNode;
   buttonProps?: ButtonProps;
   accept?: string;
@@ -41,7 +40,11 @@ export function FileInput({
   required,
   ...props
 }: FileInputProps) {
-  const { value, changeValue, error, id } = useFormControl(props);
+  const { value, changeValue, error, id } = useFormControl(props, {
+    transformValue: value => value,
+    collectValue: ({ value }) => value?.id,
+    isCollectable: ({ value }) => value?.id !== undefined,
+  });
 
   const [isUploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(false);
@@ -50,7 +53,7 @@ export function FileInput({
 
   const [uploadedFile, setUploadedFile] = useState<any | null>(value);
 
-  const formProvider = useForm();
+  const form = useForm();
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -76,8 +79,8 @@ export function FileInput({
   const uploading = (isUploading: boolean) => {
     setUploading(isUploading);
 
-    if (formProvider) {
-      formProvider.form.disable(isUploading);
+    if (form) {
+      form.disable(isUploading);
     }
   };
 
@@ -93,11 +96,11 @@ export function FileInput({
     const loading = toastLoading(
       trans(moonlightTranslations.uploadingFileDescription),
       trans(moonlightTranslations.uploadingFile),
-      2000
+      2000,
     );
 
     uploadFiles(formData)
-      .then((files) => {
+      .then(files => {
         const file = files[0];
 
         if (!file) {
@@ -106,21 +109,19 @@ export function FileInput({
 
         setUploadedFile(file);
 
-        changeValue(file.id, {
-          file,
-        });
+        changeValue(file);
 
         loading.success(
           trans(moonlightTranslations.fileUploadedDescription),
-          trans(moonlightTranslations.fileUploaded)
+          trans(moonlightTranslations.fileUploaded),
         );
       })
-      .catch((error) => {
+      .catch(error => {
         setUploadError(true);
 
         loading.error(
           parseError(error),
-          trans(moonlightTranslations.uploadingFileFailed)
+          trans(moonlightTranslations.uploadingFileFailed),
         );
       })
       .finally(() => {
@@ -192,9 +193,7 @@ export function FileInput({
         label={label}
         required={required}
         id={id}
-        error={error}
-      >
-        <HiddenInput name={name} value={uploadedFile?.id} />
+        error={error}>
         <input
           type="file"
           accept={accept}
@@ -216,8 +215,7 @@ export function FileInput({
             id={id}
             {...buttonProps}
             color={color}
-            variant={variant}
-          >
+            variant={variant}>
             {selectedFile || uploadedFile ? (
               <Tooltip
                 label={
@@ -236,12 +234,11 @@ export function FileInput({
                       </Text>
                     </>
                   )
-                }
-              >
+                }>
                 <span>
                   {readMoreChars(
                     (uploadedFile?.fileName || selectedFile?.name) as string,
-                    uploadedFile ? 35 : 40
+                    uploadedFile ? 35 : 40,
                   )}
                 </span>
               </Tooltip>
@@ -255,16 +252,14 @@ export function FileInput({
                 type="button"
                 color="red"
                 variant="outline"
-                onClick={reUpload}
-              >
+                onClick={reUpload}>
                 <IconRefresh />
               </Button>
             </Tooltip>
           )}
           {isUploading && (
             <Tooltip
-              label={<span>{trans(moonlightTranslations.uploading)}</span>}
-            >
+              label={<span>{trans(moonlightTranslations.uploading)}</span>}>
               <Button type="button" color="blue" variant="outline" loading />
             </Tooltip>
           )}
@@ -274,8 +269,7 @@ export function FileInput({
                 type="button"
                 color="red"
                 variant="outline"
-                onClick={reset}
-              >
+                onClick={reset}>
                 <IconTrash />
               </Button>
             </Tooltip>

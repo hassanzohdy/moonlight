@@ -1,14 +1,14 @@
 import { ActionIcon, Text, Tooltip } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
-import { IconTrash } from "@tabler/icons";
+import { useOnce } from "@mongez/react-hooks";
+import { IconTrash } from "@tabler/icons-react";
+import { useRowHoverAction } from "../../hooks/useRowHoverAction";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
 
 export function DeleteButton({ row, rowIndex }: FormatterProps) {
   const superTable = useSuperTable();
-
-  if (superTable.forbids("delete", row, rowIndex)) return null;
 
   const openDeleteModal = () =>
     openConfirmModal({
@@ -19,7 +19,9 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
       ),
       centered: true,
       trapFocus: false,
-      exitTransitionDuration: 500,
+      transitionProps: {
+        exitDuration: 400,
+      },
       children: <Text size="sm">{trans("confirmDeleteMessage")}</Text>,
       labels: {
         confirm: trans("confirmDelete"),
@@ -28,6 +30,23 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
       confirmProps: { color: "red", autoFocus: true },
       onConfirm: () => superTable.deleteRow(row, rowIndex),
     });
+
+  useRowHoverAction({
+    id: row.id,
+    keys: ["mod", "d"],
+    ignoreKeys: ["shift"],
+    in: openDeleteModal,
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
+      keys: ["mod", "d"],
+      description: "Delete Record (When hovering over row)",
+      once: true,
+    });
+  });
+
+  if (superTable.forbids("delete", row, rowIndex)) return null;
 
   return (
     <>

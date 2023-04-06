@@ -1,37 +1,29 @@
 import {
   hideNotification,
   NotificationProps,
-  NotificationProviderProps,
-  NotificationsProvider,
+  Notifications,
+  NotificationsProps,
   showNotification,
   updateNotification,
 } from "@mantine/notifications";
 import { trans } from "@mongez/localization";
-import { atom } from "@mongez/react-atom";
 import { Random } from "@mongez/reinforcements";
-import { IconCheck } from "@tabler/icons";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import React from "react";
-import { IconX } from "@tabler/icons";
+import { toastAtom } from "../../atoms/moonlight-toast";
 
 export { toastConfirm } from "./ToastConfirm";
-
-const toastAtom = atom<NotificationProviderProps>({
-  key: "mantine-toast",
-  default: {
-    position: "top-right",
-  } as NotificationProviderProps,
-});
 
 export function ToastContainer() {
   const position = toastAtom.useWatcher("position");
 
-  return <NotificationsProvider position={position}></NotificationsProvider>;
+  return <Notifications position={position}></Notifications>;
 }
 
 export function toastSuccess(
   message: React.ReactNode,
   title: React.ReactNode = trans("success"),
-  placement: NotificationProviderProps["position"] = "top-right"
+  placement: NotificationsProps["position"] = "top-right",
 ) {
   toastAtom.update({
     ...toastAtom.value,
@@ -50,7 +42,7 @@ export function toastSuccess(
 export function toastError(
   message: React.ReactNode,
   title: React.ReactNode = trans("error"),
-  placement: NotificationProviderProps["position"] = "top-right"
+  placement: NotificationsProps["position"] = "top-right",
 ) {
   toastAtom.update({
     ...toastAtom.value,
@@ -67,7 +59,7 @@ export function toastError(
 export function toastLoading(
   message: React.ReactNode,
   title: React.ReactNode = trans("loading"),
-  closeAfter = 5000
+  closeAfter = 5000,
 ) {
   const id = Random.string(8);
   showNotification({
@@ -76,7 +68,7 @@ export function toastLoading(
     message,
     loading: true,
     autoClose: false,
-    disallowClose: true,
+    withCloseButton: true,
   });
 
   return {
@@ -86,7 +78,7 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "green",
         autoClose: closeAfter,
-      }
+      },
     ) => {
       updateNotification({
         id,
@@ -102,7 +94,7 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "yellow",
         autoClose: closeAfter,
-      } as NotificationProps
+      } as NotificationProps,
     ) => {
       updateNotification({
         id,
@@ -119,7 +111,7 @@ export function toastLoading(
         message,
         loading: true,
         autoClose: false,
-        disallowClose: true,
+        withCloseButton: true,
       });
     },
     close: () => {
@@ -131,7 +123,7 @@ export function toastLoading(
       notificationProps: Partial<NotificationProps> = {
         color: "red",
         autoClose: closeAfter,
-      }
+      },
     ) => {
       updateNotification({
         id,

@@ -24,7 +24,9 @@ export function ImageFormatter({
 
       <Modal
         size="xl"
-        exitTransitionDuration={400}
+        transitionProps={{
+          exitDuration: 400,
+        }}
         opened={opened}
         onClose={() => setOpened(false)}>
         <Image src={value} alt={value} />

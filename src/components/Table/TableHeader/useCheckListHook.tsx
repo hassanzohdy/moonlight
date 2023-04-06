@@ -7,10 +7,8 @@ export function useCheckList(defaultCheckedValues: any) {
     let newValues: any[] = [];
     if (isChecked) {
       newValues = [...checkedValues, value];
-      setCheckedValues(newValues);
     } else {
       newValues = checkedValues.filter((item: any) => item !== value);
-      setCheckedValues(newValues);
     }
 
     return newValues;

@@ -9,23 +9,6 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
   current: {
     autoDetect: true,
   },
-  google: {
-    map: {
-      apiKey: "",
-      zoom: 18,
-      libraries: [
-        "drawing",
-        "geometry",
-        "localContext",
-        "places",
-        "visualization",
-      ],
-      center: {
-        lat: 30.044399831543025, // Tahrir Square
-        lng: 31.235718727111816,
-      },
-    },
-  },
   form: {
     select: {
       responseDataKey: "records",
@@ -41,8 +24,8 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
       createRecord: "record",
       updateRecord: "record",
     },
-    limitOptions: [10, 20, 50, 100, 200, 250, 500],
-    paginationInfo: response => {
+    limitOptions: [10, 15, 20, 50, 100, 200, 250, 500],
+    paginationInfo: (response) => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -65,9 +48,11 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations,
+  configurations: MoonlightConfigurations
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
+
+  currentConfigurations.router = configurations.router;
 
   if (configurations.components) {
     currentConfigurations.components = configurations.components;
@@ -83,8 +68,4 @@ export function getMoonlightConfigurations() {
 
 export function getMoonlightConfig(key: string, defaultValue?: any) {
   return get(currentConfigurations, key, defaultValue);
-}
-
-export function googleMapConfig(key: string, defaultValue?: any) {
-  return get(currentConfigurations, `google.map.${key}`, defaultValue);
 }

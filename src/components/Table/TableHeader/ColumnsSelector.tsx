@@ -1,62 +1,30 @@
 import { Button, Menu } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { CheckboxInput } from "../../Form";
-import { useSuperTable } from "../hooks/useSuperTable";
+import { useColumnsSelector } from "../hooks/useColumnsSelector";
 import { ColumnsSelectorDropdown } from "./style";
-import { useCheckList } from "./useCheckListHook";
 
 export function ColumnsSelector() {
-  const superTable = useSuperTable();
-
-  const columns = superTable.columns;
-
-  const defaultDisplayedColumns = columns.filter(
-    column => column.getDisplayMode() === "default",
-  );
-
-  const optionalDisplayedColumns = columns.filter(
-    column => column.getDisplayMode() === "optional",
-  );
-
-  const alwaysDisplayedColumns = columns.filter(
-    column => column.getDisplayMode() === "always",
-  );
-
-  const [checkedColumnsList, toggleChecklistValue, setCheckedList] =
-    useCheckList(() =>
-      superTable.getDisplayedColumns().map(column => column.key),
-    );
-
-  const toggleColumn = (e: any) => {
-    const displayedColumnsKeys = [
-      ...toggleChecklistValue(e.target.value, e.target.checked),
-      ...alwaysDisplayedColumns.map(column => column.key),
-    ];
-
-    superTable.setDisplayedColumns(displayedColumnsKeys);
-  };
-
-  const resetDisplayedColumns = () => {
-    const defaultCheckedColumns = [
-      ...defaultDisplayedColumns.map(column => column.key),
-      ...alwaysDisplayedColumns.map(column => column.key),
-    ];
-
-    superTable.resetDisplayedColumns();
-
-    setCheckedList(defaultCheckedColumns);
-  };
+  const {
+    defaultDisplayedColumns,
+    resetDisplayedColumns,
+    toggleColumn,
+    alwaysDisplayedColumns,
+    optionalDisplayedColumns,
+    checkedColumnsList,
+    canResetDisplayedColumns,
+  } = useColumnsSelector();
 
   return (
     <>
       <Menu shadow="md" width={200}>
         <Menu.Target>
           <Button color="indigo" variant="light">
-            {trans("displayedColumns")}
+            {trans("moonlight.displayedColumns")}
           </Button>
         </Menu.Target>
         <ColumnsSelectorDropdown>
-          {superTable.getCached("displayedColumns", [])?.length > 0 && (
+          {canResetDisplayedColumns && (
             <>
               <Menu.Label>
                 <Button
@@ -70,12 +38,14 @@ export function ColumnsSelector() {
           )}
           {defaultDisplayedColumns.length > 0 && (
             <>
-              <Menu.Label>{trans("defaultDisplayedColumns")}</Menu.Label>
+              <Menu.Label>
+                {trans("moonlight.defaultDisplayedColumns")}
+              </Menu.Label>
               {defaultDisplayedColumns.map((column, index) => (
                 <Menu.Item closeMenuOnClick={false} key={index}>
                   <CheckboxInput
                     color="green"
-                    onChange={toggleColumn}
+                    onChange={toggleColumn as any}
                     defaultValue={column.key}
                     checked={checkedColumnsList.includes(column.key)}
                     label={
@@ -91,12 +61,12 @@ export function ColumnsSelector() {
           {optionalDisplayedColumns.length > 0 && (
             <>
               <Menu.Divider />
-              <Menu.Label>{trans("otherColumns")}</Menu.Label>
+              <Menu.Label>{trans("moonlight.otherColumns")}</Menu.Label>
               {optionalDisplayedColumns.map((column, index) => (
                 <Menu.Item closeMenuOnClick={false} key={index}>
                   <CheckboxInput
                     color="orange"
-                    onChange={toggleColumn}
+                    onChange={toggleColumn as any}
                     defaultValue={column.key}
                     checked={checkedColumnsList.includes(column.key)}
                     label={
@@ -113,7 +83,9 @@ export function ColumnsSelector() {
           {alwaysDisplayedColumns.length > 0 && (
             <>
               <Menu.Divider />
-              <Menu.Label>{trans("alwaysDisplayedColumns")}</Menu.Label>
+              <Menu.Label>
+                {trans("moonlight.alwaysDisplayedColumns")}
+              </Menu.Label>
               {alwaysDisplayedColumns.map((column, index) => (
                 <Menu.Item closeMenuOnClick={false} key={index}>
                   <CheckboxInput

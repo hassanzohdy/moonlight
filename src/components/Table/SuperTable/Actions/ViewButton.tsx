@@ -1,6 +1,6 @@
 import { ActionIcon, Anchor, Tooltip } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { IconEyeCheck } from "@tabler/icons";
+import { IconEyeCheck } from "@tabler/icons-react";
 import { components, router } from "../../../../utils/resolvers";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";

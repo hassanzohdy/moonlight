@@ -70,7 +70,7 @@ export class PasswordInputBuilder extends InputBuilder {
 
     if (!this.confirmPasswordInput) {
       this.confirmPasswordInput = new PasswordInputBuilder(
-        this.data.name + "_confirmation"
+        this.data.name + "_confirmation",
       );
     }
 
@@ -89,13 +89,13 @@ export class PasswordInputBuilder extends InputBuilder {
 
     if (props.label) {
       this.confirmPasswordInput.label(
-        trans("confirmInput", { input: props.label })
+        trans("confirmInput", { input: props.label }),
       );
     }
 
     if (props.placeholder) {
       this.confirmPasswordInput.placeholder(
-        converter("confirmInput", { input: props.placeholder })
+        converter("confirmInput", { input: props.placeholder }),
       );
     }
 

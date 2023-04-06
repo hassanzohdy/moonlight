@@ -1,8 +1,10 @@
 import { DropzoneProps } from "@mantine/dropzone";
-import { FormInputProps } from "@mongez/react-form";
+import { FormControlProps } from "@mongez/react-form";
+import { UploadingFileValidationOptions } from "src/moonlight/utils";
 
-export type DropzoneInputProps = FormInputProps &
-  Partial<DropzoneProps> & {
+export type DropzoneInputProps = FormControlProps &
+  Partial<DropzoneProps> &
+  UploadingFileValidationOptions & {
     //
     images?: boolean;
     description?: React.ReactNode;

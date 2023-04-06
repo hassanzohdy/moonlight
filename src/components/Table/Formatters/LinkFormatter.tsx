@@ -1,5 +1,5 @@
 import { Anchor } from "@mantine/core";
-import { IconEye } from "@tabler/icons";
+import { IconEye } from "@tabler/icons-react";
 import React from "react";
 import { components } from "../../../utils/resolvers";
 import { FormatterProps } from "../TableProps";

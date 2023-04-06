@@ -8,10 +8,10 @@ import {
 } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useBooleanState } from "@mongez/react-hooks";
-import { IconEye } from "@tabler/icons";
+import { IconEye } from "@tabler/icons-react";
 import React from "react";
-import { useSuperTable } from "../../hooks/useSuperTable";
 import { FormatterProps } from "../../TableProps";
+import { useSuperTable } from "../../hooks";
 
 type ViewOptions = {
   title?: (row: any, rowIndex: number) => React.ReactNode;
@@ -21,9 +21,13 @@ type ViewOptions = {
 
 const defaultModalOptions: Partial<ModalProps> = {
   size: "lg",
-  overlayOpacity: 0.5,
-  exitTransitionDuration: 500,
+  overlayProps: {
+    opacity: 0.5,
+  },
   trapFocus: false,
+  transitionProps: {
+    exitDuration: 500,
+  },
 };
 
 export type QuickViewButtonProps = {

@@ -1,17 +1,21 @@
 import { Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
-import { IconTrash } from "@tabler/icons";
-import { parseError } from "../../../../utils/parse-error";
+import { useOnce } from "@mongez/react-hooks";
+import { IconTrash } from "@tabler/icons-react";
+import { parseError } from "../../../../utils";
 import { toastLoading } from "../../../Toast";
+import { BulkSelectionRow, SuperTable } from "../../SuperTable";
 import { useBulkRows } from "../../hooks/useBulkRows";
 import { useSuperTable } from "../../hooks/useSuperTable";
-import { BulkSelectionRow, SuperTable } from "../../SuperTable";
 import { Button } from "../style";
+import { Tooltip } from "./../../../../components";
+import { useHotKeys } from "./../../../../hooks";
+import { modButtons } from "./../../../../utils";
 
 async function deleteMultipleRows(
   superTable: SuperTable,
-  bulkRows: BulkSelectionRow[]
+  bulkRows: BulkSelectionRow[],
 ) {
   const service: any = superTable.service;
   if (service) {
@@ -26,7 +30,7 @@ async function deleteMultipleRows(
 
       // remove deleted rows from table
       superTable.data = superTable.data.filter(
-        (row) => !bulkRows.find(({ row: r }) => r.id === row.id)
+        row => !bulkRows.find(({ row: r }) => r.id === row.id),
       );
 
       superTable.setData([...superTable.data]);
@@ -43,9 +47,11 @@ async function deleteMultipleRows(
 }
 
 export function BulkDelete() {
-  const selectedBulkRows = useBulkRows();
+  useBulkRows();
 
   const superTable = useSuperTable();
+
+  const selectedBulkRows = superTable.getSelectedBulkRows();
 
   const openDeleteModal = () =>
     openConfirmModal({
@@ -56,13 +62,15 @@ export function BulkDelete() {
       ),
       centered: true,
       trapFocus: false,
-      exitTransitionDuration: 500,
+      transitionProps: {
+        exitDuration: 400,
+      },
       children: (
         <Text size="sm">
           {trans("confirmBulkRows", {
             count: (
               <Text color="red" fw="bold" component="span">
-                {selectedBulkRows.length}
+                {superTable.getSelectedBulkRows().length}
               </Text>
             ),
           })}
@@ -74,19 +82,38 @@ export function BulkDelete() {
       },
       confirmProps: { color: "red", autoFocus: true },
       onConfirm: async () => {
-        deleteMultipleRows(superTable, selectedBulkRows);
+        deleteMultipleRows(superTable, superTable.getSelectedBulkRows());
       },
     });
 
+  useHotKeys({
+    keys: ["mod", "shift", "d"],
+    callback: () => {
+      superTable.toggleAllBulkSelection(true);
+      setTimeout(() => {
+        openDeleteModal();
+      }, 0);
+    },
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
+      keys: ["mod", "shift", "D"],
+      description: "Select all rows and open confirm delete popup",
+    });
+  });
+
   return (
-    <Button
-      color="red"
-      onClick={openDeleteModal}
-      disabled={selectedBulkRows.length === 0}
-      leftIcon={<IconTrash size={20} />}
-    >
-      {trans("deleteBulk", { count: selectedBulkRows.length })}
-    </Button>
+    <Tooltip label={trans("delete") + " " + modButtons(["shift", "d"])}>
+      <Button
+        color="red"
+        onClick={openDeleteModal}
+        disabled={selectedBulkRows.length === 0}
+        leftIcon={<IconTrash size={20} />}>
+        {/* {trans("deleteBulk", { count: selectedBulkRows.length })} */}
+        {selectedBulkRows.length}
+      </Button>
+    </Tooltip>
   );
 }
 /** Adding permission will tell Super Table to validate that permission before rendering the component */

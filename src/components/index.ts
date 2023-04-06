@@ -3,7 +3,6 @@ export * from "./Common/BreadCrumb";
 export * from "./ErrorHandler";
 export * from "./Form";
 export * from "./FormModal";
-export * from "./GoogleMap";
 export * from "./HTML";
 export * from "./Icons";
 export * from "./Image";

@@ -2,7 +2,7 @@ import { ActionIcon, Table } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useCachedRows, useFormRows } from "@mongez/react-hooks";
 import { get } from "@mongez/reinforcements";
-import { IconPlus, IconTrash } from "@tabler/icons";
+import { IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useMemo, useRef } from "react";
 import { Tooltip } from "../../components/Tooltip";
 import { InputBuilder } from "./InputBuilder";

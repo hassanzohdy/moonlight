@@ -6,6 +6,11 @@ export type PaginationInfo = {
   pages: number;
 };
 
+export type HoveredRow = null | {
+  row: any;
+  rowIndex: number;
+};
+
 export type TableEvent =
   | "loading"
   | "data"
@@ -13,6 +18,7 @@ export type TableEvent =
   | "displayedColumns"
   | "limitChange"
   | "limitOptionsChange"
+  | "hoveredRow"
   | "sortByOptions"
   | "sort"
   | "filter"

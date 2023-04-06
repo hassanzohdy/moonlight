@@ -32,7 +32,7 @@ export function parseError(error: any) {
   if (Is.array(error)) {
     errorContent = error.map((error: any) => {
       if (error.value) {
-        return <p key={error.key}>{error.value}</p>;
+        return <div key={error.key}>{error.value}</div>;
       }
 
       return error;

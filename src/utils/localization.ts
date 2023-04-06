@@ -5,14 +5,14 @@ export function getLocalizedValue(
   value: any,
   localeCode: string = currentLocaleCode(),
   localeCodeKey = "localeCode",
-  textKey = "text"
+  textKey = "text",
 ) {
   if (!value) return "";
 
   if (value[localeCode]) return value[localeCode];
 
   if (Array.isArray(value)) {
-    return value.find((item) => item[localeCodeKey] === localeCode)?.[textKey];
+    return value.find(item => item[localeCodeKey] === localeCode)?.[textKey];
   }
 
   return value;
@@ -21,7 +21,7 @@ export function getLocalizedValue(
 export function multiLingualName(
   name = "",
   localeCodeIndex = 0,
-  textKey = "text"
+  textKey = "text",
 ) {
   if (!name) return "";
 

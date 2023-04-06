@@ -16,7 +16,7 @@ import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
 import { Form, FormControl, FormInterface } from "@mongez/react-form";
 import { useEvent, useForceUpdate, useOnce } from "@mongez/react-hooks";
-import { get, Random } from "@mongez/reinforcements";
+import { Random, get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { Wrapper } from "../../components/FormModal/style";
@@ -27,20 +27,20 @@ import {
   CachedRender,
   Callbacks,
   OnErrorCallback,
-  reactiveFormComponentProps,
+  ReactiveFormComponentProps,
   ReactiveFormEvent,
   SaveCallback,
   SubmitCallback,
 } from "./../types";
+import { FormButton } from "./FormButton";
+import { FormTab } from "./FormTab";
+import { InputBuilder } from "./InputBuilder";
 import {
   cancelButton,
   resetButton,
   saveAndClearButton,
   submitButton,
 } from "./form-buttons-list";
-import { FormButton } from "./FormButton";
-import { FormTab } from "./FormTab";
-import { InputBuilder } from "./InputBuilder";
 
 export class ReactiveForm {
   /**
@@ -72,11 +72,7 @@ export class ReactiveForm {
    * Submit handler
    * Used if service is not provided
    */
-  protected _submit?: (
-    e: any,
-    form: FormInterface,
-    reactiveForm: ReactiveForm,
-  ) => Promise<any>;
+  protected _submit?: SubmitCallback;
 
   /**
    * Callbacks list
@@ -123,11 +119,15 @@ export class ReactiveForm {
    */
   protected defaultModalProps: Partial<ModalProps> = {
     size: "md",
-    overlayBlur: 2,
-    overlayOpacity: 0.2,
+    overlayProps: {
+      blur: 2,
+      opacity: 0.2,
+    },
     centered: true,
     trapFocus: false,
-    exitTransitionDuration: 300,
+    transitionProps: {
+      exitDuration: 300,
+    },
   };
 
   /**
@@ -206,7 +206,15 @@ export class ReactiveForm {
   /**
    * Open in modal
    */
-  public openInModal = getMoonlightConfig("reactiveForm.openInModal", false);
+  public openInModal: boolean = getMoonlightConfig(
+    "reactiveForm.openInModal",
+    false,
+  );
+
+  /**
+   * Determine if current form is opened in modal
+   */
+  public opened = false;
 
   /**
    * Cached Content of the form
@@ -369,6 +377,15 @@ export class ReactiveForm {
   }
 
   /**
+   * Close when click outside the modal or on the overlay
+   */
+  public closeByOverlay(close = true) {
+    this.wrapperProps.closeOnClickOutside = close;
+
+    return this;
+  }
+
+  /**
    * Get tab by name
    */
   public getTab(name: string): FormTab | undefined {
@@ -397,7 +414,11 @@ export class ReactiveForm {
    * Set overlay opacity
    */
   public overlayOpacity(opacity: number) {
-    this.wrapperProps["overlayBlur"] = opacity;
+    if (!this.wrapperProps["overlayProps"]) {
+      this.wrapperProps["overlayProps"] = {};
+    }
+
+    this.wrapperProps["overlayProps"]["opacity"] = opacity;
     return this;
   }
 
@@ -453,13 +474,7 @@ export class ReactiveForm {
    * Add submit handler
    * Used if service is not set
    */
-  public submitter(
-    handler: (
-      formElement: React.FormEvent,
-      form: FormInterface,
-      reactiveForm: ReactiveForm,
-    ) => Promise<any> | any,
-  ) {
+  public submitter(handler: SubmitCallback) {
     this._submit = handler;
     return this;
   }
@@ -795,7 +810,7 @@ export class ReactiveForm {
       input = inputBuilder.formControl;
     }
 
-    input?.focus(true);
+    input?.focus();
   }
 
   /**
@@ -885,15 +900,14 @@ export class ReactiveForm {
     setIslLoading: (loading: boolean) => void,
     onClose: () => void,
   ) {
-    return async (e: React.FormEvent, form: FormInterface) => {
+    return async ({ form, values, formData }) => {
       this.callbacks.onSubmit.forEach(callback =>
         callback({
           form,
-          values: form.values(),
+          values: values,
           reactiveForm: this,
-          get formData() {
-            return new FormData(e.target.value);
-          },
+          formData,
+          setIslLoading,
         }),
       );
 
@@ -907,9 +921,9 @@ export class ReactiveForm {
           const service = this._service;
 
           if (this._recordId) {
-            response = await service.update(this._recordId, e.target);
+            response = await service.update(this._recordId, formData);
           } else {
-            response = await service.create(e.target);
+            response = await service.create(formData);
           }
 
           if (this._closeOnSave) {
@@ -925,8 +939,17 @@ export class ReactiveForm {
           setTimeout(() => {
             this.callbacks.onSave.forEach(callback => callback(response, this));
           }, getMoonlightConfig("reactiveForm.saveEventDelay", 100));
+
+          form.submitting(false);
+          setIslLoading(false);
         } else if (this._submit) {
-          await this._submit(e, form, this);
+          await this._submit({
+            form,
+            values: values,
+            reactiveForm: this,
+            formData,
+            setIslLoading,
+          });
           if (this._closeOnSave) {
             onClose();
           }
@@ -937,7 +960,6 @@ export class ReactiveForm {
         } else {
           toastError(parseError(error));
         }
-      } finally {
         form.submitting(false);
         setIslLoading(false);
       }
@@ -1087,14 +1109,16 @@ export class ReactiveForm {
     const reactiveForm = this;
 
     function Component({
-      open,
+      open = false,
       onClose,
       record: incomingRecord,
       recordId,
       rowIndex: _index,
       onSave,
+      initialLoad,
+      mapLoadedData,
       ...modalProps
-    }: reactiveFormComponentProps & Partial<ModalProps>) {
+    }: ReactiveFormComponentProps & Partial<ModalProps>) {
       const [isLoading, setIsLoading] = useState(false);
       const [record, setRecord] = useState(incomingRecord);
       const [opened, setOpen] = useState(open);
@@ -1104,6 +1128,8 @@ export class ReactiveForm {
       if (!reactiveForm.record && record) {
         reactiveForm.record = record;
       }
+
+      reactiveForm.opened = opened;
 
       useEffect(() => {
         if (!reactiveForm._service || !opened || !recordId) return;
@@ -1122,11 +1148,24 @@ export class ReactiveForm {
       }, [recordId, opened]);
 
       useEffect(() => {
+        if (!initialLoad) return;
+
+        setIsLoading(true);
+
+        initialLoad().then(response => {
+          reactiveForm.setRecord(mapLoadedData?.(response));
+          setIsLoading(false);
+        });
+      }, []);
+
+      useEffect(() => {
         if (!reactiveForm._enableKeyboardShortcuts) return;
+        if (reactiveForm.openInModal && !reactiveForm.opened) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
           // if pressed ctrl + s or in mac pressed cmd + s
           // then trigger form submit
+
           if ((e.ctrlKey || e.metaKey) && e.key === "s") {
             e.preventDefault();
             const form = reactiveForm.form;
@@ -1142,7 +1181,7 @@ export class ReactiveForm {
         return () => {
           document.removeEventListener("keydown", handleKeyDown);
         };
-      }, []);
+      }, [opened]);
 
       useEffect(() => {
         if (reactiveForm.openInModal === false) return;
@@ -1202,7 +1241,7 @@ export class ReactiveForm {
 
       const wrapperProps = reactiveForm.openInModal
         ? {
-            title: heading,
+            title: <strong>{heading}</strong>,
             opened: opened,
             ...reactiveForm.defaultModalProps,
             ...reactiveForm.wrapperProps,
@@ -1231,7 +1270,9 @@ export class ReactiveForm {
           {modalTrigger}
           <Wrapper {...wrapperProps}>
             {!reactiveForm.openInModal && (
-              <Title align="center">{heading}</Title>
+              <Title px="xl" align="center">
+                {heading}
+              </Title>
             )}
             <LoadingOverlay visible={isLoading} />
             <Form

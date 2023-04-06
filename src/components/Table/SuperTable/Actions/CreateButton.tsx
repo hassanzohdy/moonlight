@@ -1,8 +1,10 @@
 import { Button } from "@mantine/core";
 import { trans } from "@mongez/localization";
+import { useOnce } from "@mongez/react-hooks";
 import { get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
 import React, { useState } from "react";
+import { useHotKeys } from "../../../../hooks/use-hot-keys";
 import { useSuperTable } from "../../hooks/useSuperTable";
 
 export function createButton(Form: React.ComponentType<any>) {
@@ -17,6 +19,18 @@ export function createButton(Form: React.ComponentType<any>) {
         superTable.unshiftRow(record);
       }
     };
+
+    useHotKeys({
+      keys: ["mod", "Q"],
+      callback: () => setOpen(true),
+    });
+
+    useOnce(() => {
+      return superTable.registerKeyboardShortcut({
+        keys: ["mod", "Q"],
+        description: "Create New Record",
+      });
+    });
 
     return (
       <>

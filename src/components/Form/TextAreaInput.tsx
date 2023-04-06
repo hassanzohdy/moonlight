@@ -8,7 +8,7 @@ import { InputWrapper } from "./InputWrapper";
 
 function _TextAreaInput(
   { dir, label, required, placeholder, description, ...props }: BaseInputProps,
-  ref: any
+  ref: any,
 ) {
   const { id, value, visibleElementRef, changeValue, error, otherProps } =
     useFormControl(props);
@@ -22,8 +22,7 @@ function _TextAreaInput(
         label={label}
         dir={dir}
         description={description}
-        required={required}
-      >
+        required={required}>
         <Textarea
           id={id}
           ref={ref}
@@ -33,8 +32,10 @@ function _TextAreaInput(
             },
           })}
           required={required}
-          placeholder={placeholder && trans(placeholder) + (required && " *")}
-          onChange={(e) => changeValue(e.currentTarget.value)}
+          placeholder={
+            placeholder ? trans(placeholder) + (required ? " *" : "") : ""
+          }
+          onChange={e => changeValue(e.target.value)}
           value={value}
           {...otherProps}
         />

@@ -1,35 +1,21 @@
-import Column from "./Column";
+import { useMemo } from "react";
 import { useSuperTable } from "./hooks/useSuperTable";
-import { useTableChange } from "./hooks/useTableChange";
-import { SortByColumn } from "./SuperTable/SortByColumn";
+import TableColumnHeading from "./TableColumnHeading";
 
 export function TableHeading() {
-  useTableChange("sortByOptions");
-  useTableChange("displayedColumns");
-
   const superTable = useSuperTable();
-  const displayedColumns = superTable.getDisplayedColumns();
 
-  const headings = () => {
-    return displayedColumns.map(column => {
-      const heading = column.headingComponent ? (
-        <column.headingComponent />
-      ) : (
-        column.heading
-      );
-
-      const columnHandler = column.column as Column;
+  const tableHeading = useMemo(() => {
+    return superTable.columns.map((column, index) => {
       return (
-        <th style={column.headingStyle} key={column.key}>
-          <SortByColumn column={columnHandler}>{heading}</SortByColumn>
-        </th>
+        <TableColumnHeading key={index} column={column} columnIndex={index} />
       );
     });
-  };
+  }, [superTable]);
 
   return (
     <thead>
-      <tr>{headings()}</tr>
+      <tr>{tableHeading}</tr>
     </thead>
   );
 }

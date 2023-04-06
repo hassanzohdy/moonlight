@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { UnstyledButton } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useBooleanState } from "@mongez/react-hooks";
-import { IconPencil } from "@tabler/icons";
+import { IconPencil } from "@tabler/icons-react";
 import React from "react";
 import { Tooltip } from "../../Tooltip";
 import { EditOptions } from "../TableProps";

@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { trans } from "@mongez/localization";
-import React from "react";
+import React, { useMemo } from "react";
 import { useSuperTable } from "./hooks/useSuperTable";
 import { useTableChange } from "./hooks/useTableChange";
+import TableCell from "./TableCell";
 
 export const EmptyColumn = styled.td`
   label: EmptyColumn;
@@ -13,13 +14,12 @@ export const EmptyColumn = styled.td`
 
 function _TableBody() {
   useTableChange("data");
-  useTableChange("displayedColumns");
   useTableChange("loading");
 
   const superTable = useSuperTable();
-  const displayedColumns = superTable.getDisplayedColumns();
 
-  const tableRows = () => {
+  const tableRows = useMemo(() => {
+    const displayedColumns = superTable.getDisplayedColumns();
     if (superTable.data.length === 0) {
       if (superTable.isLoading) {
         return (
@@ -41,24 +41,30 @@ function _TableBody() {
     }
 
     return superTable.data.map((row, rowIndex) => {
+      // listen to mouse over and mouse out events
       return (
-        <tr key={row.uniqueId}>
-          {displayedColumns.map((column, columnIndex) => {
+        <tr
+          key={row.uniqueId}
+          onMouseOver={() => superTable.hovering({ row, rowIndex })}
+          onMouseOut={() => superTable.hovering(null)}>
+          {superTable.columns.map((column, columnIndex) => {
             return (
-              <td
+              <TableCell
+                row={row}
+                rowIndex={rowIndex}
+                columnIndex={columnIndex}
                 key={columnIndex}
-                className={column.className}
-                style={column.style}>
-                {column.render && column.render(row, rowIndex)}
-              </td>
+                column={column}
+              />
             );
           })}
         </tr>
       );
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [superTable, superTable.isLoading, superTable.data]);
 
-  return <tbody>{tableRows()}</tbody>;
+  return <tbody>{tableRows}</tbody>;
 }
 
 export const TableBody = React.memo(_TableBody);

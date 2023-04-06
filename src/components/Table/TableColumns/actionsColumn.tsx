@@ -31,7 +31,7 @@ export function actionsColumn(
       });
     })
     .validate(column => {
-      return column.settings.buttons.length > 0;
+      return column.data.settings?.buttons.length > 0;
     })
     .settings({
       buttons,
@@ -39,7 +39,7 @@ export function actionsColumn(
 }
 
 function ActionsFormatter({ row, rowIndex, column }: FormatterProps) {
-  const { buttons } = column.settings;
+  const { buttons } = column.data.settings;
 
   if (!buttons) return null;
 

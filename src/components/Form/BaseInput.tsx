@@ -1,27 +1,37 @@
-import { Input, Loader, useMantineTheme } from "@mantine/core";
+import { Loader, TextInput, useMantineTheme } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { FormInputProps, useFormControl } from "@mongez/react-form";
-import { IconAlertCircle } from "@tabler/icons";
+import { FormControlProps, useFormControl } from "@mongez/react-form";
+import { IconAlertCircle, IconHelp } from "@tabler/icons-react";
 import React from "react";
 import { left, right } from "../../utils/directions";
 import { currentDirection } from "../../utils/helpers";
 import { Tooltip } from "../Tooltip";
-import { InputWrapper } from "./InputWrapper";
 
-export type BaseInputProps = FormInputProps & {
+export type BaseInputProps = FormControlProps & {
   description?: React.ReactNode;
 };
 
 function _BaseInput({
   dir,
-  component: Component = Input,
+  component: Component = TextInput,
   loading,
   description,
   placeholder,
+  hint,
+  tooltip,
+  label,
+  handleValueChange = e => e.target.value,
   ...props
 }: BaseInputProps) {
-  const { value, changeValue, inputRef, error, id, otherProps, ...rest } =
-    useFormControl(props);
+  const {
+    value,
+    changeValue,
+    visibleElementRef,
+    inputRef,
+    error,
+    id,
+    otherProps,
+  } = useFormControl(props);
 
   let rightSection: React.ReactNode = null;
 
@@ -29,7 +39,7 @@ function _BaseInput({
 
   if (error) {
     rightSection = (
-      <Tooltip label={trans(error.errorMessage)} position="top-end" withArrow>
+      <Tooltip label={error} position="top-end" withArrow>
         <div>
           <IconAlertCircle
             size={18}
@@ -46,19 +56,62 @@ function _BaseInput({
     rightSection = <Loader size={18} color="gray" />;
   }
 
+  let inputDescription = description || hint;
+
+  if (hint && !description) {
+    inputDescription = (
+      <>
+        {description || trans("didYouKnow")}
+        <Tooltip multiline label={hint}>
+          <span
+            style={{
+              verticalAlign: "middle",
+              marginInlineStart: "0.2rem",
+              display: "inline-block",
+            }}>
+            <IconHelp size="1.0rem" />
+          </span>
+        </Tooltip>
+      </>
+    );
+  }
+
+  const ContentWrapper: any = tooltip ? Tooltip : React.Fragment;
+
+  const contentProps = tooltip ? { label: tooltip } : {};
+
   return (
-    <>
-      <InputWrapper
-        dir={dir}
-        id={id}
-        description={description}
-        {...rest}
-        error={error}
-      >
+    <ContentWrapper {...contentProps}>
+      <>
         <Component
-          invalid={Boolean(error)}
-          ref={inputRef}
+          dir={dir}
           id={id}
+          wrapperProps={{
+            ref: visibleElementRef,
+            description: inputDescription,
+            withAsterisk: props.required,
+            dir: dir,
+            error,
+            styles: theme => ({
+              root: {
+                position: "relative",
+              },
+              label: {
+                marginBottom: theme.spacing.xs,
+                cursor: "pointer",
+              },
+              description: {
+                marginBottom: inputDescription ? theme.spacing.xs : undefined,
+              },
+              error: {
+                fontWeight: "bold",
+                margin: "5px 0",
+              },
+            }),
+          }}
+          label={label}
+          error={error}
+          ref={inputRef}
           readOnly={loading}
           rightSection={rightSection}
           styles={() => ({
@@ -67,14 +120,14 @@ function _BaseInput({
             },
           })}
           placeholder={
-            placeholder && trans(placeholder) + (props.required ? " *" : "")
+            placeholder ? trans(placeholder) + (props.required ? " *" : "") : ""
           }
-          onChange={changeValue}
+          onChange={e => changeValue(handleValueChange(e))}
           value={value}
           {...otherProps}
         />
-      </InputWrapper>
-    </>
+      </>
+    </ContentWrapper>
   );
 }
 

@@ -1,12 +1,13 @@
 import { Box, Collapse, Flex, Group, Paper, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { IconFilter, IconFilterOff } from "@tabler/icons";
+import { IconFilter, IconFilterOff } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { components } from "../../../utils/resolvers";
-import { useSuperTable } from "../hooks/useSuperTable";
 import LimitOptions from "../Pagination/LimitOptions";
 import { TableFilter } from "../TableFilter/Filters/TableFilter";
+import { useSuperTable } from "../hooks/useSuperTable";
 import { ColumnsSelector } from "./ColumnsSelector";
+import SuperTableShortcuts from "./SuperTableShortcuts";
 import { Button, RightSide, Wrapper } from "./style";
 
 export function TableHeader() {
@@ -74,9 +75,9 @@ export function TableHeader() {
             <RightSide>
               <Group>
                 <LimitOptions />
-
                 <ColumnsSelector />
                 {bulkActions}
+                <SuperTableShortcuts />
               </Group>
             </RightSide>
           </Wrapper>

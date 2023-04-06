@@ -1,4 +1,3 @@
-import { NumberInput } from "../../components/Form/NumberInput";
 import { InputBuilder } from "./InputBuilder";
 
 export class NumberInputBuilder extends InputBuilder {
@@ -38,8 +37,6 @@ export class NumberInputBuilder extends InputBuilder {
    * {@inheritDoc}
    */
   public boot(): void {
-    this.component(NumberInput);
-
     this.type("number").min(0);
   }
 }

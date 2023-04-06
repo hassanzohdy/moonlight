@@ -1,4 +1,3 @@
-import { Col } from "@mantine/core";
 import { get } from "@mongez/reinforcements";
 import { ConditionalInputRenderer } from "./ConditionalInputRenderer";
 import { InputBuilder } from "./InputBuilder";
@@ -68,20 +67,26 @@ export class ConditionalRenderBuilder extends InputBuilder {
    * {@inheritdoc}
    */
   protected boot(): void {
+    let isSubscribed = false;
     this.onRendered(() => {
-      if (!this.form.form) return;
+      if (!this.form.form || isSubscribed) return;
 
       const input = this.form.form.control(this.conditionInput);
 
       if (!input) return;
 
-      input.on("change", value => {
-        const isMatched = value === this.conditionValue;
+      input.onChange(({ value, checked }) => {
+        const isMatched =
+          typeof this.conditionValue === "boolean"
+            ? this.conditionValue === checked
+            : value === this.conditionValue;
 
         this.isMatched = isMatched;
 
         this.matchingCallback(isMatched);
       });
+
+      isSubscribed = true;
     });
   }
 
@@ -89,19 +94,17 @@ export class ConditionalRenderBuilder extends InputBuilder {
    * Render content
    */
   protected renderContent() {
-    const { props, wrapperProps } = this.prepareRendering();
+    const { props } = this.prepareRendering();
 
     // we'll use custom key to force re-render the input if the record data has been changed
     // @see setRecord method
 
     return (
       <ConditionalInputRenderer
-        Wrapper={Col}
         conditionalInputsRenderer={this}
         key={this._key}
         inputsProps={props}
         inputs={this.conditionInputs}
-        wrapperProps={wrapperProps}
       />
     );
   }

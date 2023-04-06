@@ -27,7 +27,9 @@ export function toastConfirm(
       ),
       centered: true,
       trapFocus: false,
-      exitTransitionDuration: 500,
+      transitionProps: {
+        exitDuration: 400,
+      },
       children: <Text size="sm">{message}</Text>,
       labels: {
         confirm: currentOptions.confirmLabel,

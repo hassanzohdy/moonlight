@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Avatar, Flex, MantineTheme, Text } from "@mantine/core";
 import { extension } from "@mongez/reinforcements";
-import { IconFile } from "@tabler/icons";
+import { IconFile } from "@tabler/icons-react";
 import React from "react";
 import { isImageExtension } from "../../utils/extensions";
 import { humanSize } from "../../utils/human-size";
@@ -32,7 +32,7 @@ const getExtensionColor = (extension: string, theme: MantineTheme) => {
       return theme.fn.linearGradient(
         45,
         theme.colors.indigo[5],
-        theme.colors.cyan[5]
+        theme.colors.cyan[5],
       );
     case "doc":
     case "docx":

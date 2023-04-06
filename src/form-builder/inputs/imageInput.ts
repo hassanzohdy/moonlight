@@ -1,5 +1,5 @@
 import { ImageInputBuilder } from "../components";
 
 export function imageInput(name: string) {
-  return new ImageInputBuilder(name).width(100).height(100);
+  return new ImageInputBuilder(name).previewWidth(100).previewHeight(100);
 }

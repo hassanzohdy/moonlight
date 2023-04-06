@@ -7,6 +7,7 @@ export type SubmitCallback = (options: {
   reactiveForm: ReactiveForm;
   form: FormInterface;
   formData: FormData;
+  setIslLoading: (isLoading: boolean) => void;
 }) => void;
 
 export type CachedRender = {
@@ -23,25 +24,27 @@ export type ReactiveFormEvent =
 export type OnErrorCallback = (
   invalidFormControls: FormControl[],
   form: FormInterface,
-  reactiveForm: ReactiveForm
+  reactiveForm: ReactiveForm,
 ) => void;
 
 export type SaveCallback = (
   response: AxiosResponse<any>,
-  reactiveForm: ReactiveForm
+  reactiveForm: ReactiveForm,
 ) => void;
 
 export type ShouldTabBeRendered =
   | boolean
   | ((reactiveForm: ReactiveForm) => boolean);
 
-export type reactiveFormComponentProps = {
+export type ReactiveFormComponentProps = {
   record?: any;
   rowIndex?: number;
   recordId?: number | string;
   open?: boolean;
   onClose?: () => void;
   onSave?: SaveCallback;
+  initialLoad?: () => Promise<any>;
+  mapLoadedData?: (response: AxiosResponse<any>) => any;
 };
 
 export type Callbacks = {

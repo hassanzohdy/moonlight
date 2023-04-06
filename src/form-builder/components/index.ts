@@ -20,6 +20,8 @@ export * from "./InputRenderer";
 export * from "./MultiLingualBuilder";
 export * from "./NumberInputBuilder";
 export * from "./PasswordInputBuilder";
+export * from "./RadioGroupInputBuilder";
+export * from "./RadioInputBuilder";
 export * from "./ReactiveForm";
 export * from "./ReactiveFormElement";
 export * from "./SelectInputBuilder";

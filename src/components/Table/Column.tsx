@@ -1,5 +1,9 @@
-import { merge } from "@mongez/reinforcements";
+import { trans } from "@mongez/localization";
+import { get, merge } from "@mongez/reinforcements";
 import React from "react";
+import { createReactForm } from "./../../form-builder";
+import { SuperTable } from "./SuperTable";
+import { EditColumn } from "./SuperTable/EditColumn";
 import {
   ColumnSortBy,
   EditColumnCallback,
@@ -230,6 +234,143 @@ export class Column {
    */
   public get heading() {
     return this.data.heading;
+  }
+
+  /**
+   * Render cell contents
+   */
+  public render({ row, rowIndex, columnIndex, superTable }) {
+    const column = this.data;
+
+    const value = get(row, column.key, column.defaultValue);
+
+    const Formatter = column.formatter as React.ComponentType<any>;
+
+    const editOptions = this.getEditColumnOptions();
+
+    let Wrapper: React.ComponentType<any> = React.Fragment;
+    let wrapperProps = {};
+
+    if (editOptions.enabled) {
+      Wrapper = EditColumn;
+
+      const FormComponent = createReactForm(reactiveForm => {
+        reactiveForm
+          .heading(trans("moonlight.quickEdit"))
+          .withResetButton(false)
+          .withSaveAndClearButton(false)
+          .closeOnEscape()
+          .onSave(record => {
+            superTable.updateRow(record, rowIndex);
+          })
+          .setInputs(editOptions.inputs({ row, rowIndex, column: this }))
+          .submitter(({ values, form }) => {
+            return editOptions.onEdit({
+              row,
+              rowIndex,
+              column: this,
+              form,
+              values,
+            });
+          });
+      });
+
+      wrapperProps = {
+        ...editOptions,
+        row,
+        rowIndex,
+        column: this,
+        FormComponent,
+      };
+    }
+
+    const children = column.formatter ? (
+      <Formatter
+        {...{
+          row,
+          rowIndex,
+          column: this,
+          key: this.key,
+          columnIndex,
+          value,
+          defaultValue: column.defaultValue,
+          settings: column.settings || {},
+        }}
+      />
+    ) : (
+      value
+    );
+
+    return <Wrapper {...wrapperProps}>{children}</Wrapper>;
+  }
+
+  /**
+   * Get cell class name
+   */
+  public getCellClassName() {
+    return this.data.className;
+  }
+
+  /**
+   * Get cell styles
+   */
+  public getCellStyles() {
+    return {
+      ...this.getCommonStyles(),
+      ...this.data.style,
+    };
+  }
+
+  /**
+   * Get heading styles
+   */
+  public getHeadingStyles() {
+    return {
+      ...this.getCommonStyles(),
+      ...this.data.headingStyle,
+    };
+  }
+
+  /**
+   * Get heading content
+   */
+  public getHeadingContent() {
+    return typeof this.data.heading === "string"
+      ? trans(this.data.heading)
+      : this.data.heading;
+  }
+
+  /**
+   * Get common styles between heading and cell
+   */
+  public getCommonStyles() {
+    const style: React.CSSProperties = {};
+
+    const column = this.data;
+
+    if (column.width) {
+      style.width = column.width;
+    }
+
+    if (column.align) {
+      let textAlign: React.CSSProperties["textAlign"] = column.align;
+      if (column.align === "left") {
+        textAlign = "start";
+      } else if (column.align === "right") {
+        textAlign = "end";
+      }
+
+      style.textAlign = textAlign;
+    }
+
+    return style;
+  }
+
+  /**
+   * validate current column
+   */
+  public validateColumn(superTable: SuperTable) {
+    return this.data.validate?.(this, superTable) || true;
   }
 }
 
