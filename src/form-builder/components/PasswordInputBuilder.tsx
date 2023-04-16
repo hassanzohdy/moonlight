@@ -1,5 +1,5 @@
 import { Col } from "@mantine/core";
-import { converter, trans } from "@mongez/localization";
+import { plainConverter, trans } from "@mongez/localization";
 import { Random } from "@mongez/reinforcements";
 import { PasswordInput } from "../../components/Form/PasswordInput";
 import { InputBuilder } from "./InputBuilder";
@@ -70,7 +70,7 @@ export class PasswordInputBuilder extends InputBuilder {
 
     if (!this.confirmPasswordInput) {
       this.confirmPasswordInput = new PasswordInputBuilder(
-        this.data.name + "_confirmation",
+        this.data.name + "_confirmation"
       );
     }
 
@@ -89,13 +89,13 @@ export class PasswordInputBuilder extends InputBuilder {
 
     if (props.label) {
       this.confirmPasswordInput.label(
-        trans("confirmInput", { input: props.label }),
+        trans("confirmInput", { input: props.label })
       );
     }
 
     if (props.placeholder) {
       this.confirmPasswordInput.placeholder(
-        converter("confirmInput", { input: props.placeholder }),
+        plainConverter("confirmInput", { input: props.placeholder })
       );
     }
 
