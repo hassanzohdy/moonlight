@@ -3,7 +3,7 @@ import { currentDirection } from "./helpers";
 export type Direction = "ltr" | "rtl";
 
 export function left(
-  direction: Direction = currentDirection()
+  direction: Direction = currentDirection(),
 ): "left" | "right" {
   switch (direction) {
     case "ltr":
@@ -16,7 +16,7 @@ export function left(
 }
 
 export function right(
-  direction: Direction = currentDirection()
+  direction: Direction = currentDirection(),
 ): "right" | "left" {
   switch (direction) {
     case "ltr":

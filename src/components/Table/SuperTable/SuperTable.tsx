@@ -142,6 +142,11 @@ export class SuperTable {
   };
 
   /**
+   * Whether to fetch data when editing or cloning documents when using the buttons
+   */
+  public fetchRecord = getMoonlightConfig("table.fetchRecord", false);
+
+  /**
    * Table base form
    */
   public baseForm?: React.FC<any>;
@@ -221,6 +226,11 @@ export class SuperTable {
   };
 
   /**
+   * Determine whether to enable helmet title
+   */
+  public withHelmet = true;
+
+  /**
    * Limit options
    */
   public limitOptions: number[] | false =
@@ -229,7 +239,7 @@ export class SuperTable {
   /**
    * Pagination info cast callback
    */
-  protected paginationInfoCast = (response) => response.data.paginationInfo;
+  protected paginationInfoCast = response => response.data.paginationInfo;
 
   /**
    * Determine if pagination is enabled
@@ -313,8 +323,8 @@ export class SuperTable {
       // check if the keys already exists
       // if so then return
       if (
-        this.keyboardShortcuts.find((s) =>
-          areEqual([...s.keys], [...shortcut.keys])
+        this.keyboardShortcuts.find(s =>
+          areEqual([...s.keys], [...shortcut.keys]),
         )
       ) {
         return;
@@ -337,13 +347,13 @@ export class SuperTable {
     const isMacOS = navigator.userAgent.toLowerCase().includes("mac");
 
     return this.keyboardShortcuts
-      .map((shortcut) => {
+      .map(shortcut => {
         // check if shortcut has `mod`
         // if so then replace it based on current OS
         // if macOS then replace `mod` with `⌘`
         // otherwise, replace it with `ctrl`
         if (shortcut.keys.includes("mod")) {
-          shortcut.keys = shortcut.keys.map((key) => {
+          shortcut.keys = shortcut.keys.map(key => {
             if (key === "mod") {
               return isMacOS ? "⌘" : "CTRL";
             }
@@ -369,7 +379,7 @@ export class SuperTable {
     if (previousHoveredRow) {
       this.trigger(
         ("hoveredRow." + previousHoveredRow.row.id) as TableEvent,
-        false
+        false,
       );
     }
 
@@ -434,7 +444,7 @@ export class SuperTable {
    * Listen to table page change
    */
   public onPageChange(
-    callback: (page: number, paramsList: any) => void = defaultCallback
+    callback: (page: number, paramsList: any) => void = defaultCallback,
   ) {
     return this.on("pageChange", callback);
   }
@@ -453,8 +463,8 @@ export class SuperTable {
     callback: (
       sortingColumn: string,
       sortDirection: SortDirection,
-      column: Column
-    ) => void = defaultCallback
+      column: Column,
+    ) => void = defaultCallback,
   ) {
     return this.on("sort", callback);
   }
@@ -486,7 +496,7 @@ export class SuperTable {
    * Cast pagination info
    */
   public castPaginationInfo(
-    callback: (response: AxiosResponse) => PaginationInfo
+    callback: (response: AxiosResponse) => PaginationInfo,
   ) {
     this.paginationInfoCast = callback;
 
@@ -588,7 +598,7 @@ export class SuperTable {
    * Register bulk selection
    */
   public registerBulkSelection(
-    bulkSelectionRow: BulkSelectionRow
+    bulkSelectionRow: BulkSelectionRow,
   ): RegisteredBulkSelectionRow {
     const data = {
       ...bulkSelectionRow,
@@ -599,7 +609,7 @@ export class SuperTable {
 
         this.trigger("bulkSelection", this.registeredBulkSelection);
       },
-      updateState: (checked) => {
+      updateState: checked => {
         data.setChecked(checked);
       },
       unregister: () => {
@@ -617,11 +627,11 @@ export class SuperTable {
    */
   public unregisterBulkSelection(row: any, rowIndex) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return (
           bulkSelectionRow.row !== row || bulkSelectionRow.rowIndex !== rowIndex
         );
-      }
+      },
     );
 
     return this;
@@ -631,7 +641,7 @@ export class SuperTable {
    * Toggle all bulk selection
    */
   public toggleAllBulkSelection(checked: boolean) {
-    this.registeredBulkSelection.forEach((bulkSelectionRow) => {
+    this.registeredBulkSelection.forEach(bulkSelectionRow => {
       bulkSelectionRow.setChecked(checked);
       bulkSelectionRow.checked = checked;
     });
@@ -646,7 +656,7 @@ export class SuperTable {
    */
   public getSelectedBulkRows() {
     return this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => bulkSelectionRow.checked
+      bulkSelectionRow => bulkSelectionRow.checked,
     );
   }
 
@@ -655,13 +665,13 @@ export class SuperTable {
    */
   public removeBulkRows(rows: BulkSelectionRow[]) {
     this.registeredBulkSelection = this.registeredBulkSelection.filter(
-      (bulkSelectionRow) => {
+      bulkSelectionRow => {
         return !rows.find(
-          (row) =>
+          row =>
             row.row === bulkSelectionRow.row &&
-            row.rowIndex === bulkSelectionRow.rowIndex
+            row.rowIndex === bulkSelectionRow.rowIndex,
         );
-      }
+      },
     );
 
     return this;
@@ -745,7 +755,7 @@ export class SuperTable {
    */
   public load(
     params: any = {},
-    loadMode: LoadMode = "full"
+    loadMode: LoadMode = "full",
   ): Promise<SuperTable> {
     return new Promise((resolve, reject) => {
       if (!this.service) {
@@ -766,7 +776,7 @@ export class SuperTable {
 
       this.service
         .list(finalParams)
-        .then((response) => {
+        .then(response => {
           scrollTop();
           this.setData(get(response.data, this.getKey("records")));
           this.setPaginationInfo(this.paginationInfoCast(response));
@@ -782,7 +792,7 @@ export class SuperTable {
 
           resolve(this);
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = error;
           this.isLoading = false;
           this.setLoading(false);
@@ -877,7 +887,7 @@ export class SuperTable {
    * Get column by key
    */
   public getColumn(key: string) {
-    return this.columns.find((column) => column.key === key);
+    return this.columns.find(column => column.key === key);
   }
 
   /**
@@ -909,10 +919,10 @@ export class SuperTable {
 
     this.displayedColumns =
       cachedDisplayedColumns.length > 0
-        ? this.columns.filter((column) =>
-            cachedDisplayedColumns.includes(column.data.key)
+        ? this.columns.filter(column =>
+            cachedDisplayedColumns.includes(column.data.key),
           )
-        : this.columns.filter((column) => {
+        : this.columns.filter(column => {
             return ["always", "default"].includes(column.getDisplayMode());
           });
 
@@ -923,8 +933,8 @@ export class SuperTable {
    * Reset displayed columns
    */
   public resetDisplayedColumns() {
-    this.displayedColumns = this.columns.filter((column) =>
-      ["always", "default"].includes(column.getDisplayMode())
+    this.displayedColumns = this.columns.filter(column =>
+      ["always", "default"].includes(column.getDisplayMode()),
     );
 
     const cachedData = this.cacheHandler?.get(this.cacheKey, {}) || {};
@@ -953,8 +963,8 @@ export class SuperTable {
    */
   public setDisplayedColumns(displayedColumns: string[]) {
     this.cache("displayedColumns", displayedColumns);
-    this.displayedColumns = this.columns.filter((column) =>
-      displayedColumns.includes(column.data.key)
+    this.displayedColumns = this.columns.filter(column =>
+      displayedColumns.includes(column.data.key),
     );
 
     this.trigger("displayedColumns", this.displayedColumns);
@@ -976,9 +986,7 @@ export class SuperTable {
    * Get only the columns that are marked as displayed
    */
   public getDisplayedColumns() {
-    return this.displayedColumns.filter((column) =>
-      column.validateColumn(this)
-    );
+    return this.displayedColumns.filter(column => column.validateColumn(this));
   }
 
   /**
@@ -1011,7 +1019,7 @@ export class SuperTable {
   public setData(data: any[]) {
     const dataChanged = data !== this.data;
 
-    this.data = data.map((data) => {
+    this.data = data.map(data => {
       if (!data.uniqueId) {
         data.uniqueId = Random.string(36);
       }
@@ -1038,7 +1046,7 @@ export class SuperTable {
    */
   public on(
     event: TableEvent,
-    callback: (...args: any[]) => void
+    callback: (...args: any[]) => void,
   ): EventSubscription {
     return events.subscribe(`table.${this.tableName}.${event}`, callback);
   }
@@ -1082,7 +1090,7 @@ export class SuperTable {
     if (this.service) {
       const loader = toastLoading(
         trans("deletingInProgress"),
-        trans("deleting")
+        trans("deleting"),
       );
 
       this.service
@@ -1091,10 +1099,10 @@ export class SuperTable {
           deleteRowFromTable();
           loader.success(trans(moonlightTranslations.deleteSuccess));
         })
-        .catch((error) => {
+        .catch(error => {
           loader.error(
             parseError(error),
-            trans(moonlightTranslations.deleteError)
+            trans(moonlightTranslations.deleteError),
           );
         });
     } else {
@@ -1137,7 +1145,7 @@ export class SuperTable {
     this.paginationInfo.total += numberOfRows;
     this.paginationInfo.results += numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1150,7 +1158,7 @@ export class SuperTable {
     this.paginationInfo.total -= numberOfRows;
     this.paginationInfo.results -= numberOfRows;
     this.paginationInfo.pages = Math.ceil(
-      this.paginationInfo.total / this.paginationInfo.limit
+      this.paginationInfo.total / this.paginationInfo.limit,
     );
 
     this.setPaginationInfo(this.paginationInfo);
@@ -1229,7 +1237,7 @@ export class SuperTable {
    * Manager table filters to return it properly
    */
   public getFilters(): TableFilter[] {
-    return this.filters.map((filter) => {
+    return this.filters.map(filter => {
       let Component = filter.component;
       if (filter.type) {
         switch (filter.type) {

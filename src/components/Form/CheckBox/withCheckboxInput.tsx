@@ -28,15 +28,19 @@ export function withCheckboxInput<T>(
     onChange?: (checked: boolean, options?: FormControlChangeOptions) => any;
   };
 
-  function CheckboxInput({ multiple, ...props }: T & DefaultCheckboxProps) {
+  function CheckboxInput({
+    multiple,
+    collectUnchecked,
+    uncheckedValue,
+    ...props
+  }: T & DefaultCheckboxProps) {
     const options = { ...defaultOptions, ...incomingOptions };
 
     const { checked, id, disabled, otherProps, visibleElementRef, setChecked } =
       useFormControl(props as FormControlProps, {
+        uncheckedValue,
+        collectUnchecked,
         multiple: multiple !== undefined ? multiple : options.multiple,
-        isCollectable({ checked }) {
-          return checked;
-        },
       });
 
     return (

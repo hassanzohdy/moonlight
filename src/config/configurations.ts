@@ -34,7 +34,12 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
       dateFormat: "dd-MM-yyyy",
     },
   },
+  publishedColumn: {
+    name: "published",
+    label: "active",
+  },
   table: {
+    fetchRecord: false,
     keys: {
       records: "records",
       record: "record",
@@ -42,7 +47,7 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
       updateRecord: "record",
     },
     limitOptions: [10, 15, 20, 50, 100, 200, 250, 500],
-    paginationInfo: (response) => {
+    paginationInfo: response => {
       return {
         limit: response.data.paginationInfo?.limit,
         page: response.data.paginationInfo?.page,
@@ -65,7 +70,7 @@ const defaultConfigurations: Partial<MoonlightConfigurations> = {
 let currentConfigurations = { ...defaultConfigurations };
 
 export function setMoonlightConfigurations(
-  configurations: MoonlightConfigurations
+  configurations: MoonlightConfigurations,
 ) {
   currentConfigurations = merge(currentConfigurations, configurations);
 

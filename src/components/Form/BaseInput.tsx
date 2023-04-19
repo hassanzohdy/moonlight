@@ -97,7 +97,6 @@ function _BaseInput({
                 position: "relative",
               },
               label: {
-                marginBottom: theme.spacing.xs,
                 cursor: "pointer",
               },
               description: {

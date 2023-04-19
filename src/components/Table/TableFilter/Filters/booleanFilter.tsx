@@ -13,16 +13,16 @@ export function booleanFilter(
       tooltip,
       data: [
         {
-          label: trans("all"),
+          label: trans("moonlight.all"),
           value: "",
         },
         {
-          label: trans("yes"),
-          value: 1,
+          label: trans("moonlight.yes"),
+          value: "1",
         },
         {
-          label: trans("no"),
-          value: 0,
+          label: trans("moonlight.no"),
+          value: "0",
         },
       ],
     },

@@ -1,5 +1,8 @@
+import { getMoonlightConfig } from "src/moonlight/config";
 import { switchInput } from "./switchInput";
 
 export function publishedInput() {
-  return switchInput("published").label("active").defaultChecked();
+  return switchInput(getMoonlightConfig("publishedColumn.name"))
+    .label(getMoonlightConfig("publishedColumn.label"))
+    .defaultChecked();
 }

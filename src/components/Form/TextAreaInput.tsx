@@ -11,7 +11,10 @@ function _TextAreaInput(
   ref: any,
 ) {
   const { id, value, visibleElementRef, changeValue, error, otherProps } =
-    useFormControl(props);
+    useFormControl({
+      ...props,
+      required,
+    });
 
   return (
     <>
@@ -28,6 +31,7 @@ function _TextAreaInput(
           ref={ref}
           styles={() => ({
             input: {
+              // this is needed to make the input aligned based on the given direction
               textAlign: left(dir),
             },
           })}
@@ -44,8 +48,9 @@ function _TextAreaInput(
   );
 }
 
-export const TextAreaInput: React.FC<BaseInputProps> =
-  React.forwardRef(_TextAreaInput);
+export const TextAreaInput: React.FC<BaseInputProps> = React.memo(
+  React.forwardRef(_TextAreaInput),
+);
 
 TextAreaInput.defaultProps = {
   rules: [requiredRule],

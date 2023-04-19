@@ -75,6 +75,14 @@ export class ReactiveForm {
   protected _submit?: SubmitCallback;
 
   /**
+   * Submit format
+   */
+  protected _submitFormat: "json" | "formData" = getMoonlightConfig(
+    "reactiveForm.submitFormat",
+    "json",
+  );
+
+  /**
    * Callbacks list
    */
   protected callbacks: Callbacks = {
@@ -284,6 +292,14 @@ export class ReactiveForm {
    */
   public submitButton(text: React.ReactNode) {
     this.buttonsList.push(submitButton(text));
+    return this;
+  }
+
+  /**
+   * Set submit format that will receive data when submitting data with services
+   */
+  public submitFormat(format: "json" | "formData") {
+    this._submitFormat = format;
     return this;
   }
 
@@ -621,7 +637,7 @@ export class ReactiveForm {
       this._recordId = record.id;
     }
 
-    const requiresClearingCache = this.record !== record;
+    const requiresClearingCache = Object.is(this.record, record) === false;
 
     this.record = record;
 
@@ -920,10 +936,12 @@ export class ReactiveForm {
           loader = toastLoading(trans("saving"), trans("savingForm"));
           const service = this._service;
 
+          const data = this._submitFormat === "json" ? values : formData;
+
           if (this._recordId) {
-            response = await service.update(this._recordId, formData);
+            response = await service.update(this._recordId, data);
           } else {
-            response = await service.create(formData);
+            response = await service.create(data);
           }
 
           if (this._closeOnSave) {
@@ -956,7 +974,7 @@ export class ReactiveForm {
         }
       } catch (error) {
         if (loader) {
-          loader.error(trans("saveFailed"), parseError(error));
+          loader.error(parseError(error), trans("saveFailed"));
         } else {
           toastError(parseError(error));
         }
@@ -1115,6 +1133,7 @@ export class ReactiveForm {
       recordId,
       rowIndex: _index,
       onSave,
+      loading: incomingLoading,
       initialLoad,
       mapLoadedData,
       ...modalProps
@@ -1141,7 +1160,7 @@ export class ReactiveForm {
             "reactiveForm.singleRecordKey",
             "record",
           );
-          const data: any = get(response.data, dataKey, "record");
+          const data: any = get(response.data, dataKey);
           reactiveForm.setRecord(data);
           setIsLoading(false);
         });
@@ -1157,6 +1176,12 @@ export class ReactiveForm {
           setIsLoading(false);
         });
       }, []);
+
+      useEffect(() => {
+        if (incomingLoading !== undefined) {
+          setIsLoading(incomingLoading);
+        }
+      }, [incomingLoading]);
 
       useEffect(() => {
         if (!reactiveForm._enableKeyboardShortcuts) return;

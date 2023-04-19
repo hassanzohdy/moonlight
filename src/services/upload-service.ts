@@ -3,7 +3,7 @@ import { getMoonlightConfig } from "../config";
 
 export function uploadFiles(
   data: any,
-  progressPercentageCallback?: (percentage: number) => void
+  progressPercentageCallback?: (percentage: number) => void,
 ): Promise<Fileable[]> {
   const endpoint = getMoonlightConfig("endpoint");
   const uploadsRoute = getMoonlightConfig("uploads.route", "/uploads");
@@ -14,13 +14,13 @@ export function uploadFiles(
           if (!progressEvent.total) return;
 
           const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
+            (progressEvent.loaded * 100) / progressEvent.total,
           );
 
           progressPercentageCallback?.(percentCompleted);
         },
       })
-      .then((response) => {
+      .then(response => {
         resolve(uploadsHandler.resolveResponse(response));
       })
       .catch(reject);
@@ -35,7 +35,7 @@ export function deleteUploadedFile(fileId: string | number) {
 
 export function uploadFile(
   file: File,
-  progressPercentageCallback?: (percentage: number) => void
+  progressPercentageCallback?: (percentage: number) => void,
 ): Promise<Fileable> {
   const formData = new FormData();
 
@@ -43,7 +43,7 @@ export function uploadFile(
 
   return new Promise((resolve, reject) => {
     uploadFiles(formData, progressPercentageCallback)
-      .then((files) => {
+      .then(files => {
         resolve(files[0]);
       })
       .catch(reject);
@@ -51,10 +51,10 @@ export function uploadFile(
 }
 
 export const uploadsHandler = {
-  resolveResponse: (response) => {
+  resolveResponse: response => {
     return getMoonlightConfig(
       "uploads.resolveResponse",
-      (response) => response.data.uploads
+      response => response.data.uploads,
     )(response);
   },
   uploadsKey: () => getMoonlightConfig("uploads.key", "uploads[]"),

@@ -131,6 +131,12 @@ export type TableProps = {
    */
   role?: string;
   /**
+   * Whether to update the title of the page
+   *
+   * @default true
+   */
+  withHelmet?: boolean;
+  /**
    * Default record to be used when creating new records
    */
   defaultRecord?: {
@@ -160,6 +166,10 @@ export type TableProps = {
      */
     delete?: boolean | ((record: any, index: number) => boolean);
   };
+  /**
+   * Whether to fetch records from server when editing or cloning
+   */
+  fetchRecord?: boolean;
   /**
    * Table Columns
    */

@@ -32,11 +32,12 @@ export function TableHeader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const Helmet = components.link;
+  const Helmet = components.Helmet();
 
   return (
     <>
-      {Helmet && <Helmet title={superTable.title} />}
+      {superTable.withHelmet && Helmet && <Helmet title={superTable.title} />}
+
       <Paper mb={50} shadow="md" radius="md" p="xs">
         <Wrapper>
           <Box>

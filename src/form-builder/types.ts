@@ -41,6 +41,7 @@ export type ReactiveFormComponentProps = {
   rowIndex?: number;
   recordId?: number | string;
   open?: boolean;
+  loading?: boolean;
   onClose?: () => void;
   onSave?: SaveCallback;
   initialLoad?: () => Promise<any>;

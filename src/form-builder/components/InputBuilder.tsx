@@ -483,7 +483,7 @@ export class InputBuilder {
    * Set record
    */
   public setRecord(record: any) {
-    if (record !== this.record) {
+    if (!Object.is(record, this.record)) {
       this.generateNewKey();
     }
 

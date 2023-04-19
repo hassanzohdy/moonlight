@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import { List, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import Is from "@mongez/supportive-is";
 
@@ -23,20 +23,30 @@ export function parseError(error: any) {
     error = error.data.errors;
   }
 
+  if (error?.data?.messages) {
+    error = error.data.messages;
+  }
+
   if (error?.data?.error) {
     error = error.data.error;
+  }
+
+  if (error?.message) {
+    error = error.message;
   }
 
   let errorContent: any;
 
   if (Is.array(error)) {
-    errorContent = error.map((error: any) => {
-      if (error.value) {
-        return <div key={error.key}>{error.value}</div>;
-      }
-
-      return error;
+    const errorsList = error.map((error: any) => {
+      return (
+        <List.Item key={error.key}>
+          {error?.value || error?.message || error?.error || error}
+        </List.Item>
+      );
     });
+
+    errorContent = <List>{errorsList}</List>;
   } else {
     errorContent = <Text color="gray">{error}</Text>;
   }

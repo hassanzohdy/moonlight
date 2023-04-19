@@ -18,9 +18,13 @@ import {
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React, { useRef, useState } from "react";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
-import { UploadingFileValidationOptions, isValidFile } from "../../utils";
+import {
+  UploadingFileValidationOptions,
+  isValidFile,
+  parseError,
+} from "../../utils";
 import { acceptImagesOnly } from "../../utils/extensions";
-import { toastError } from "../Toast";
+import { toastError, toastLoading } from "../Toast";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
 
@@ -52,11 +56,17 @@ export function ImageInput({
   maxSize,
   ...props
 }: ImageInputProps) {
-  const { id, value, changeValue, error, otherProps } = useFormControl(props, {
-    transformValue: value => value,
-    collectValue: ({ value }) => value?.id,
-    isCollectable: ({ value }) => value?.id !== undefined,
-  });
+  const { id, value, changeValue, error, otherProps } = useFormControl(
+    {
+      ...props,
+      required,
+    },
+    {
+      transformValue: value => value,
+      collectValue: ({ value }) => value?.id,
+      isCollectable: ({ value }) => value?.id !== undefined,
+    },
+  );
 
   const [isUploading, setUploading] = useState(false);
   const [imageOptionsOpened, toggleImageOptionsPopup] = useState(false);
@@ -121,13 +131,18 @@ export function ImageInput({
 
     uploading(true);
 
+    const loader = toastLoading(trans("moonlight.uploading"));
+
     uploadFile(file)
       .then(file => {
         setUploadedFile(file);
 
+        loader.close();
+
         changeValue(file);
       })
-      .catch(() => {
+      .catch(error => {
+        loader.error(parseError(error));
         setUploadError(true);
       })
       .finally(() => {

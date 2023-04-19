@@ -115,14 +115,43 @@ export type MoonlightConfigurations = {
     };
   };
   reactiveForm?: {
+    /**
+     * Used when fetching single document from api using service.get method
+     *
+     * @default record
+     */
     singleRecordKey?: string;
+    /**
+     * Input column size
+     * Full width is 12 columns
+     *
+     * @default 6
+     */
     defaultColSize?: ColSpan;
+    /**
+     * Whether to show the form in a modal or not
+     *
+     * @default true
+     */
     openInModal?: boolean;
+    /**
+     * What to send when submitting the form
+     * If your form contains uploadable files, then it is advised to use `formData`
+     * Otherwise, json is better
+     * You can override each form submit format using `submitFormat` method
+     *
+     * @todo: Auto detect if the form contains uploadable files
+     * @default "json"
+     */
+    submitFormat?: "json" | "formData";
     /**
      * The delay in milliseconds after the form is saved
      * Works only when service is used not `onSubmit` method
      */
     saveEventDelay?: number;
+    /**
+     * Submit button options
+     */
     submitButton?: {
       label?: React.ReactNode;
     };
@@ -154,6 +183,18 @@ export type MoonlightConfigurations = {
       responseDataKey?: string;
     };
   };
+  /**
+   * Published/active column name
+   *  This is used with publishedInput in reactive form and with publishedColumn in Super table
+   * @default {
+   *  name: "published",
+   * label: "active"
+   * }
+   */
+  publishedColumn?: {
+    name: string;
+    label: string;
+  };
   endpoint?: Endpoint;
   google?: {
     map?: {
@@ -172,9 +213,30 @@ export type MoonlightConfigurations = {
     resolveResponse?: (response: AxiosResponse) => Fileable[];
     key?: string;
   };
+  /**
+   * Super table options
+   */
   table?: {
+    /**
+     * Table data keys
+     */
     keys?: TableKeys;
+    /**
+     * Limit options
+     */
     limitOptions?: number[];
+    /**
+     * If set to true, then when updating record or cloning it, it will fetch first data from api,
+     * otherwise, it will be taken from the current table row
+     *
+     * @default false
+     */
+    fetchRecord?: boolean;
+    /**
+     * List of actions used by default when calling actionColumn
+     *
+     * @default [EditButton, DeleteButton]
+     */
     actions?: React.ComponentType<any>[];
     paginationInfo?: (response: AxiosResponse) => PaginationInfo;
   };

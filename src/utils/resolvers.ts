@@ -4,7 +4,7 @@ export const queryString = () => getMoonlightConfig("router.queryString");
 
 export const components = {
   link: getMoonlightConfig("components.link"),
-  Helmet: getMoonlightConfig("components.helmet"),
+  Helmet: () => getMoonlightConfig("components.helmet"),
 };
 
 export const router = {

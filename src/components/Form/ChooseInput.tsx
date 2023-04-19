@@ -74,6 +74,7 @@ export function ChooseInput({
           <SegmentedControl
             value={value}
             key={segmentKey}
+            name={Random.string(6)}
             onChange={changeValue}
             data={data}
             {...otherProps}

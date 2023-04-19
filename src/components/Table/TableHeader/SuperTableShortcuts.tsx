@@ -2,6 +2,7 @@ import { Box, Kbd, Modal, Table, Text, Title } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useBooleanState, useOnce } from "@mongez/react-hooks";
 import { IconQuestionMark } from "@tabler/icons-react";
+import { modButtons } from "src/moonlight/utils";
 import { Tooltip } from "../../Tooltip";
 import { useSuperTable } from "../hooks";
 import { useHotKeys } from "./../../../hooks/use-hot-keys";
@@ -28,7 +29,10 @@ export default function SuperTableShortcuts() {
 
   return (
     <>
-      <Tooltip label={trans(moonlightTranslations.keyboardShortcuts)}>
+      <Tooltip
+        label={
+          trans("moonlight.keyboardShortcuts") + ` (${modButtons(["H"])})`
+        }>
         <Kbd
           onClick={open}
           style={{

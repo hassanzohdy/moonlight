@@ -25,6 +25,7 @@ export function useTable({
   title,
   bulkActions,
   defaultParams,
+  withHelmet,
   filters,
   filterOptions,
   bulkSelection = true,
@@ -38,12 +39,10 @@ export function useTable({
   onPageChange,
   onSortChange,
   onFilterChange,
-  responsePaginationHandler,
-  responseRecordsKey,
-  responseDataHandler,
   limitOptions,
   onPageSizeChange,
   keys,
+  fetchRecord,
   total,
   defaultRecord,
   sortCallback,
@@ -73,6 +72,14 @@ export function useTable({
 
   if (keys) {
     superTable.mergeKeys(keys);
+  }
+
+  if (withHelmet !== undefined) {
+    superTable.withHelmet = withHelmet;
+  }
+
+  if (fetchRecord !== undefined) {
+    superTable.fetchRecord = fetchRecord;
   }
 
   useEffect(() => {
@@ -106,7 +113,7 @@ export function useTable({
       // results will be number of results for current page
       paginationInfo.results = Math.min(
         limit,
-        totalResults - (page - 1) * limit
+        totalResults - (page - 1) * limit,
       );
     }
 

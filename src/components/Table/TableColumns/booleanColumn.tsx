@@ -1,14 +1,15 @@
 import React from "react";
+import { getMoonlightConfig } from "src/moonlight/config";
 import { BooleanFormatter } from "../Formatters";
 import { tableColumn } from "./tableColumn";
 
-export function booleanColumn(
-  key = "published",
-  heading: React.ReactNode = key,
-) {
+export function booleanColumn(key, heading: React.ReactNode = key) {
   return tableColumn(key, heading).formatter(BooleanFormatter);
 }
 
 export function publishedColumn() {
-  return booleanColumn("published", "active").sortable();
+  return booleanColumn(
+    getMoonlightConfig("publishedColumn.name"),
+    getMoonlightConfig("publishedColumn.label"),
+  ).sortable();
 }

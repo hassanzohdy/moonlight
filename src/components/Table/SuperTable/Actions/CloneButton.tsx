@@ -5,23 +5,56 @@ import { except, get } from "@mongez/reinforcements";
 import { IconCopy } from "@tabler/icons-react";
 import { AxiosResponse } from "axios";
 import React, { useMemo, useState } from "react";
+import { getMoonlightConfig } from "src/moonlight/config";
+import { catchError } from "src/moonlight/utils";
 import { moonlightTranslations } from "../../../../locales";
+import { FormatterProps } from "../../TableProps";
 import { useRowHoverAction } from "../../hooks/useRowHoverAction";
 import { useSuperTable } from "../../hooks/useSuperTable";
-import { FormatterProps } from "../../TableProps";
 
+// TODO: Fix it when fetching record
 function _CloneButton({ row }: FormatterProps) {
   const superTable = useSuperTable();
 
+  const fetchRecord = superTable.fetchRecord;
+  const [tableRow, setTableRow] = useState(fetchRecord ? undefined : row);
   const [open, setOpen] = useState(false);
   const Form = superTable.baseForm;
+  const [isLoading, setIsLoading] = useState(false);
 
-  const record = useMemo(() => except(row, ["id"]), [row]);
+  const record = useMemo(() => except(tableRow, ["id"]), [tableRow]);
+
+  const openForm = () => {
+    if (superTable.fetchRecord) {
+      setTableRow(undefined);
+      setIsLoading(true);
+
+      superTable.service
+        ?.get(row.id)
+        .then(response => {
+          const dataKey = getMoonlightConfig(
+            "reactiveForm.singleRecordKey",
+            "record",
+          );
+
+          const data = get(response.data, dataKey);
+
+          setTableRow(data);
+          setIsLoading(false);
+        })
+        .catch(error => {
+          catchError(error);
+          setIsLoading(false);
+        });
+    }
+
+    setOpen(true);
+  };
 
   useRowHoverAction({
     id: row.id,
     keys: ["mod", "c"],
-    in: () => setOpen(true),
+    in: openForm,
   });
 
   useOnce(() => {
@@ -35,7 +68,10 @@ function _CloneButton({ row }: FormatterProps) {
   if (!Form) return null;
 
   const updateRowData = (response: AxiosResponse) => {
-    const record = get(response.data, superTable.getKey("createRecord"));
+    const record = get(
+      response.data,
+      superTable.getKey("createRecord", "record"),
+    );
 
     if (record) {
       superTable.unshiftRow(record);
@@ -48,7 +84,7 @@ function _CloneButton({ row }: FormatterProps) {
         variant="light"
         radius={10000}
         color="indigo"
-        onClick={() => setOpen(true)}>
+        onClick={openForm}>
         <Tooltip
           withArrow
           label={trans(moonlightTranslations.clone)}
@@ -61,11 +97,12 @@ function _CloneButton({ row }: FormatterProps) {
 
       <Form
         open={open}
+        loading={isLoading}
         onClose={() => {
           setOpen(false);
         }}
-        record={record}
         onSave={updateRowData}
+        record={record}
       />
     </>
   );
