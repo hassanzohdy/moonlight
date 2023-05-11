@@ -8,7 +8,7 @@ export type SubmitCallback = (options: {
   form: FormInterface;
   formData: FormData;
   setIslLoading: (isLoading: boolean) => void;
-}) => void;
+}) => any;
 
 export type CachedRender = {
   heading: React.ReactNode;

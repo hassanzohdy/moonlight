@@ -123,6 +123,11 @@ export class ReactiveForm {
   protected wrapperProps: any = {};
 
   /**
+   * Whether to ignore empty values
+   */
+  protected _ignoreEmptyValues = true;
+
+  /**
    * Default modal props
    */
   protected defaultModalProps: Partial<ModalProps> = {
@@ -268,6 +273,14 @@ export class ReactiveForm {
    */
   public recordId(id: number | string | undefined) {
     this._recordId = id;
+    return this;
+  }
+
+  /**
+   * Determine whether to ignore empty values
+   */
+  public ignoreEmptyValues(ignore = true) {
+    this._ignoreEmptyValues = ignore;
     return this;
   }
 
@@ -933,7 +946,7 @@ export class ReactiveForm {
         setIslLoading(true);
         if (this._service) {
           let response: AxiosResponse<any>;
-          loader = toastLoading(trans("saving"), trans("savingForm"));
+          loader = toastLoading(trans("saving"), trans("moonlight.savingForm"));
           const service = this._service;
 
           const data = this._submitFormat === "json" ? values : formData;
@@ -961,7 +974,7 @@ export class ReactiveForm {
           form.submitting(false);
           setIslLoading(false);
         } else if (this._submit) {
-          await this._submit({
+          const response = await this._submit({
             form,
             values: values,
             reactiveForm: this,
@@ -971,6 +984,10 @@ export class ReactiveForm {
           if (this._closeOnSave) {
             onClose();
           }
+
+          setTimeout(() => {
+            this.callbacks.onSave.forEach(callback => callback(response, this));
+          }, getMoonlightConfig("reactiveForm.saveEventDelay", 100));
         }
       } catch (error) {
         if (loader) {
@@ -1144,6 +1161,12 @@ export class ReactiveForm {
 
       reactiveForm.reRenderer = useForceUpdate();
 
+      if (!onClose) {
+        onClose = () => {
+          setOpen(false);
+        };
+      }
+
       if (!reactiveForm.record && record) {
         reactiveForm.record = record;
       }
@@ -1306,6 +1329,7 @@ export class ReactiveForm {
             )}
             <LoadingOverlay visible={isLoading} />
             <Form
+              ignoreEmptyValues={reactiveForm._ignoreEmptyValues}
               onError={reactiveForm.manageFormError.bind(reactiveForm)}
               ref={form => {
                 reactiveForm.setForm(form as FormInterface);

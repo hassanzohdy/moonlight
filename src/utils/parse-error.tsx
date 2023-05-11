@@ -3,6 +3,8 @@ import { trans } from "@mongez/localization";
 import Is from "@mongez/supportive-is";
 
 export function parseError(error: any) {
+  console.log(error);
+
   if (Is.empty(error)) {
     return Is.object(error) ? <span>{trans("somethingWentWrong")}</span> : null;
   }

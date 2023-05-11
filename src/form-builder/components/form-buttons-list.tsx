@@ -20,7 +20,9 @@ export function formButton(content: React.ReactNode) {
   return new FormButton().content(content).size("xs");
 }
 
-export function resetButton(content: React.ReactNode = trans("reset")) {
+export function resetButton(
+  content: React.ReactNode = trans("moonlight.reset"),
+) {
   return new FormButton()
     .content(content)
     .color("cyan")
@@ -33,7 +35,9 @@ export function resetButton(content: React.ReactNode = trans("reset")) {
     });
 }
 
-export function cancelButton(content: React.ReactNode = trans("cancel")) {
+export function cancelButton(
+  content: React.ReactNode = trans("moonlight.cancel"),
+) {
   return new FormButton()
     .content(content)
     .color("red")
@@ -47,7 +51,7 @@ export function cancelButton(content: React.ReactNode = trans("cancel")) {
 }
 
 export function saveAndClearButton(
-  content: React.ReactNode = trans("saveAndClear"),
+  content: React.ReactNode = trans("moonlight.saveAndClear"),
 ) {
   return new FormButton()
     .content(content)
