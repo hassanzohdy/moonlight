@@ -22,7 +22,11 @@ async function deleteMultipleRows(
     const loader = toastLoading(trans("deleting"), trans("deletingInProgress"));
     try {
       if (service.bulkDelete) {
-        await service.bulkDelete(bulkRows.map(({ row }) => row.id));
+        const response = await service.bulkDelete(
+          bulkRows.map(({ row }) => row.id),
+        );
+
+        superTable.updateDataFromResponse(response);
       } else {
         // promise all to delete all rows
         await Promise.all(bulkRows.map(({ row }) => service.delete(row.id)));

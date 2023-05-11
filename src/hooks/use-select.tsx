@@ -105,7 +105,7 @@ export function useSelect(
         responseDataKey ||
         getMoonlightConfig("select.responseDataKey", "records");
 
-      const data: any[] = get(response.data, dataKey, "records");
+      const data: any[] = get(response.data, dataKey, []);
 
       setDataList(mapData(data, except, mapOption));
       loading(false);

@@ -221,7 +221,7 @@ export function FileInput({
                 label={
                   uploadedFile ? (
                     <>
-                      {uploadedFile.fileName}{" "}
+                      {uploadedFile.name}{" "}
                       <Text component="span" size="sm" color="lime">
                         ( {humanSize(uploadedFile.size)} )
                       </Text>

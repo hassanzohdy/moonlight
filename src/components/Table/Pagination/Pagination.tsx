@@ -10,7 +10,7 @@ export function Pagination() {
 
   return (
     <BasePagination
-      page={paginationInfo.page}
+      value={paginationInfo.page}
       total={paginationInfo.pages}
       position="center"
       withEdges

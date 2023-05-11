@@ -1,8 +1,7 @@
 import { Box, useMantineTheme } from "@mantine/core";
-import { InputError as FormInputErrorProps } from "@mongez/react-form";
 
 export type InputErrorProps = {
-  error: FormInputErrorProps;
+  error: any;
 };
 
 export function InputError({ error }: InputErrorProps) {

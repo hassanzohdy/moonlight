@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
 import { trans } from "@mongez/localization";
 import React, { useMemo } from "react";
+import TableCell from "./TableCell";
 import { useSuperTable } from "./hooks/useSuperTable";
 import { useTableChange } from "./hooks/useTableChange";
-import TableCell from "./TableCell";
 
 export const EmptyColumn = styled.td`
   label: EmptyColumn;

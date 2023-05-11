@@ -49,6 +49,7 @@ export class MultiLingualBuilder extends InputBuilder {
       for (const localeCodeData of value) {
         const localeCode = localeCodesList[localeCodeData.localeCode] as any;
 
+        // WTF is this?
         localeCode.localeCode = localeCodeData.localeCode;
 
         if (localeCode) {
@@ -65,7 +66,7 @@ export class MultiLingualBuilder extends InputBuilder {
 
     const renderedComponents = localeCodes.map((localeCodeObject, index) => {
       const { localeCode } = localeCodeObject;
-      const input = this.input.clone();
+      const input: InputBuilder = this.input.clone();
 
       if (input.isAutoFocused() && index > 0) {
         input.autoFocus(false);
@@ -75,8 +76,10 @@ export class MultiLingualBuilder extends InputBuilder {
 
       const inputName = originalName + "." + index;
 
+      input.hintOptions && input.hintOptions(this._hintOptions);
+
       input
-        .setName(inputName + ".text")
+        .setName(inputName + ".value")
         .description(
           <>
             {this._description
@@ -91,10 +94,24 @@ export class MultiLingualBuilder extends InputBuilder {
           transFrom(localeCode, input.data.label.value || originalName),
           false,
         )
+        .onChange(value => {
+          const localeCodeInput = this.form.form.control(
+            `${inputName}.localeCode`,
+          );
+
+          if (!localeCodeInput) return;
+          if (!value) {
+            // if no value, then change the value of the hidden input of the locale code
+            localeCodeInput.change("");
+          } else {
+            // if there is a value, then change the value of the hidden input of the locale code
+            localeCodeInput.change(localeCode);
+          }
+        })
         .updateComponentProps({
           dir: localeCodeObject.direction,
         })
-        .setDefaultValueKey(`${inputName}.text`)
+        .setDefaultValueKey(`${inputName}.value`)
         .placeholder(
           transFrom(localeCode, input.data.placeholder.value || originalName),
           false,
@@ -110,7 +127,11 @@ export class MultiLingualBuilder extends InputBuilder {
 
       const content = (
         <Grid.Col {...sizes} key={input.name() + localeCode}>
-          <HiddenInput name={`${inputName}.localeCode`} value={localeCode} />
+          <HiddenInput
+            name={`${inputName}.localeCode`}
+            key={`${inputName}.localeCode`}
+            value={value ? localeCode : ""}
+          />
 
           {input.render()}
         </Grid.Col>

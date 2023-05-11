@@ -98,6 +98,7 @@ function _BaseInput({
               },
               label: {
                 cursor: "pointer",
+                marginBottom: inputDescription ? undefined : theme.spacing.xs,
               },
               description: {
                 marginBottom: inputDescription ? theme.spacing.xs : undefined,

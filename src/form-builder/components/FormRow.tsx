@@ -72,6 +72,15 @@ export class FormRow extends ShouldBeRendered {
   }
 
   /**
+   * Margin top
+   */
+  public mt(value: number) {
+    this.componentProps["mt"] = value;
+
+    return this;
+  }
+
+  /**
    * Make row as equal columns
    */
   public asEqualColumns() {

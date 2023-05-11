@@ -1267,6 +1267,11 @@ export class ReactiveForm {
       const wrapperProps = reactiveForm.openInModal
         ? {
             title: <strong>{heading}</strong>,
+            styles: theme => ({
+              header: {
+                borderBottom: `1px solid ${theme.colors.gray[4]}`,
+              },
+            }),
             opened: opened,
             ...reactiveForm.defaultModalProps,
             ...reactiveForm.wrapperProps,

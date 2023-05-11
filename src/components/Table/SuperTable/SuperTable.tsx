@@ -239,7 +239,8 @@ export class SuperTable {
   /**
    * Pagination info cast callback
    */
-  protected paginationInfoCast = response => response.data.paginationInfo;
+  protected paginationInfoCast: (response: AxiosResponse) => PaginationInfo =
+    response => response.data.paginationInfo;
 
   /**
    * Determine if pagination is enabled
@@ -294,11 +295,20 @@ export class SuperTable {
   /**
    * Constructor
    */
-  public constructor(public lazyTable = false) {
+  public constructor(public lazyTable = false, name: string) {
     this.setId(Random.id());
+    this.setName(name);
+
     this.currentQueryString = queryString?.().all() || {};
 
     this.keysList = merge(this.keysList, getMoonlightConfig("table.keys", {}));
+
+    const cachedSortByOptions =
+      this.getCached("sortByOptions") || this.currentQueryString.sortByOptions;
+
+    if (cachedSortByOptions) {
+      this.sortByOptions = cachedSortByOptions;
+    }
 
     if (lazyTable) {
       this.isLoading = true;
@@ -778,8 +788,7 @@ export class SuperTable {
         .list(finalParams)
         .then(response => {
           scrollTop();
-          this.setData(get(response.data, this.getKey("records")));
-          this.setPaginationInfo(this.paginationInfoCast(response));
+          this.updateDataFromResponse(response);
           this.setLoading(false);
 
           if (this.updateQueryString) {
@@ -800,6 +809,23 @@ export class SuperTable {
           reject(error);
         });
     });
+  }
+
+  /**
+   * Update data from response
+   */
+  public updateDataFromResponse(response: AxiosResponse) {
+    const rows = get(response.data, this.getKey("records"));
+
+    if (rows) {
+      this.setData(rows);
+    }
+
+    const paginationInfo = this.paginationInfoCast(response);
+
+    if (typeof paginationInfo.results === "number") {
+      this.setPaginationInfo(paginationInfo);
+    }
   }
 
   /**
@@ -955,7 +981,8 @@ export class SuperTable {
     if (!this.cacheHandler) return defaultValue;
 
     const cachedData = this.cacheHandler.get(this.cacheKey, {});
-    return cachedData[key] !== undefined ? cachedData[key] : defaultValue;
+
+    return cachedData[key] ?? defaultValue;
   }
 
   /**
@@ -1082,7 +1109,6 @@ export class SuperTable {
     const deleteRowFromTable = () => {
       this.data.splice(rowIndex, 1);
       this.setData([...this.data]);
-      // TODO: Translate the message
 
       this.decreasePaginationInfoRow(1);
     };
@@ -1322,7 +1348,7 @@ export class SuperTable {
           this.loadFilter(form);
         }
       }
-    }, 300);
+    }, 300)();
   }
 
   /**
@@ -1383,10 +1409,10 @@ export class SuperTable {
    * Sort by the given name and order
    */
   public sortBy(name: string, order: "asc" | "desc" = "asc") {
-    this.goToPage(1);
-
     if (!this.service) {
       this.updateSortByOptions([name, order]);
+
+      this.trigger("pageChange", 1, {});
 
       let sortCallback: any = this.sortCallback;
 
@@ -1414,6 +1440,8 @@ export class SuperTable {
     const values = tableFilterForm.values();
 
     values.orderBy = [name, order];
+
+    values.page = 1;
 
     this.load(values);
   }

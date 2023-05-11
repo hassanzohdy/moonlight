@@ -63,8 +63,8 @@ export function GoogleMapInput({
       defaultValue,
     },
     {
-      transformValue: (value) => value,
-    }
+      transformValue: value => value,
+    },
   );
 
   // initializing google map
@@ -79,7 +79,7 @@ export function GoogleMapInput({
 
   const styles = { ...defaultStyles, ...incomingStyles };
 
-  const onMapClick = (e) => {
+  const onMapClick = e => {
     getAddressByLatLng(e.latLng.lat(), e.latLng.lng()).then((response: any) => {
       const newLocation = {
         lat: e.latLng.lat(),
@@ -130,7 +130,7 @@ export function GoogleMapInput({
     };
 
   const renderSuggestions = () =>
-    data.map((suggestion) => {
+    data.map(suggestion => {
       const {
         place_id,
         structured_formatting: { main_text, secondary_text },
@@ -142,8 +142,7 @@ export function GoogleMapInput({
             cursor: "pointer",
           }}
           key={place_id}
-          onClick={handleSelect(suggestion)}
-        >
+          onClick={handleSelect(suggestion)}>
           <strong>{main_text}</strong> <small>{secondary_text}</small>
         </List.Item>
       );
@@ -169,8 +168,7 @@ export function GoogleMapInput({
         label={label}
         required={required}
         tooltip={location.address}
-        id={id}
-      >
+        id={id}>
         <TextInput
           value={readMoreChars(location.address || "", 80)}
           placeholder={placeholder && trans(placeholder)}
@@ -189,8 +187,7 @@ export function GoogleMapInput({
                       cursor: "pointer",
                     }}
                     size="sm"
-                    color="red"
-                  >
+                    color="red">
                     <IconTrash onClick={clearLocation} size={15} />
                   </ThemeIcon>
                 </Tooltip>
@@ -202,8 +199,7 @@ export function GoogleMapInput({
                   }}
                   mt={4}
                   size="sm"
-                  color={location?.address ? "green" : "gray"}
-                >
+                  color={location?.address ? "green" : "gray"}>
                   <IconMapPin size={15} onClick={() => setOpen(true)} />
                 </ThemeIcon>
               </Tooltip>
@@ -228,8 +224,7 @@ export function GoogleMapInput({
           <Text fw="bold" fz="xl">
             {trans("moonlight.selectLocation")}
           </Text>
-        }
-      >
+        }>
         <Grid ref={searchRef}>
           <Grid.Col mb={10}>
             <TextInput
@@ -251,8 +246,7 @@ export function GoogleMapInput({
                   <ThemeIcon color="teal" size={24} radius="xl">
                     <IconCircleCheck size={16} />
                   </ThemeIcon>
-                }
-              >
+                }>
                 {renderSuggestions()}
               </List>
             </Grid.Col>
@@ -263,8 +257,7 @@ export function GoogleMapInput({
           mapContainerStyle={styles.container}
           zoom={zoom}
           center={location}
-          onClick={onMapClick}
-        >
+          onClick={onMapClick}>
           <Marker position={{ lat: location.lat, lng: location.lng }} />
         </GoogleMap>
       </Modal>

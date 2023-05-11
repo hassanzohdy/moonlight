@@ -1,16 +1,18 @@
 import { Button } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { useOnce } from "@mongez/react-hooks";
+import { useBooleanState, useOnce } from "@mongez/react-hooks";
 import { get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { useHotKeys } from "../../../../hooks/use-hot-keys";
+import { modButtons } from "../../../../utils";
+import { Tooltip } from "../../../Tooltip";
 import { useSuperTable } from "../../hooks/useSuperTable";
 
 export function createButton(Form: React.ComponentType<any>) {
   function CreateButtonComponent() {
     const superTable = useSuperTable();
-    const [open, setOpen] = useState(false);
+    const [opened, open, close] = useBooleanState();
 
     const pushRow = (response: AxiosResponse) => {
       const record = get(response.data, superTable.getKey("createRecord"));
@@ -22,7 +24,7 @@ export function createButton(Form: React.ComponentType<any>) {
 
     useHotKeys({
       keys: ["mod", "Q"],
-      callback: () => setOpen(true),
+      callback: open,
     });
 
     useOnce(() => {
@@ -34,15 +36,17 @@ export function createButton(Form: React.ComponentType<any>) {
 
     return (
       <>
-        <Button onClick={() => setOpen(true)} variant="light">
-          {trans("create")}
-        </Button>
+        <Tooltip label={modButtons(["q"])}>
+          <Button onClick={open} variant="light">
+            {trans("create")}
+          </Button>
+        </Tooltip>
 
         <Form
           record={superTable.getDefaultRecord()}
-          open={open}
+          open={opened}
           onSave={pushRow}
-          onClose={() => setOpen(false)}
+          onClose={close}
         />
       </>
     );

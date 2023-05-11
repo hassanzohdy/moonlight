@@ -11,12 +11,22 @@ import {
 } from "./";
 import { ReactiveFormComponentProps } from "./types";
 
+const buttonsList = () => [
+  cancelButton(),
+  resetButton(),
+  saveAndClearButton().when(button => {
+    return button.reactiveForm.hasRecordId() === false;
+  }),
+  submitButton(trans("save")),
+];
+
 export function createReactiveForm(
   callback: (reactForm: ReactiveForm) => void,
 ) {
   function ReactiveFormComponent(props: ReactiveFormComponentProps) {
     const Form = useMemo(() => {
       const reactiveForm = new ReactiveForm();
+      reactiveForm.buttons(buttonsList());
       callback(reactiveForm);
 
       return reactiveForm.asComponent();
@@ -43,14 +53,7 @@ export function createSimpleReactiveForm(
       .setInputs(inputs)
       .service(service)
       .singleName(singleName)
-      .buttons([
-        cancelButton(),
-        resetButton(),
-        saveAndClearButton().when(button => {
-          return button.reactiveForm.hasRecordId() === false;
-        }),
-        submitButton(trans("save")),
-      ]);
+      .buttons(buttonsList());
 
     callback?.(reactiveForm);
   });

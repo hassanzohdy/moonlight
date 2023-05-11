@@ -5,7 +5,7 @@ export function getLocalizedValue(
   value: any,
   localeCode: string = currentLocaleCode(),
   localeCodeKey = "localeCode",
-  textKey = "text",
+  textKey = "value",
 ) {
   if (!value) return "";
 

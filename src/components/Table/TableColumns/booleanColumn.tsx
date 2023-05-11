@@ -1,5 +1,5 @@
 import React from "react";
-import { getMoonlightConfig } from "src/moonlight/config";
+import { getMoonlightConfig } from "../../../config";
 import { BooleanFormatter } from "../Formatters";
 import { tableColumn } from "./tableColumn";
 

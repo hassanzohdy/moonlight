@@ -8,7 +8,8 @@ import {
 } from "@tabler/icons-react";
 import React from "react";
 import { Tooltip } from "../../Tooltip";
-import Column from "../Column";
+import type Column from "../Column";
+import { useTableChange } from "../hooks";
 import { useSuperTable } from "../hooks/useSuperTable";
 
 const Wrapper = styled(Flex)`
@@ -22,6 +23,7 @@ export function SortByColumn({
   column: Column;
   children: React.ReactNode;
 }) {
+  useTableChange("sortByOptions");
   const superTable = useSuperTable();
 
   if (!column.sortByOptions.enabled) {
@@ -50,8 +52,8 @@ export function SortByColumn({
     <Wrapper>
       {children}
       <Tooltip
-        label={trans("sortDirection", {
-          direction: trans(nextDirection),
+        label={trans("moonlight.sortDirection", {
+          direction: trans("moonlight." + nextDirection),
         })}>
         <ActionIcon size="sm" mx={2} onClick={reorder}>
           {sortIcon}

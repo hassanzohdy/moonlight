@@ -136,7 +136,6 @@ export function ImageInput({
     uploadFile(file)
       .then(file => {
         setUploadedFile(file);
-
         loader.close();
 
         changeValue(file);

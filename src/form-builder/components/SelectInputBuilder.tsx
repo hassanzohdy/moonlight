@@ -12,7 +12,7 @@ export class SelectInputBuilder extends InputBuilder {
   public requestsList: {
     request?: (props: any) => Promise<any>;
     lazyRequest?: (props: any) => Promise<any>;
-    searchRequest?: (props: any, record: any) => Promise<any>;
+    searchRequest?: (keywords: string, record: any) => Promise<any>;
     dynamicRequest?: (props: any) => Promise<any>;
   } = {
     request: undefined,
@@ -157,7 +157,7 @@ export class SelectInputBuilder extends InputBuilder {
         this.record,
         this.data.defaultValueKey,
         this.inputDefaultValue || [],
-      ).map(value => value.id || value);
+      ).map(value => value?.id || value);
     }
 
     const value = get(
@@ -180,7 +180,7 @@ export class SelectInputBuilder extends InputBuilder {
   /**
    * Set request
    */
-  public request(request: any) {
+  public request(request: (record: any) => Promise<any>) {
     this.requestsList.request = request;
     return this;
   }
@@ -188,7 +188,7 @@ export class SelectInputBuilder extends InputBuilder {
   /**
    * Set lazy request
    */
-  public lazyRequest(request: any) {
+  public lazyRequest(request: () => Promise<any>) {
     this.requestsList.lazyRequest = request;
     return this;
   }
@@ -196,7 +196,9 @@ export class SelectInputBuilder extends InputBuilder {
   /**
    * Set search request
    */
-  public searchRequest(request: any) {
+  public searchRequest(
+    request: (keywords: string, record: any) => Promise<any>,
+  ) {
     this.requestsList.searchRequest = request;
     return this;
   }
@@ -204,7 +206,7 @@ export class SelectInputBuilder extends InputBuilder {
   /**
    * Set dynamic request
    */
-  public dynamicRequest(request: any) {
+  public dynamicRequest(request: () => Promise<any>) {
     this.requestsList.dynamicRequest = request;
     return this;
   }
@@ -228,7 +230,7 @@ export class SelectInputBuilder extends InputBuilder {
           this.reRender();
         }
       });
-    }, 150);
+    }, 150)();
 
     let foundRequest = false;
 
@@ -238,6 +240,8 @@ export class SelectInputBuilder extends InputBuilder {
       if (requestName === "searchRequest" && request) {
         request = (keywords: string) =>
           this.requestsList.searchRequest?.(keywords, this.record);
+      } else if (requestName === "request" && request) {
+        request = () => this.requestsList.request?.(this.record);
       }
 
       if (request) {
@@ -277,7 +281,7 @@ export class SelectInputBuilder extends InputBuilder {
           selectInput.data.propsFromParent = searchAsValue;
 
           selectInput.dynamicRequest(() => {
-            return selectInput.restfulService?.list(searchAsValue);
+            return selectInput.restfulService?.list(searchAsValue) as any;
           });
 
           selectInput.generateNewKey();

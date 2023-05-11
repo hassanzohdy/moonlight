@@ -10,7 +10,7 @@ export function toastConfirm(
     confirmLabel?: string;
     cancelLabel?: string;
   } = {},
-): Promise<false | any> {
+): Promise<boolean> {
   const defaultOptions = {
     color: "red",
     confirmLabel: trans("confirm"),

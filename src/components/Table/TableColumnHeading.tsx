@@ -1,7 +1,7 @@
 import { trans } from "@mongez/localization";
-import Column from "./Column";
-import { useDisplayedColumn } from "./hooks";
+import type Column from "./Column";
 import { SortByColumn } from "./SuperTable/SortByColumn";
+import { useDisplayedColumn } from "./hooks";
 
 export type TableColumnHeadingProps = {
   column: Column;

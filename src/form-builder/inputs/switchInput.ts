@@ -1,8 +1,8 @@
 import { SwitchInput } from "../../components";
-import { InputBuilder } from "../components";
+import { SwitchInputBuilder } from "../components";
 
 export function switchInput(name: string) {
-  return new InputBuilder(name)
+  return new SwitchInputBuilder(name)
     .component(SwitchInput)
     .type("switch")
     .updateComponentProps({

@@ -9,10 +9,9 @@ export function ExternalLinkFormatter({
   return (
     <Anchor
       component={"a"}
-      to={value}
+      href={value}
       target="_blank"
-      rel="noopener noreferrer"
-    >
+      rel="noopener noreferrer">
       {settings.content ? settings.content(row) : value}
     </Anchor>
   );

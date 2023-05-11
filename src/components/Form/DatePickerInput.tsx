@@ -1,4 +1,4 @@
-import { DatePicker, DatePickerProps } from "@mantine/dates";
+import { DateInput, DatePickerProps } from "@mantine/dates";
 import { trans } from "@mongez/localization";
 import {
   getActiveForm,
@@ -7,7 +7,7 @@ import {
 } from "@mongez/react-form";
 import { useOnce } from "@mongez/react-hooks";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { ComponentType, useEffect, useState } from "react";
 import { getMoonlightConfig } from "../../config";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
@@ -18,6 +18,7 @@ export type DatePickerInputProps = DatePickerProps &
     maxDateInput?: string;
     hint?: React.ReactNode;
     description?: React.ReactNode;
+    component?: ComponentType;
   };
 
 export function DatePickerInput({
@@ -27,6 +28,8 @@ export function DatePickerInput({
   label,
   required,
   placeholder,
+  description,
+  component: Component = DateInput,
   minDate: incomingMinDate,
   maxDate: incomingMaxDate,
   ...props
@@ -35,10 +38,9 @@ export function DatePickerInput({
     value,
     changeValue,
     id,
+    formControl,
     error,
-    description,
     visibleElementRef,
-    formInput,
     otherProps,
   } = useFormControl(props);
 
@@ -81,13 +83,13 @@ export function DatePickerInput({
 
       if (!input) return;
 
-      input.on("change", () => {
+      input.onChange(() => {
         const minDate = input.value;
 
         if (minDate) {
           const minDateValue = dayjs(
             minDate,
-            getMoonlightConfig("date.dateFormat")
+            getMoonlightConfig("date.dateFormat"),
           ).toDate();
 
           setMinDate(minDateValue);
@@ -97,7 +99,7 @@ export function DatePickerInput({
   }, [minDateInput]);
 
   useOnce(() => {
-    const onReset = formInput.on("reset", () => {
+    const onReset = formControl.onReset(() => {
       setDate(null);
     });
 
@@ -116,13 +118,13 @@ export function DatePickerInput({
 
       if (!input) return;
 
-      input.on("change", () => {
+      input.onChange(() => {
         const maxDate = input.value;
 
         if (maxDate) {
           const maxDateValue = dayjs(
             minDate,
-            getMoonlightConfig("date.dateFormat")
+            getMoonlightConfig("date.dateFormat"),
           ).toDate();
 
           setMaxDate(maxDateValue);
@@ -141,15 +143,14 @@ export function DatePickerInput({
   return (
     <>
       <InputWrapper
-        required
+        required={required}
         id={id}
         hint={hint}
         description={description}
         error={error}
         visibleElementRef={visibleElementRef}
-        label={label}
-      >
-        <DatePicker
+        label={label}>
+        <Component
           onChange={updateDate}
           id={id}
           value={date}

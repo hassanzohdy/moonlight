@@ -3,9 +3,9 @@ import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
 import { useOnce } from "@mongez/react-hooks";
 import { IconTrash } from "@tabler/icons-react";
+import { FormatterProps } from "../../TableProps";
 import { useRowHoverAction } from "../../hooks/useRowHoverAction";
 import { useSuperTable } from "../../hooks/useSuperTable";
-import { FormatterProps } from "../../TableProps";
 
 export function DeleteButton({ row, rowIndex }: FormatterProps) {
   const superTable = useSuperTable();
@@ -27,6 +27,10 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
         confirm: trans("confirmDelete"),
         cancel: trans("cancelDelete"),
       },
+      closeOnConfirm: true,
+      closeOnCancel: true,
+      closeOnEscape: true,
+      closeOnClickOutside: true,
       confirmProps: { color: "red", autoFocus: true },
       onConfirm: () => superTable.deleteRow(row, rowIndex),
     });

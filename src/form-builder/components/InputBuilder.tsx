@@ -1,4 +1,9 @@
-import { Col, MantineSize } from "@mantine/core";
+import {
+  Col,
+  MantineNumberSize,
+  MantineSize,
+  TooltipProps,
+} from "@mantine/core";
 import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import { trans } from "@mongez/localization";
 import { Random, clone, get, rtrim } from "@mongez/reinforcements";
@@ -14,6 +19,11 @@ import { ReactiveForm } from "./ReactiveForm";
 export type ColumnSize =
   | ColSpan
   | Partial<Record<MantineSize | "span", ColSpan>>;
+
+export type HintOptions = {
+  position: TooltipProps["position"];
+  width: TooltipProps["width"];
+};
 
 export class InputBuilder {
   /**
@@ -109,6 +119,14 @@ export class InputBuilder {
   protected _hint: React.ReactNode = null;
 
   /**
+   * Hint configurations
+   */
+  protected _hintOptions: HintOptions = {
+    position: "top",
+    width: 200,
+  };
+
+  /**
    * Re-render handler
    */
   protected reRenderer: any;
@@ -172,6 +190,15 @@ export class InputBuilder {
    */
   public readOnly(readOnly = true) {
     this.componentProps.readOnly = readOnly;
+
+    return this;
+  }
+
+  /**
+   * Set the length that the user must enter for the input
+   */
+  public length(length: number) {
+    this.componentProps.length = length;
 
     return this;
   }
@@ -268,6 +295,30 @@ export class InputBuilder {
    */
   public hint(hint: React.ReactNode) {
     this._hint = hint;
+    return this;
+  }
+
+  /**
+   * Set hint position
+   */
+  public hintPosition(position: HintOptions["position"]) {
+    this._hintOptions.position = position;
+    return this;
+  }
+
+  /**
+   * Set hint width
+   */
+  public hintWidth(width: HintOptions["width"]) {
+    this._hintOptions.width = width;
+    return this;
+  }
+
+  /**
+   * Set all hint options
+   */
+  public hintOptions(options: HintOptions) {
+    this._hintOptions = options;
     return this;
   }
 
@@ -381,6 +432,69 @@ export class InputBuilder {
    */
   public required(required = true) {
     this.data.required = required;
+    return this;
+  }
+
+  /**
+   * Set margin top
+   */
+  public mt(size: MantineNumberSize) {
+    this.componentProps.mt = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin bottom
+   */
+  public mb(size: MantineNumberSize) {
+    this.componentProps.mb = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin left
+   */
+  public ml(size: MantineNumberSize) {
+    this.componentProps.ml = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin right
+   */
+  public mr(size: MantineNumberSize) {
+    this.componentProps.mr = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin
+   */
+  public m(size: MantineNumberSize) {
+    this.componentProps.m = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin x
+   */
+  public mx(size: MantineNumberSize) {
+    this.componentProps.mx = size;
+
+    return this;
+  }
+
+  /**
+   * Set margin y
+   */
+  public my(size: MantineNumberSize) {
+    this.componentProps.my = size;
+
     return this;
   }
 
@@ -595,6 +709,7 @@ export class InputBuilder {
 
       return props;
     }
+
     return {
       span: this.data.col !== undefined ? this.data.col : this.defaultColSize,
     };
@@ -640,7 +755,14 @@ export class InputBuilder {
       props.description = (
         <>
           {props.description || trans("didYouKnow")}
-          <Tooltip width={550} multiline label={hint}>
+          <Tooltip
+            width={this._hintOptions.width}
+            transitionProps={{
+              transition: "pop",
+            }}
+            position={this._hintOptions.position}
+            multiline
+            label={hint}>
             <span
               style={{
                 verticalAlign: "middle",
@@ -693,9 +815,8 @@ export class InputBuilder {
       if (props.defaultChecked === undefined) {
         props.defaultChecked = this.parseDefaultChecked();
       }
-    } else {
-      props.defaultValue = this.parseDefaultValue();
     }
+    props.defaultValue = this.parseDefaultValue();
 
     return (this.preparedProps = props);
   }
@@ -705,14 +826,6 @@ export class InputBuilder {
    */
   protected parseDefaultValue() {
     let defaultValue = get(this.record, this.data.defaultValueKey);
-
-    if (this.name().includes("primaryColor"))
-      console.log(
-        defaultValue,
-        this.record,
-        this.data.defaultValueKey,
-        this.name(),
-      );
 
     if (!defaultValue) {
       if (this.valueFromQueryString) {

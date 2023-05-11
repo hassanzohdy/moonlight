@@ -29,12 +29,26 @@ function _MultiLingualInput({
   defaultValue,
   withFlag = true,
   localeCodeKey = "localeCode",
-  localeCodeTextKey = "text",
+  localeCodeTextKey = "value",
+  rightSection,
   ...componentProps
 }: MultiLingualInputProps) {
   const localeCodesList: any = getMoonlightConfig("localeCodes", {});
 
   const localeCodes = Object.keys(localeCodesList);
+
+  const getRightSection = localeCode => {
+    let rightSectionContent;
+
+    if (rightSection) {
+      rightSectionContent =
+        typeof rightSection === "function"
+          ? rightSection(localeCode)
+          : rightSection;
+    }
+
+    return rightSectionContent;
+  };
 
   return (
     <>
@@ -46,10 +60,13 @@ function _MultiLingualInput({
               value={localeCode}
             />
             <Component
+              rightSection={getRightSection(localeCode)}
               {...componentProps}
               autoFocus={autoFocus && index === 0}
               defaultValue={getLocalizedValue(defaultValue, localeCode)}
               label={label}
+              locale={localeCode}
+              name={multiLingualName(name, index, localeCodeTextKey)}
               description={
                 <div>
                   {localeCodesList[localeCode].name}{" "}
@@ -63,8 +80,6 @@ function _MultiLingualInput({
                   ? placeholder + " " + localeCodesList[localeCode].name
                   : ""
               }
-              locale={localeCode}
-              name={multiLingualName(name, index, localeCodeTextKey)}
             />
           </Grid.Col>
         ))}

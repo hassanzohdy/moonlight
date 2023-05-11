@@ -102,9 +102,9 @@ export function DropzoneInput({
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileType[]>([]);
   const [filesList, setFilesList] = useState<any[]>(() =>
-    (value || []).map(attachment => ({
+    (value || []).map((attachment: any) => ({
       ...attachment,
-      id: attachment.id || Random.string(),
+      id: attachment?.id || Random.string(),
     })),
   );
 
@@ -496,7 +496,7 @@ export function DropzoneInput({
                       url={file.url}
                       key={file.id}
                       size={file.size}
-                      name={file.fileName}
+                      name={file.name}
                       rightIcon={
                         <Tooltip label={trans(moonlightTranslations.remove)}>
                           <ActionIcon onClick={() => removeFile(file.id)}>

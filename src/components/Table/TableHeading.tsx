@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { useSuperTable } from "./hooks/useSuperTable";
 import TableColumnHeading from "./TableColumnHeading";
+import { useSuperTable } from "./hooks/useSuperTable";
 
 export function TableHeading() {
   const superTable = useSuperTable();

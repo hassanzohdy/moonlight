@@ -67,13 +67,20 @@ export class ConditionalRenderBuilder extends InputBuilder {
    * {@inheritdoc}
    */
   protected boot(): void {
-    let isSubscribed = false;
+    // let isSubscribed = false;
     this.onRendered(() => {
-      if (!this.form.form || isSubscribed) return;
+      if (!this.form.form) return;
 
       const input = this.form.form.control(this.conditionInput);
 
       if (!input) return;
+
+      const inputValue = get(this.record, this.conditionInput) ?? input.value;
+
+      this.isMatched = inputValue === this.conditionValue;
+      if (this.isMatched) {
+        this.matchingCallback(this.isMatched);
+      }
 
       input.onChange(({ value, checked }) => {
         const isMatched =
@@ -86,7 +93,7 @@ export class ConditionalRenderBuilder extends InputBuilder {
         this.matchingCallback(isMatched);
       });
 
-      isSubscribed = true;
+      // isSubscribed = true;
     });
   }
 

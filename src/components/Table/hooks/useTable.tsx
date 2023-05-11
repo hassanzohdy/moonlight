@@ -48,7 +48,7 @@ export function useTable({
   sortCallback,
   ...otherProps
 }: TableProps & BaseTableProps): SuperTable {
-  const { current: superTable } = useRef(new SuperTable(lazy));
+  const { current: superTable } = useRef(new SuperTable(lazy, name));
 
   superTable.setRole(role).setPermissions(permissions);
 
@@ -141,9 +141,8 @@ export function useTable({
   }, [limitOptions, superTable]);
 
   useOnce(() => {
-    if (!service) {
-      return;
-    }
+    if (!service) return;
+
     if (!superTable.hasPermission("list")) return;
 
     superTable.init();
@@ -153,7 +152,7 @@ export function useTable({
     superTable.setId(id);
   }
 
-  superTable.setName(name).setProps({
+  superTable.setProps({
     ...otherProps,
     highlightOnHover: hovered,
   });

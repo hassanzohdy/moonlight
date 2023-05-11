@@ -1,9 +1,9 @@
 import { MantineColor } from "@mantine/core";
-import { TablerIcon } from "@tabler/icons-react";
+import { Icon } from "@tabler/icons-react";
 import React from "react";
 
 export type LinksGroupProps = {
-  icon: TablerIcon;
+  icon: Icon;
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];

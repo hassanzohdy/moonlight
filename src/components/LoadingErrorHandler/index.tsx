@@ -1,6 +1,5 @@
 import { Skeleton } from "@mantine/core";
 import { ErrorHandler } from "./../ErrorHandler";
-import { LoadingErrorHandlerProps } from "./types";
 
 export type LoadingErrorHandlerProps = {
   /**

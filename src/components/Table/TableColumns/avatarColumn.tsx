@@ -4,10 +4,10 @@ import { tableColumn } from "./tableColumn";
 
 export function avatarColumn(
   heading: React.ReactNode,
-  key: string,
+  imageUrlKey: string,
   name = "name",
 ) {
-  return tableColumn(key, heading).formatter(AvatarFormatter).settings({
+  return tableColumn(imageUrlKey, heading).formatter(AvatarFormatter).settings({
     name,
   });
 }
