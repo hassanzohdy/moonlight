@@ -1297,7 +1297,11 @@ export class ReactiveForm {
             title: <strong>{heading}</strong>,
             styles: theme => ({
               header: {
-                borderBottom: `1px solid ${theme.colors.gray[4]}`,
+                borderBottom: `1px solid ${
+                  theme.colorScheme === "light"
+                    ? theme.colors.gray[4]
+                    : theme.colors.dark[5]
+                }`,
               },
             }),
             opened: opened,
