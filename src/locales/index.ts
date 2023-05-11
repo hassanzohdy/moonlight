@@ -289,6 +289,22 @@ export const moonlightTranslations = {
     es: "Guardando el formulario",
     de: "Formular speichern",
   },
+  successFormSaved: {
+    en: "Form Has Been Saved Successfully",
+    ar: "تم حفظ النموذج بنجاح",
+    fr: "Le formulaire a été enregistré avec succès",
+    it: "Il modulo è stato salvato con successo",
+    es: "El formulario se ha guardado correctamente",
+    de: "Formular wurde erfolgreich gespeichert",
+  },
+  success: {
+    en: "Success",
+    ar: "نجاح",
+    fr: "Succès",
+    it: "Successo",
+    es: "Éxito",
+    de: "Erfolg",
+  },
   clear: {
     en: "Clear",
     ar: "مسح",

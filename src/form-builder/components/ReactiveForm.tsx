@@ -961,11 +961,11 @@ export class ReactiveForm {
             onClose();
           }
 
-          const message = trans("successFormSaved", {
+          const message = trans("moonlight.successFormSaved", {
             name: this.getTranslatedSingleName(),
           });
 
-          loader.success(trans("success"), message);
+          loader.success(trans("moonlight.success"), message);
 
           setTimeout(() => {
             this.callbacks.onSave.forEach(callback => callback(response, this));
@@ -1149,6 +1149,7 @@ export class ReactiveForm {
       record: incomingRecord,
       recordId,
       rowIndex: _index,
+      triggerButton,
       onSave,
       loading: incomingLoading,
       initialLoad,
@@ -1165,6 +1166,10 @@ export class ReactiveForm {
         onClose = () => {
           setOpen(false);
         };
+      }
+
+      if (triggerButton) {
+        reactiveForm._triggerButton = triggerButton;
       }
 
       if (!reactiveForm.record && record) {

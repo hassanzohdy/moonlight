@@ -43,6 +43,7 @@ export type ReactiveFormComponentProps = {
   open?: boolean;
   loading?: boolean;
   onClose?: () => void;
+  triggerButton?: React.ReactNode;
   onSave?: SaveCallback;
   initialLoad?: () => Promise<any>;
   mapLoadedData?: (response: AxiosResponse<any>) => any;
