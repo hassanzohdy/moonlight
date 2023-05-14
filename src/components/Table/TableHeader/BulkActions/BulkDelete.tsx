@@ -19,7 +19,11 @@ async function deleteMultipleRows(
 ) {
   const service: any = superTable.service;
   if (service) {
-    const loader = toastLoading(trans("deleting"), trans("deletingInProgress"));
+    const loader = toastLoading(
+      trans("moonlight.deleting"),
+      trans("moonlight.deletingInProgress"),
+    );
+
     try {
       if (service.bulkDelete) {
         const response = await service.bulkDelete(
@@ -43,9 +47,12 @@ async function deleteMultipleRows(
 
       superTable.removeBulkRows(bulkRows);
 
-      loader.success(trans("success"), trans("deleteSuccess"));
+      loader.success(
+        trans("moonlight.success"),
+        trans("moonlight.deleteSuccess"),
+      );
     } catch (error) {
-      loader.error(trans("deleteError"), parseError(error));
+      loader.error(parseError(error), trans("moonlight.deleteError"));
     }
   }
 }
@@ -108,7 +115,8 @@ export function BulkDelete() {
   });
 
   return (
-    <Tooltip label={trans("delete") + " " + modButtons(["shift", "d"])}>
+    <Tooltip
+      label={trans("moonlight.delete") + " " + modButtons(["shift", "d"])}>
       <Button
         color="red"
         onClick={openDeleteModal}

@@ -22,7 +22,7 @@ export function ToastContainer() {
 
 export function toastSuccess(
   message: React.ReactNode,
-  title: React.ReactNode = trans("success"),
+  title: React.ReactNode = trans("moonlight.success"),
   placement: NotificationsProps["position"] = "top-right",
 ) {
   toastAtom.update({
@@ -41,7 +41,7 @@ export function toastSuccess(
 
 export function toastError(
   message: React.ReactNode,
-  title: React.ReactNode = trans("error"),
+  title: React.ReactNode = trans("moonlight.error"),
   placement: NotificationsProps["position"] = "top-right",
 ) {
   toastAtom.update({
@@ -58,7 +58,7 @@ export function toastError(
 
 export function toastLoading(
   message: React.ReactNode,
-  title: React.ReactNode = trans("loading"),
+  title: React.ReactNode = trans("moonlight.loading"),
   closeAfter = 5000,
 ) {
   const id = Random.string(8);
@@ -74,7 +74,7 @@ export function toastLoading(
   return {
     success: (
       message: React.ReactNode,
-      title: React.ReactNode = trans("success"),
+      title: React.ReactNode = trans("moonlight.success"),
       notificationProps: Partial<NotificationProps> = {
         color: "green",
         autoClose: closeAfter,
@@ -90,7 +90,7 @@ export function toastLoading(
     },
     warning: (
       message: React.ReactNode,
-      title: React.ReactNode = trans("warning"),
+      title: React.ReactNode = trans("moonlight.warning"),
       notificationProps: Partial<NotificationProps> = {
         color: "yellow",
         autoClose: closeAfter,
@@ -119,7 +119,7 @@ export function toastLoading(
     },
     error: (
       message: React.ReactNode,
-      title: React.ReactNode = trans("error"),
+      title: React.ReactNode = trans("moonlight.error"),
       notificationProps: Partial<NotificationProps> = {
         color: "red",
         autoClose: closeAfter,

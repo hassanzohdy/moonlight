@@ -67,7 +67,7 @@ export function EditButton({ row, rowIndex }: FormatterProps) {
         color="green"
         radius={10000}
         onClick={openForm}>
-        <Tooltip withArrow label={trans("edit")} position="top">
+        <Tooltip withArrow label={trans("moonlight.edit")} position="top">
           <span>
             <IconPencil size={16} stroke={1.5} />
           </span>

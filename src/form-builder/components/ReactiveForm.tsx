@@ -946,7 +946,10 @@ export class ReactiveForm {
         setIslLoading(true);
         if (this._service) {
           let response: AxiosResponse<any>;
-          loader = toastLoading(trans("saving"), trans("moonlight.savingForm"));
+          loader = toastLoading(
+            trans("moonlight.saving"),
+            trans("moonlight.savingForm"),
+          );
           const service = this._service;
 
           const data = this._submitFormat === "json" ? values : formData;
@@ -991,7 +994,7 @@ export class ReactiveForm {
         }
       } catch (error) {
         if (loader) {
-          loader.error(parseError(error), trans("saveFailed"));
+          loader.error(parseError(error), trans("moonlight.saveFailed"));
         } else {
           toastError(parseError(error));
         }
@@ -1025,12 +1028,12 @@ export class ReactiveForm {
     const translatedSingleName = this.getTranslatedSingleName();
 
     if (this._recordId) {
-      return trans("updateItem", {
+      return trans("moonlight.updateItem", {
         item: translatedSingleName,
       });
     }
 
-    return trans("createItem", {
+    return trans("moonlight.createItem", {
       item: translatedSingleName,
     });
   }

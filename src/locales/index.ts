@@ -305,6 +305,115 @@ export const moonlightTranslations = {
     es: "Éxito",
     de: "Erfolg",
   },
+  error: {
+    en: "Error",
+    ar: "خطأ",
+    fr: "Erreur",
+    it: "Errore",
+    es: "Error",
+    de: "Fehler",
+  },
+  warning: {
+    en: "Warning",
+    ar: "تحذير",
+    fr: "Attention",
+    it: "Avvertimento",
+    es: "Advertencia",
+    de: "Warnung",
+  },
+  createNewRecord: {
+    en: "Create New Record",
+    ar: "إنشاء سجل جديد",
+    fr: "Créer un nouveau dossier",
+    it: "Crea nuovo record",
+    es: "Crear nuevo registro",
+    de: "Neuen Datensatz erstellen",
+  },
+  saveFailed: {
+    en: "Save Failed",
+    ar: "فشل الحفظ",
+    fr: "Échec de l'enregistrement",
+    it: "Salvataggio non riuscito",
+    es: "Error al guardar",
+    de: "Speichern fehlgeschlagen",
+  },
+  updateItem: {
+    en: "Update :item",
+    ar: "تحديث بيانات :item",
+    fr: "Mettre à jour :item",
+    it: "Aggiorna :item",
+    es: "Actualizar :item",
+    de: "Aktualisieren :item",
+  },
+  createItem: {
+    en: "Create new :item",
+    ar: "إنشاء :item جديد",
+    fr: "Créer un nouveau :item",
+    it: "Crea nuovo :item",
+    es: "Crear nuevo :item",
+    de: "Erstelle neu :item",
+  },
+  deleteItem: {
+    en: "Delete :item",
+    ar: "حذف :item",
+    fr: "Supprimer :item",
+    it: "Elimina :item",
+    es: "Eliminar :item",
+    de: "Löschen :item",
+  },
+
+  noData: {
+    en: "No data found",
+    ar: "لا يوجد بيانات",
+  },
+  deleteBulk: {
+    en: "Delete (:count)",
+    ar: "حذف (:count)",
+  },
+  confirmBulkRows: {
+    en: "Are you sure you want to delete (:count) selected rows?",
+    ar: "هل أنت متأكد من حذف (:count) الصفوف المحددة؟",
+  },
+  bulkDeleteHeading: {
+    en: "Bulk Delete Confirm",
+    ar: "تأكيد حذف متعدد",
+  },
+  cancelDelete: {
+    en: "No don't delete it",
+    ar: "لا، لا تحذفه",
+  },
+  confirmDelete: {
+    en: "Yes, delete it",
+    ar: "تأكيد الحذف",
+  },
+  confirm: {
+    en: "Confirm",
+    ar: "تأكيد",
+  },
+  confirmDeleteMessage: {
+    en: "Are you sure you want to delete this record? This action is destructive and can not be restored.",
+    ar: "هل أنت متأكد من أنك تريد حذف هذا السجل؟ هذا الإجراء غير قابل للتراجع عنه ولا يمكن إعادته.",
+  },
+  singleDeleteHeading: {
+    en: "Delete Confirm",
+    ar: "تأكيد الحذف",
+  },
+  deleting: {
+    en: "Deleting...",
+    ar: "جاري الحذف...",
+  },
+  deletingInProgress: {
+    en: "Deleting in progress...",
+    ar: "جاري الحذف...",
+  },
+  deleteSuccess: {
+    en: "Delete Operation has been done successfully",
+    ar: "تمت عملية الحذف بنجاح",
+  },
+  deleteError: {
+    en: "Error while deleting",
+    ar: "حدث خطأ أثناء الحذف",
+  },
   clear: {
     en: "Clear",
     ar: "مسح",
@@ -320,14 +429,6 @@ export const moonlightTranslations = {
   selectFile: {
     en: "Please select a file",
     ar: "ارفع ملف",
-  },
-  deleteSuccess: {
-    en: "Deleted successfully",
-    ar: "تم الحذف بنجاح",
-  },
-  deleteError: {
-    en: "Error in deleting",
-    ar: "حدث خطأ أثناء الحذف",
   },
   uploadingFile: {
     en: "Uploading file",

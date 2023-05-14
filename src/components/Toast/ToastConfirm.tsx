@@ -13,8 +13,8 @@ export function toastConfirm(
 ): Promise<boolean> {
   const defaultOptions = {
     color: "red",
-    confirmLabel: trans("confirm"),
-    cancelLabel: trans("cancel"),
+    confirmLabel: trans("moonlight.confirm"),
+    cancelLabel: trans("moonlight.cancel"),
   };
 
   return new Promise(resolve => {

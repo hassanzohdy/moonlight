@@ -30,7 +30,7 @@ export function createButton(Form: React.ComponentType<any>) {
     useOnce(() => {
       return superTable.registerKeyboardShortcut({
         keys: ["mod", "Q"],
-        description: "Create New Record",
+        description: trans("moonlight.createNewRecord"),
       });
     });
 
@@ -38,7 +38,7 @@ export function createButton(Form: React.ComponentType<any>) {
       <>
         <Tooltip label={modButtons(["q"])}>
           <Button onClick={open} variant="light">
-            {trans("create")}
+            {trans("moonlight.create")}
           </Button>
         </Tooltip>
 
