@@ -11,8 +11,7 @@ import { Random } from "@mongez/reinforcements";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import React from "react";
 import { toastAtom } from "../../atoms/moonlight-toast";
-
-export { toastConfirm } from "./ToastConfirm";
+export { toastConfirm } from "./toast-confirm";
 
 export function ToastContainer() {
   const position = toastAtom.useWatcher("position");

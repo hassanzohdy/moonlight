@@ -48,7 +48,7 @@ export function parseError(error: any) {
 
     errorContent = <List>{errorsList}</List>;
   } else {
-    errorContent = <Text color="gray">{error}</Text>;
+    errorContent = <Text>{error}</Text>;
   }
 
   return errorContent;
