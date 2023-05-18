@@ -14,7 +14,7 @@ import { toastAtom } from "../../atoms/moonlight-toast";
 export { toastConfirm } from "./toast-confirm";
 
 export function ToastContainer() {
-  const position = toastAtom.useWatcher("position");
+  const position = toastAtom.use("position");
 
   return <Notifications position={position}></Notifications>;
 }
@@ -24,10 +24,7 @@ export function toastSuccess(
   title: React.ReactNode = trans("moonlight.success"),
   placement: NotificationsProps["position"] = "top-right",
 ) {
-  toastAtom.update({
-    ...toastAtom.value,
-    position: placement,
-  });
+  toastAtom.change("position", placement);
 
   showNotification({
     title: title,
@@ -43,10 +40,7 @@ export function toastError(
   title: React.ReactNode = trans("moonlight.error"),
   placement: NotificationsProps["position"] = "top-right",
 ) {
-  toastAtom.update({
-    ...toastAtom.value,
-    position: placement,
-  });
+  toastAtom.change("position", placement);
   showNotification({
     title,
     message,

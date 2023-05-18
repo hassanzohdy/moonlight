@@ -36,12 +36,21 @@ export function withCheckboxInput<T>(
   }: T & DefaultCheckboxProps) {
     const options = { ...defaultOptions, ...incomingOptions };
 
-    const { checked, id, disabled, otherProps, visibleElementRef, setChecked } =
-      useFormControl(props as FormControlProps, {
-        uncheckedValue,
-        collectUnchecked,
-        multiple: multiple !== undefined ? multiple : options.multiple,
-      });
+    const {
+      checked,
+      id,
+      disabled,
+      otherProps,
+      visibleElementRef,
+      setChecked,
+      formControl,
+    } = useFormControl(props as FormControlProps, {
+      uncheckedValue,
+      collectUnchecked,
+      multiple: multiple !== undefined ? multiple : options.multiple,
+    });
+
+    console.log(formControl);
 
     return (
       <span ref={visibleElementRef}>
