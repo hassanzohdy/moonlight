@@ -1,6 +1,6 @@
 {
     "name": "@mongez/moonlight",
-    "version": "1.1.20",
+    "version": "1.1.21",
     "description": "A Massive React Builder and ready-made components for web apps.",
     "main": "src/index.ts",
     "dependencies": {
@@ -24,7 +24,7 @@
         "@react-google-maps/api": "^2.18.1",
         "use-places-autocomplete": "^4.0.0",
         "@thaddeusjiang/react-sortable-list": "^0.1.1",
-        "@tabler/icons": "^2.19.0"
+        "@tabler/icons": "^2.20.0"
     },
     "devDependencies": {
         "typescript": "^5.0.4"

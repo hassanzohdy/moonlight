@@ -69,7 +69,7 @@ export class ConditionalRenderBuilder extends InputBuilder {
   protected boot(): void {
     // let isSubscribed = false;
     this.onRendered(() => {
-      if (!this.form.form) return;
+      if (!this.form?.form) return;
 
       const input = this.form.form.control(this.conditionInput);
 

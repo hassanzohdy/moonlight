@@ -321,6 +321,14 @@ export const moonlightTranslations = {
     es: "Advertencia",
     de: "Warnung",
   },
+  create: {
+    en: "Create",
+    ar: "إنشاء",
+    fr: "Créer",
+    it: "Creare",
+    es: "Crear",
+    de: "Erstellen",
+  },
   createNewRecord: {
     en: "Create New Record",
     ar: "إنشاء سجل جديد",

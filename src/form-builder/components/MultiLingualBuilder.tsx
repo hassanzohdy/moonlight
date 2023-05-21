@@ -60,6 +60,16 @@ export class MultiLingualBuilder extends InputBuilder {
       return localeCodes;
     };
 
+    if (value && !Array.isArray(value)) {
+      const input: InputBuilder = this.input.clone();
+
+      return input
+        .hint(this._hint)
+        .hintOptions(this._hintOptions)
+        .description(this._description)
+        .render();
+    }
+
     const localeCodes = value ? getFromValue() : getLocaleCodes();
 
     const baseInputName = this.name();
