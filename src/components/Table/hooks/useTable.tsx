@@ -1,6 +1,7 @@
 import { TableProps as BaseTableProps } from "@mantine/core";
 import { useEvent, useOnce } from "@mongez/react-hooks";
 import { useEffect, useRef } from "react";
+import { getMoonlightConfig } from "../../../config";
 import { SuperTable } from "../SuperTable";
 import { createButton } from "../SuperTable/Actions/CreateButton";
 import { TableProps } from "../TableProps";
@@ -23,12 +24,12 @@ export function useTable({
   data,
   form,
   title,
-  bulkActions,
+  bulkActions = getMoonlightConfig("table.bulkActions"),
   defaultParams,
   withHelmet,
   filters,
   filterOptions,
-  bulkSelection = true,
+  bulkSelection = bulkActions !== undefined && bulkActions.length > 0,
   updateQueryString,
   id,
   lazy = service !== undefined,
@@ -177,8 +178,12 @@ export function useTable({
     superTable.setUpdateQueryString(updateQueryString);
   }
 
-  if (bulkSelection && bulkActions !== undefined) {
-    superTable.enableBulkSelection(bulkSelection).setBulkActions(bulkActions);
+  if (bulkSelection !== undefined) {
+    superTable.enableBulkSelection(bulkSelection);
+  }
+
+  if (bulkActions !== undefined) {
+    superTable.setBulkActions(bulkActions);
   }
 
   if (filters) {

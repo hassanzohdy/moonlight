@@ -1,7 +1,7 @@
 import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import Endpoint from "@mongez/http";
 import { AxiosResponse } from "axios";
-import React from "react";
+import React, { ComponentType } from "react";
 import { PaginationInfo } from "../components";
 import { Fileable } from "../components/Form/DropzoneInput.types";
 import { TableKeys } from "../components/Table/TableProps";
@@ -232,6 +232,16 @@ export type MoonlightConfigurations = {
      * @default false
      */
     fetchRecord?: boolean;
+    /**
+     * Whether to enable bulk selection or not
+     *
+     * @default if bulkActions is set, then true, otherwise false
+     */
+    bulkSelection?: boolean;
+    /**
+     * Set bulk actions when user selects multiple rows
+     */
+    bulkActions?: ComponentType<any>[];
     /**
      * List of actions used by default when calling actionColumn
      *

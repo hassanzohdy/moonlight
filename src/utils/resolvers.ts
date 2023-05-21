@@ -1,6 +1,11 @@
 import { getMoonlightConfig } from "../config";
 
-export const queryString = () => getMoonlightConfig("router.queryString");
+export const queryString = () =>
+  getMoonlightConfig("router.queryString") || {
+    all: () => ({}),
+    get: () => ({}),
+    update: () => ({}),
+  };
 
 export const components = {
   link: getMoonlightConfig("components.link"),
