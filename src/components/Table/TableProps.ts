@@ -121,7 +121,7 @@ export type TableProps = {
   /**
    * Table name
    */
-  name: string;
+  name?: string;
   /**
    * Base roles for table
    * All permissions will be prefixed with the role name

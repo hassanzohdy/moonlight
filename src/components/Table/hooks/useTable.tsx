@@ -50,7 +50,11 @@ export function useTable({
 }: TableProps & BaseTableProps): SuperTable {
   const { current: superTable } = useRef(new SuperTable(lazy, name));
 
-  superTable.setRole(role).setPermissions(permissions);
+  if (role) {
+    superTable.setRole(role);
+  }
+
+  superTable.setPermissions(permissions);
 
   superTable.setOriginalData(data);
 

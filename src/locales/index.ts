@@ -345,6 +345,10 @@ export const moonlightTranslations = {
     es: "Error al guardar",
     de: "Speichern fehlgeschlagen",
   },
+  rowSelection: {
+    en: "Row Selection",
+    ar: "تحديد الصفوف",
+  },
   updateItem: {
     en: "Update :item",
     ar: "تحديث بيانات :item",

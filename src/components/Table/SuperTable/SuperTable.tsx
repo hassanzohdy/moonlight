@@ -295,7 +295,10 @@ export class SuperTable {
   /**
    * Constructor
    */
-  public constructor(public lazyTable = false, name: string) {
+  public constructor(
+    public lazyTable = false,
+    name: string = "superTable." + Random.int(1000, 100000),
+  ) {
     this.setId(Random.id());
     this.setName(name);
 
@@ -887,7 +890,25 @@ export class SuperTable {
       return this.load(paramsList);
     }
 
+    // if the table is not lazy, we should update the current rendered data
+
+    const currentLimitValue = this.paginationInfo.limit;
+    const startIndex = (pageNumber - 1) * currentLimitValue;
+    const endIndex = startIndex + currentLimitValue;
+
+    const newRows = (this.originalData as any[]).slice(startIndex, endIndex);
+
+    this.setData(newRows);
+
+    this.setPaginationInfo({
+      ...this.paginationInfo,
+      page: pageNumber,
+      results: newRows.length,
+    });
+
     this.trigger("pageChange", pageNumber, paramsList);
+
+    return this;
   }
 
   /**
@@ -923,7 +944,7 @@ export class SuperTable {
     if (this.bulkSelection) {
       columns = [
         tableColumn("bulkSelection")
-          .setHeading(trans("rowsControl"))
+          .setHeading(trans("moonlight.rowSelection"))
           .headingComponent(BulkSelectionHeading)
           .formatter(BulkSelectionFormatter)
           .validate(() => {
