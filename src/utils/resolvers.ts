@@ -13,8 +13,8 @@ export const components = {
 };
 
 export const router = {
-  currentRoute: () => getMoonlightConfig("router.currentRoute")(),
+  currentRoute: () => getMoonlightConfig("router.currentRoute") || (() => "/"),
   navigateTo: (...args: any) =>
-    getMoonlightConfig("router.navigateTo")(...args),
+    (getMoonlightConfig("router.navigateTo") || (() => null))(...args),
   notFoundRoute: () => getMoonlightConfig("router.notFoundRoute") || "/404",
 };

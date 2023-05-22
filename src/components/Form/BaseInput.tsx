@@ -30,6 +30,7 @@ function _BaseInput({
     inputRef,
     error,
     id,
+    disabled,
     otherProps,
   } = useFormControl(props);
 
@@ -113,6 +114,7 @@ function _BaseInput({
           error={error}
           ref={inputRef}
           readOnly={loading}
+          disabled={disabled}
           rightSection={rightSection}
           styles={() => ({
             input: {

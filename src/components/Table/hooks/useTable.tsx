@@ -17,7 +17,7 @@ export function useTable({
   name,
   role = name,
   columns,
-  hovered,
+  hovered = true,
   service,
   permissions = { ...defaultPermissions },
   buttons,

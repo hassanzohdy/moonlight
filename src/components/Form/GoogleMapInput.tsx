@@ -50,14 +50,7 @@ export function GoogleMapInput({
   searchScope = ["address"],
   ...props
 }: any) {
-  const {
-    error,
-    visibleElementRef,
-    value: storedValue,
-    name,
-    id,
-    changeValue,
-  } = useFormControl(
+  const { error, visibleElementRef, id, changeValue } = useFormControl(
     {
       ...props,
       defaultValue,
@@ -120,7 +113,6 @@ export function GoogleMapInput({
 
         setLocation(newLocation);
         setValue(newLocation.address, false);
-        console.log(newLocation);
 
         changeValue(newLocation);
       });

@@ -10,11 +10,18 @@ function _TextAreaInput(
   { dir, label, required, placeholder, description, ...props }: BaseInputProps,
   ref: any,
 ) {
-  const { id, value, visibleElementRef, changeValue, error, otherProps } =
-    useFormControl({
-      ...props,
-      required,
-    });
+  const {
+    id,
+    value,
+    visibleElementRef,
+    changeValue,
+    disabled,
+    error,
+    otherProps,
+  } = useFormControl({
+    ...props,
+    required,
+  });
 
   return (
     <>
@@ -28,6 +35,7 @@ function _TextAreaInput(
         required={required}>
         <Textarea
           id={id}
+          disabled={disabled}
           ref={ref}
           styles={() => ({
             input: {

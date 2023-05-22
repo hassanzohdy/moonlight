@@ -10,7 +10,7 @@ export function ViewButton({ row, rowIndex, settings }: FormatterProps) {
 
   if (superTable.forbids("view", row, rowIndex)) return null;
 
-  const route = settings?.route || router.currentRoute() + "/" + row.id;
+  const route = settings?.route || router.currentRoute()() + "/" + row.id;
 
   return (
     <Anchor component={components.link} to={route}>
