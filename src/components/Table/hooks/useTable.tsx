@@ -22,6 +22,7 @@ export function useTable({
   permissions = { ...defaultPermissions },
   buttons,
   data,
+  shortcuts,
   form,
   title,
   bulkActions = getMoonlightConfig("table.bulkActions"),
@@ -39,6 +40,7 @@ export function useTable({
   pagination = true,
   onPageChange,
   onSortChange,
+  displayHeader,
   onFilterChange,
   limitOptions,
   onPageSizeChange,
@@ -46,6 +48,7 @@ export function useTable({
   fetchRecord,
   total,
   defaultRecord,
+  columnsSelections,
   sortCallback,
   ...otherProps
 }: TableProps & BaseTableProps): SuperTable {
@@ -53,6 +56,18 @@ export function useTable({
 
   if (role) {
     superTable.setRole(role);
+  }
+
+  if (shortcuts !== undefined) {
+    superTable.shortcuts = shortcuts;
+  }
+
+  if (columnsSelections !== undefined) {
+    superTable.columnsSelections = columnsSelections;
+  }
+
+  if (displayHeader !== undefined) {
+    superTable.displayHeader = displayHeader;
   }
 
   superTable.setPermissions(permissions);

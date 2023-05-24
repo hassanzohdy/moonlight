@@ -121,6 +121,7 @@ export function useSelect(
   };
 
   const lazyRequested = useRef(false);
+  const searchKeywordsRef = useRef("");
 
   useEffect(() => {
     if (!request) return;
@@ -181,9 +182,16 @@ export function useSelect(
   };
 
   const onSearchChange = (keywords: string) => {
-    if (!searchRequest || !trim(keywords)) return;
+    if (
+      !searchRequest ||
+      !trim(keywords) ||
+      searchKeywordsRef.current === keywords
+    )
+      return;
 
     if (keywords === value) return;
+
+    searchKeywordsRef.current = keywords;
 
     loadRequest(() => searchRequest(keywords));
   };

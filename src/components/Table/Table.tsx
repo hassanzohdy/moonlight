@@ -38,3 +38,14 @@ function _Table(props: TableProps & BaseTableProps) {
 export const Table = React.memo(_Table);
 
 Table.displayName = "Table";
+
+export const BasicTable = React.memo(function _BasicTable(props: TableProps) {
+  return (
+    <Table
+      bulkSelection={false}
+      displayHeader={false}
+      shortcuts={false}
+      {...props}
+    />
+  );
+});

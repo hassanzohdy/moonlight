@@ -25,7 +25,9 @@ export default function SuperTableShortcuts() {
     });
   });
 
-  if (!superTable.shortcutsEnabled) return null;
+  console.log(superTable.shortcuts);
+
+  if (!superTable.shortcuts) return null;
 
   return (
     <>

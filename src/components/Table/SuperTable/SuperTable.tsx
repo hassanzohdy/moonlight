@@ -147,6 +147,11 @@ export class SuperTable {
   public fetchRecord = getMoonlightConfig("table.fetchRecord", false);
 
   /**
+   * Determine whether to display the table header
+   */
+  public displayHeader = getMoonlightConfig("table.displayHeader", true);
+
+  /**
    * Table base form
    */
   public baseForm?: React.FC<any>;
@@ -199,7 +204,7 @@ export class SuperTable {
   /**
    * Determine whether to enable bulk selection
    */
-  protected bulkSelection = true;
+  public bulkSelection = getMoonlightConfig("table.bulkSelection", false);
 
   /**
    * Cache displayed columns with bulk selection
@@ -255,7 +260,15 @@ export class SuperTable {
   /**
    * Determine if shortcuts are enabled
    */
-  public shortcutsEnabled = getMoonlightConfig("table.shortcutsEnabled", true);
+  public shortcuts = getMoonlightConfig("table.shortcuts", false);
+
+  /**
+   * Determine if columns selections should be displayed
+   */
+  public columnsSelections = getMoonlightConfig(
+    "table.columnsSelections",
+    true,
+  );
 
   /**
    * Registered shortcuts for this table

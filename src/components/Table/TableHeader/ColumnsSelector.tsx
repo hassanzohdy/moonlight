@@ -1,10 +1,12 @@
 import { Button, Menu } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { CheckboxInput } from "../../Form";
+import { useSuperTable } from "../hooks";
 import { useColumnsSelector } from "../hooks/useColumnsSelector";
 import { ColumnsSelectorDropdown } from "./style";
 
 export function ColumnsSelector() {
+  const superTable = useSuperTable();
   const {
     defaultDisplayedColumns,
     resetDisplayedColumns,
@@ -14,6 +16,8 @@ export function ColumnsSelector() {
     checkedColumnsList,
     canResetDisplayedColumns,
   } = useColumnsSelector();
+
+  if (!superTable.columnsSelections) return null;
 
   return (
     <>

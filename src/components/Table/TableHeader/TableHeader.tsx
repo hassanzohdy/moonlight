@@ -34,11 +34,13 @@ export function TableHeader() {
 
   const Helmet = components.Helmet();
 
+  if (superTable.displayHeader === false) return null;
+
   return (
     <>
       {superTable.withHelmet && Helmet && <Helmet title={superTable.title} />}
 
-      <Paper mb={50} shadow="md" radius="md" p="xs">
+      <Paper mb={50} shadow="sm" radius="md" p="xs">
         <Wrapper>
           <Box>
             <Text component="h1" my={0} weight={600} size="xl">

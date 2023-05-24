@@ -123,6 +123,18 @@ export type TableProps = {
    */
   name?: string;
   /**
+   * Enable shortcuts
+   */
+  shortcuts?: boolean;
+  /**
+   * Display table header
+   */
+  displayHeader?: boolean;
+  /**
+   * Whether to show columns selections
+   */
+  columnsSelections?: boolean;
+  /**
    * Base roles for table
    * All permissions will be prefixed with the role name
    * i.e the table list will be `role.list`, create will be `role.create`, etc.

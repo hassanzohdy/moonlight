@@ -223,8 +223,14 @@ export type MoonlightConfigurations = {
     keys?: TableKeys;
     /**
      * Limit options
+     *
+     * if set to false, then it will be hidden
      */
-    limitOptions?: number[];
+    limitOptions?: number[] | false;
+    /**
+     * Whether to display table header
+     */
+    displayHeader?: boolean;
     /**
      * If set to true, then when updating record or cloning it, it will fetch first data from api,
      * otherwise, it will be taken from the current table row
@@ -242,6 +248,14 @@ export type MoonlightConfigurations = {
      * Set bulk actions when user selects multiple rows
      */
     bulkActions?: ComponentType<any>[];
+    /**
+     * Wether to enable shortcuts
+     */
+    shortcuts?: boolean;
+    /**
+     * Whether to enable columns selection
+     */
+    columnsSelections?: boolean;
     /**
      * List of actions used by default when calling actionColumn
      *
