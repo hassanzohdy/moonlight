@@ -1,9 +1,11 @@
 import { trans } from "@mongez/localization";
 import { FormControlProps } from "@mongez/react-form";
+import { IconHelp } from "@tabler/icons-react";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { SelectHookOptions, useSelect } from "../../../hooks/use-select";
 import { defaultSelectProps } from "../../../utils/select";
+import { Tooltip } from "../../Tooltip";
 import { InputWrapper } from "../InputWrapper";
 
 export type SelectInputProps = FormControlProps & {
@@ -32,7 +34,7 @@ export const BaseSelect = (
   defaultProps = defaultSelectProps,
 ) => {
   function _SelectInput(
-    { label, placeholder, description, icon, ...props }: SelectInputProps,
+    { label, placeholder, description, hint, icon, ...props }: SelectInputProps,
     ref: any,
   ) {
     const {
@@ -49,6 +51,26 @@ export const BaseSelect = (
       dataList,
     } = useSelect(props, selectHookOptions);
 
+    let inputDescription = description || hint;
+
+    if (hint) {
+      inputDescription = (
+        <>
+          {description || trans("moonlight.didYouKnow")}
+          <Tooltip multiline label={hint}>
+            <span
+              style={{
+                verticalAlign: "middle",
+                marginInlineStart: "0.2rem",
+                display: "inline-block",
+              }}>
+              <IconHelp size="1.0rem" />
+            </span>
+          </Tooltip>
+        </>
+      );
+    }
+
     return (
       <>
         <InputWrapper
@@ -56,7 +78,7 @@ export const BaseSelect = (
           error={error}
           id={id}
           label={label}
-          description={description}
+          description={inputDescription}
           required={props.required}>
           <Component
             clearable={!props.required}

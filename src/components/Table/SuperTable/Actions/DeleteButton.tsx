@@ -14,7 +14,7 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
     openConfirmModal({
       title: (
         <Text fw="bold" color="red.7">
-          {trans("singleDeleteHeading")}
+          {trans("moonlight.singleDeleteHeading")}
         </Text>
       ),
       centered: true,
@@ -22,10 +22,12 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
       transitionProps: {
         exitDuration: 400,
       },
-      children: <Text size="sm">{trans("confirmDeleteMessage")}</Text>,
+      children: (
+        <Text size="sm">{trans("moonlight.confirmDeleteMessage")}</Text>
+      ),
       labels: {
-        confirm: trans("confirmDelete"),
-        cancel: trans("cancelDelete"),
+        confirm: trans("moonlight.confirmDelete"),
+        cancel: trans("moonlight.cancelDelete"),
       },
       closeOnConfirm: true,
       closeOnCancel: true,

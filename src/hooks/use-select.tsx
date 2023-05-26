@@ -45,11 +45,17 @@ export function useSelect(
 
   const [dataList, setData] = useState(mapData(data, except, mapOption));
   const [isOpen, setOpen] = useState(false);
+  // should be used with multiple values only
+  const selectedValuesListRef = useRef<any[]>([]);
 
   const initialRender = useRef(false);
 
   const setDataList = (data: any[], config?: any) => {
-    setData(data);
+    if (config?.keepValue && multiple) {
+      setData([...new Set([...data, ...selectedValuesListRef.current])]);
+    } else {
+      setData(data);
+    }
 
     const currentValue = multiple
       ? (value || []).map(value => String(value))
@@ -170,6 +176,12 @@ export function useSelect(
     const [parsedValue, options] = onChangeProp(newValue, dataList);
 
     changeFormControlValue(parsedValue, options);
+
+    if (multiple) {
+      selectedValuesListRef.current = dataList.filter(option =>
+        newValue.includes(option.value),
+      );
+    }
   };
 
   useEffect(() => {
