@@ -59,10 +59,10 @@ function _BaseInput({
 
   let inputDescription = description || hint;
 
-  if (hint && !description) {
+  if (hint) {
     inputDescription = (
       <>
-        {description || trans("didYouKnow")}
+        {description || trans("moonlight.didYouKnow")}
         <Tooltip multiline label={hint}>
           <span
             style={{

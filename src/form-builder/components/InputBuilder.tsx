@@ -754,7 +754,7 @@ export class InputBuilder {
         typeof this._hint === "string" ? trans(this._hint) : this._hint;
       props.description = (
         <>
-          {props.description || trans("didYouKnow")}
+          {props.description || trans("moonlight.didYouKnow")}
           <Tooltip
             width={this._hintOptions.width}
             transitionProps={{

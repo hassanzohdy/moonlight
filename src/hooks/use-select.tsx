@@ -48,7 +48,7 @@ export function useSelect(
 
   const initialRender = useRef(false);
 
-  const setDataList = (data: any[]) => {
+  const setDataList = (data: any[], config?: any) => {
     setData(data);
 
     const currentValue = multiple
@@ -63,12 +63,13 @@ export function useSelect(
           return stringedData.includes(value);
         });
 
-        if (totalFound === 0 && initialRender.current) {
+        if (totalFound === 0 && initialRender.current && !config?.keepValue) {
           changeValue([]);
         }
       } else if (
         initialRender.current &&
-        !data.find(option => String(option.value) === currentValue)
+        !data.find(option => String(option.value) === currentValue) &&
+        !config?.keepValue
       ) {
         changeValue("");
       }
@@ -95,7 +96,13 @@ export function useSelect(
     }, 0);
   });
 
-  const loadRequest = (request, data = {}) => {
+  const loadRequest = (
+    request,
+    data = {},
+    config = {
+      keepValue: false,
+    },
+  ) => {
     if (!request) return;
 
     loading(true);
@@ -107,7 +114,9 @@ export function useSelect(
 
       const data: any[] = get(response.data, dataKey, []);
 
-      setDataList(mapData(data, except, mapOption));
+      setDataList(mapData(data, except, mapOption), {
+        keepValue: config.keepValue,
+      });
       loading(false);
     });
 
@@ -193,7 +202,13 @@ export function useSelect(
 
     searchKeywordsRef.current = keywords;
 
-    loadRequest(() => searchRequest(keywords));
+    loadRequest(
+      () => searchRequest(keywords),
+      {},
+      {
+        keepValue: true,
+      },
+    );
   };
 
   return {

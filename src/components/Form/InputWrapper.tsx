@@ -23,7 +23,7 @@ export function InputWrapper({
   if (hint && !description) {
     inputDescription = (
       <>
-        {description || trans("didYouKnow")}
+        {description || trans("moonlight.didYouKnow")}
         <Tooltip multiline label={hint}>
           <span
             style={{

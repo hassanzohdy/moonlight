@@ -17,6 +17,14 @@ export const moonlightTranslations = {
     es: "Reiniciar",
     de: "Zurücksetzen",
   },
+  didYouKnow: {
+    en: "Did you know?",
+    ar: "هل تعلم؟",
+    fr: "Saviez-vous que?",
+    it: "Lo sapevi?",
+    es: "¿Sabías?",
+    de: "Wusstest du?",
+  },
   all: {
     en: "All",
     ar: "الكل",
