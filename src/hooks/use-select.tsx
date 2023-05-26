@@ -39,6 +39,9 @@ export function useSelect(
     visibleElementRef,
   } = useFormControl(props, {
     multiple,
+    collectValue(formControl) {
+      return formControl.value;
+    },
   });
 
   const [isLoading, loading] = useState(request !== undefined);
