@@ -11,18 +11,21 @@ export type BaseInputProps = FormControlProps & {
   description?: React.ReactNode;
 };
 
-function _BaseInput({
-  dir,
-  component: Component = TextInput,
-  loading,
-  description,
-  placeholder,
-  hint,
-  tooltip,
-  label,
-  handleValueChange = e => e.target.value,
-  ...props
-}: BaseInputProps) {
+function _BaseInput(
+  {
+    dir,
+    component: Component = TextInput,
+    loading,
+    description,
+    placeholder,
+    hint,
+    tooltip,
+    label,
+    handleValueChange = e => e.target.value,
+    ...props
+  }: BaseInputProps,
+  ref: any,
+) {
   const {
     value,
     changeValue,
@@ -112,7 +115,12 @@ function _BaseInput({
           }}
           label={label}
           error={error}
-          ref={inputRef}
+          ref={input => {
+            inputRef.current = input;
+            if (ref) {
+              ref.current = input;
+            }
+          }}
           readOnly={loading}
           disabled={disabled}
           rightSection={rightSection}
@@ -133,4 +141,4 @@ function _BaseInput({
   );
 }
 
-export const BaseInput = React.memo(_BaseInput);
+export const BaseInput = React.memo(React.forwardRef(_BaseInput));

@@ -54,7 +54,7 @@ export function DatePickerInput({
       return dayjs(value, getMoonlightConfig("form.date.dateFormat")).toDate();
     }
 
-    if (value.timestamp) return new Date(value.timestamp * 1000);
+    if (value.timestamp) return new Date(value.timestamp);
 
     return value;
   });

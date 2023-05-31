@@ -4,6 +4,8 @@ import { HTMLAttributes } from "react";
 
 export function SubmitButton({
   children,
+  loading,
+  disabled: incomingDisabled,
   ...props
 }: ButtonProps & HTMLAttributes<HTMLButtonElement>) {
   const { isSubmitting, disabled } = useSubmitButton();
@@ -14,8 +16,8 @@ export function SubmitButton({
         type="submit"
         color="blue"
         {...props}
-        loading={isSubmitting}
-        disabled={disabled || isSubmitting}>
+        loading={loading || isSubmitting}
+        disabled={incomingDisabled || disabled || isSubmitting}>
         {children}
       </PrimaryButton>
     </>

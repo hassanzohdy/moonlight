@@ -14,6 +14,7 @@ function _RadioInput(props: RadioInputProps, ref: any) {
     value,
     checked,
     name,
+    error,
     visibleElementRef,
     setChecked,
     otherProps,
@@ -28,6 +29,7 @@ function _RadioInput(props: RadioInputProps, ref: any) {
       id={id}
       value={value}
       name={name}
+      error={error}
       checked={checked}
       styles={{
         label: {
