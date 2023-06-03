@@ -4,7 +4,7 @@ import { trans } from "@mongez/localization";
 import { useOnce } from "@mongez/react-hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { parseError } from "../../../../utils";
-import { toastLoading } from "../../../Toast";
+import { toastLoading } from "../../../toasters";
 import { BulkSelectionRow, SuperTable } from "../../SuperTable";
 import { useBulkRows } from "../../hooks/useBulkRows";
 import { useSuperTable } from "../../hooks/useSuperTable";

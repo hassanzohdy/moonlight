@@ -24,7 +24,7 @@ import {
   parseError,
 } from "../../utils";
 import { acceptImagesOnly } from "../../utils/extensions";
-import { toastError, toastLoading } from "../Toast";
+import { toastError, toastLoading } from "../toasters";
 import { Tooltip } from "../Tooltip";
 import { InputWrapper } from "./InputWrapper";
 

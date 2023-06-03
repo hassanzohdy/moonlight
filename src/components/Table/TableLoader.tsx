@@ -2,7 +2,7 @@ import { LoadingOverlay } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { useRef } from "react";
 import { moonlightTranslations } from "../../locales";
-import { toastLoading } from "../Toast";
+import { toastLoading } from "../toasters";
 import { useSuperTable } from "./hooks/useSuperTable";
 import { useTableChange } from "./hooks/useTableChange";
 

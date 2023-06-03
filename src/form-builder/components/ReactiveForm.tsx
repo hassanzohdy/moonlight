@@ -20,7 +20,7 @@ import { Random, get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
 import { Wrapper } from "../../components/FormModal/style";
-import { toastError, toastLoading } from "../../components/Toast";
+import { toastError, toastLoading } from "../../components/toasters";
 import { getMoonlightConfig } from "../../config";
 import { parseError } from "./../../utils/parse-error";
 import {

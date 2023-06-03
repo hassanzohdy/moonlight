@@ -1,4 +1,4 @@
-import { toastError } from "../components/Toast";
+import { toastError } from "../components/toasters";
 import { parseError } from "./parse-error";
 
 /**

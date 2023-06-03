@@ -5,7 +5,7 @@ import { Form } from "@mongez/react-form";
 import React, { useMemo, useState } from "react";
 import { parseError } from "../../utils/parse-error";
 import { SubmitButton } from "../Form/SubmitButton";
-import { toastLoading } from "../Toast";
+import { toastLoading } from "../toasters";
 import { Wrapper } from "./style";
 
 export function FormModal({

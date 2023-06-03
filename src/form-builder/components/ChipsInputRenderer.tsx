@@ -2,7 +2,7 @@ import { Col, Flex, Loader } from "@mantine/core";
 import { get } from "@mongez/reinforcements";
 import React, { useEffect, useMemo, useState } from "react";
 import { InputWrapper } from "../../components/Form";
-import { toastError } from "../../components/Toast";
+import { toastError } from "../../components/toasters";
 import { getMoonlightConfig } from "./../../config";
 import { parseError } from "./../../utils/parse-error";
 import { ChipsInputBuilder } from "./ChipsInputBuilder";

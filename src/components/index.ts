@@ -8,5 +8,5 @@ export * from "./Icons";
 export * from "./Image";
 export * from "./LoadingErrorHandler";
 export * from "./Table";
-export * from "./Toast";
 export * from "./Tooltip";
+export * from "./toasters";
