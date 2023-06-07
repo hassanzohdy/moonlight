@@ -6,6 +6,7 @@ export function publishedInput() {
     .label(getMoonlightConfig("publishedColumn.label"))
     .defaultValue(true)
     .setComponentProps({
+      collectUnchecked: true,
       uncheckedValue: false,
     })
     .defaultChecked();

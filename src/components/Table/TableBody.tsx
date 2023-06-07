@@ -46,7 +46,9 @@ function _TableBody() {
         <tr
           key={row.uniqueId}
           onMouseOver={() => superTable.hovering({ row, rowIndex })}
-          onMouseOut={() => superTable.hovering(null)}>
+          onMouseOut={() => {
+            superTable.hovering(null);
+          }}>
           {superTable.columns.map((column, columnIndex) => {
             return (
               <TableCell

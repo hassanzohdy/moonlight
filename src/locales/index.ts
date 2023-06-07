@@ -25,6 +25,22 @@ export const moonlightTranslations = {
     es: "¿Sabías?",
     de: "Wusstest du?",
   },
+  edit: {
+    en: "Edit",
+    ar: "تعديل",
+    fr: "Modifier",
+    it: "Modificare",
+    es: "Editar",
+    de: "Bearbeiten",
+  },
+  delete: {
+    en: "Delete",
+    ar: "حذف",
+    fr: "Supprimer",
+    it: "Elimina",
+    es: "Eliminar",
+    de: "Löschen",
+  },
   all: {
     en: "All",
     ar: "الكل",

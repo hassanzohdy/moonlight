@@ -1,4 +1,4 @@
-import { TableProps as BaseTableProps } from "@mantine/core";
+import { TableProps as BaseTableProps, Box } from "@mantine/core";
 import React from "react";
 import { router } from "../../utils/resolvers";
 import { SuperTableContext } from "./Context/SuperTableContext";
@@ -21,16 +21,18 @@ function _Table(props: TableProps & BaseTableProps) {
 
   return (
     <SuperTableContext.Provider value={superTable}>
-      <TableLoader />
-      <TableHeader />
-      <TableWrapper>
-        <StyledTable {...superTable.props}>
-          <TableHeading />
-          <TableBody />
-        </StyledTable>
-      </TableWrapper>
-      <PaginationResults />
-      <Pagination />
+      <Box pos="relative">
+        <TableLoader />
+        <TableHeader />
+        <TableWrapper>
+          <StyledTable {...superTable.props}>
+            <TableHeading />
+            <TableBody />
+          </StyledTable>
+        </TableWrapper>
+        <PaginationResults />
+        <Pagination />
+      </Box>
     </SuperTableContext.Provider>
   );
 }

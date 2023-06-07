@@ -25,6 +25,7 @@ export function useTable({
   shortcuts,
   form,
   title,
+  description,
   bulkActions = getMoonlightConfig("table.bulkActions"),
   defaultParams,
   withHelmet,
@@ -221,6 +222,10 @@ export function useTable({
 
   if (title) {
     superTable.setTitle(title);
+  }
+
+  if (description) {
+    superTable.setDescription(description);
   }
 
   superTable.setColumns(columns);

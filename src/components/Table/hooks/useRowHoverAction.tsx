@@ -23,6 +23,7 @@ export function useRowHoverAction(options: RowHoverHookOptions) {
         options.in(event);
       }
     };
+
     return superTable.onRowHovered(options.id, (hoveredRow: boolean) => {
       document.removeEventListener("keydown", eventCallback);
       if (!hoveredRow) {

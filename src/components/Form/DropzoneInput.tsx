@@ -24,8 +24,8 @@ import { FileRejection } from "react-dropzone";
 import { moonlightTranslations } from "../../locales";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
 import { parseError } from "../../utils/parse-error";
-import { toastError, toastLoading } from "../toasters";
 import { Tooltip } from "../Tooltip";
+import { toastError, toastLoading } from "../toasters";
 import {
   DropzoneInputProps,
   UploadedFile as UploadedFileType,

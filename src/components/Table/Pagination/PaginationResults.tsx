@@ -10,6 +10,8 @@ export function PaginationResults() {
   const superTable = useSuperTable();
   const isDarkMode = themeAtom.get("colorScheme") === "dark";
 
+  if (isNaN(paginationInfo.pages)) return null;
+
   if (!superTable.isPaginationEnabled()) return null;
 
   return (

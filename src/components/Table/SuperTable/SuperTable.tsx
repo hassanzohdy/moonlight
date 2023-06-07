@@ -77,6 +77,11 @@ export class SuperTable {
   public title = "";
 
   /**
+   * Table description
+   */
+  public description = "";
+
+  /**
    * Table Columns
    */
   public columns: Column[] = [];
@@ -940,6 +945,15 @@ export class SuperTable {
    */
   public setTitle(title: string) {
     this.title = trans(title);
+    return this;
+  }
+
+  /**
+   * Set table description
+   */
+  public setDescription(description: string) {
+    this.description = trans(description);
+
     return this;
   }
 

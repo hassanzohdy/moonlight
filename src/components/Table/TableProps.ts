@@ -123,6 +123,14 @@ export type TableProps = {
    */
   name?: string;
   /**
+   * Table title
+   */
+  title?: string;
+  /**
+   * Table description
+   */
+  description?: string;
+  /**
    * Enable shortcuts
    */
   shortcuts?: boolean;

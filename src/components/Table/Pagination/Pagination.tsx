@@ -6,6 +6,8 @@ export function Pagination() {
   const paginationInfo = usePaginationInfo();
   const superTable = useSuperTable();
 
+  if (isNaN(paginationInfo.pages)) return null;
+
   if (!superTable.isPaginationEnabled()) return null;
 
   return (

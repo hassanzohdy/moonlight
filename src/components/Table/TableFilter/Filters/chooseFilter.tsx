@@ -4,7 +4,7 @@ import { TableFilter } from "../../TableProps";
 
 export function chooseFilter(
   name = "name",
-  data: any,
+  data: any[],
   tooltip = trans(name),
 ): TableFilter {
   return {

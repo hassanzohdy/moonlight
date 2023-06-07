@@ -16,8 +16,8 @@ import {
   uploadsHandler,
 } from "../../services/upload-service";
 import { humanSize } from "../../utils/human-size";
-import { toastLoading } from "../toasters";
 import { Tooltip } from "../Tooltip";
+import { toastLoading } from "../toasters";
 import { parseError } from "./../../utils/parse-error";
 import { InputWrapper } from "./InputWrapper";
 

@@ -24,8 +24,8 @@ import {
   parseError,
 } from "../../utils";
 import { acceptImagesOnly } from "../../utils/extensions";
-import { toastError, toastLoading } from "../toasters";
 import { Tooltip } from "../Tooltip";
+import { toastError, toastLoading } from "../toasters";
 import { InputWrapper } from "./InputWrapper";
 
 export type ImageInputProps = AvatarProps &

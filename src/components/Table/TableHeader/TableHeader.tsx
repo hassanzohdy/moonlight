@@ -46,6 +46,11 @@ export function TableHeader() {
             <Text component="h1" my={0} weight={600} size="xl">
               {superTable.title}
             </Text>
+            {superTable.description && (
+              <Text size="sm" color="gray">
+                {superTable.description}
+              </Text>
+            )}
           </Box>
           <Flex gap={10} pb={10}>
             {createButtons.map((Button, index) => (
