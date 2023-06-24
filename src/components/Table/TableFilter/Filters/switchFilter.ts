@@ -3,7 +3,7 @@ import { TableFilter } from "../../TableProps";
 
 export function switchFilter(
   name = "name",
-  label = trans(name),
+  label = name,
   moreComponentProps: Partial<TableFilter> = {},
 ): TableFilter {
   return {
@@ -13,7 +13,7 @@ export function switchFilter(
       mt: 0,
     },
     componentProps: {
-      label,
+      label: trans(label),
       defaultValue: 1,
       ...moreComponentProps,
     },

@@ -42,7 +42,7 @@ export function ImageInput({
   clearable,
   circle,
   description,
-  hint,
+  hint = <span>{trans("clickOrDarg")}</span>,
   label,
   required,
   withPlaceholder,
@@ -208,7 +208,7 @@ export function ImageInput({
         loading={isUploading}
         required={required}
         error={uploadError || error}
-        hint={hint || <span>{trans("clickOrDarg")}</span>}
+        hint={hint}
         description={description}
         id={id}>
         <Popover

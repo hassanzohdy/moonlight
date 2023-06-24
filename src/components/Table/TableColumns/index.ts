@@ -3,6 +3,7 @@ export * from "./avatarColumn";
 export * from "./booleanColumn";
 export * from "./circleImage";
 export * from "./columnsList";
+export * from "./dateColumn";
 export * from "./emailColumn";
 export * from "./idColumn";
 export * from "./linkColumn";

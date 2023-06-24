@@ -1,4 +1,4 @@
-import { Textarea } from "@mantine/core";
+import { TransferList as BaseTransferList } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { requiredRule, useFormControl } from "@mongez/react-form";
 import React from "react";
@@ -7,7 +7,7 @@ import { left, right } from "../../utils/directions";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
 
-function _TextAreaInput(
+function _TransferInput(
   { dir, label, required, placeholder, description, ...props }: BaseInputProps,
   ref: any,
 ) {
@@ -15,7 +15,7 @@ function _TextAreaInput(
     id,
     value,
     visibleElementRef,
-    changeValue,
+    // changeValue,
     disabled,
     error,
     otherProps,
@@ -34,7 +34,7 @@ function _TextAreaInput(
         dir={dir}
         description={description}
         required={required}>
-        <Textarea
+        <BaseTransferList
           id={id}
           disabled={disabled}
           ref={ref}
@@ -48,7 +48,7 @@ function _TextAreaInput(
           placeholder={
             placeholder ? trans(placeholder) + (required ? " *" : "") : ""
           }
-          onChange={e => changeValue(e.target.value)}
+          // onChange={e => changeValue(e.target.value)}
           value={value}
           {...otherProps}
         />
@@ -57,11 +57,10 @@ function _TextAreaInput(
   );
 }
 
-export const TextAreaInput: React.FC<BaseInputProps> = React.memo(
-  React.forwardRef(_TextAreaInput),
+export const TransferInput: React.FC<BaseInputProps> = React.memo(
+  React.forwardRef(_TransferInput),
 );
 
-TextAreaInput.defaultProps = {
+TransferInput.defaultProps = {
   rules: [requiredRule],
-  autosize: true,
 };

@@ -1,4 +1,5 @@
 import {
+  Box,
   DEFAULT_THEME,
   Grid,
   LoadingOverlay,
@@ -627,6 +628,7 @@ export class ReactiveForm {
 
     this.rendered.heading = null;
     this.rendered.content = null;
+
     this.inputs.forEach(input => {
       input.setForm(this).clearCache().setRecord(this.record);
     });
@@ -950,6 +952,7 @@ export class ReactiveForm {
             trans("moonlight.saving"),
             trans("moonlight.savingForm"),
           );
+
           const service = this._service;
 
           const data = this._submitFormat === "json" ? values : formData;
@@ -1182,7 +1185,16 @@ export class ReactiveForm {
       reactiveForm.opened = opened;
 
       useEffect(() => {
-        if (!reactiveForm._service || !opened || !recordId) return;
+        if (!opened && reactiveForm.openInModal) {
+          setTimeout(() => {
+            // reset loading state
+            setIsLoading(false);
+          }, 0);
+
+          return;
+        }
+
+        if (!reactiveForm._service || !recordId) return;
 
         setIsLoading(true);
 
@@ -1335,24 +1347,26 @@ export class ReactiveForm {
         <>
           {modalTrigger}
           <Wrapper {...wrapperProps}>
-            {!reactiveForm.openInModal && (
-              <Title px="xl" align="center">
-                {heading}
-              </Title>
-            )}
-            <LoadingOverlay visible={isLoading} />
-            <Form
-              ignoreEmptyValues={reactiveForm._ignoreEmptyValues}
-              onError={reactiveForm.manageFormError.bind(reactiveForm)}
-              ref={form => {
-                reactiveForm.setForm(form as FormInterface);
-              }}
-              onSubmit={reactiveForm.manageSubmitForm(
-                setIsLoading,
-                reactiveForm.close.bind(reactiveForm),
-              )}>
-              {content}
-            </Form>
+            <Box pos="relative">
+              {!reactiveForm.openInModal && (
+                <Title px="xl" align="center">
+                  {heading}
+                </Title>
+              )}
+              <LoadingOverlay visible={isLoading} />
+              <Form
+                ignoreEmptyValues={reactiveForm._ignoreEmptyValues}
+                onError={reactiveForm.manageFormError.bind(reactiveForm)}
+                ref={form => {
+                  reactiveForm.setForm(form as FormInterface);
+                }}
+                onSubmit={reactiveForm.manageSubmitForm(
+                  setIsLoading,
+                  reactiveForm.close.bind(reactiveForm),
+                )}>
+                {content}
+              </Form>
+            </Box>
           </Wrapper>
         </>
       );

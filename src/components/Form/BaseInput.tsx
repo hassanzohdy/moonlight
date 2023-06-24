@@ -117,7 +117,10 @@ function _BaseInput(
           error={error}
           ref={input => {
             inputRef.current = input;
-            if (ref) {
+
+            if (typeof ref === "function") {
+              ref(input);
+            } else if (ref) {
               ref.current = input;
             }
           }}

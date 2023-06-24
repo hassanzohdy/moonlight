@@ -297,6 +297,14 @@ export const moonlightTranslations = {
     es: "Cancelar",
     de: "Stornieren",
   },
+  saving: {
+    en: "Saving",
+    ar: "جاري الحفظ",
+    fr: "Sauvegarde",
+    it: "Salvataggio",
+    es: "Ahorro",
+    de: "Sparen",
+  },
   saveAndClear: {
     en: "Save and Clear",
     ar: "حفظ ومسح",
@@ -397,7 +405,6 @@ export const moonlightTranslations = {
     es: "Eliminar :item",
     de: "Löschen :item",
   },
-
   noData: {
     en: "No data found",
     ar: "لا يوجد بيانات",
@@ -565,6 +572,14 @@ export const moonlightTranslations = {
   rowsControl: {
     en: "Rows Control",
     ar: "تحكم في الصفوف",
+  },
+  dragFiles: {
+    en: "Drag files here to upload or click to select files",
+    ar: "اسحب الملفات هنا للرفع أو انقر للتصفح",
+  },
+  dropzoneDescription: {
+    en: "Drag & Drop files here to upload or click to browse files from your device",
+    ar: "اسحب الملفات هنا للرفع أو انقر للتصفح",
   },
 };
 

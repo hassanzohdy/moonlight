@@ -68,7 +68,7 @@ export function withCheckboxInput<T>(
   }
   CheckboxInput.defaultProps = {
     rules: [requiredRule],
-    defaultValue: 1,
+    defaultValue: true,
     type: "checkbox",
   };
 

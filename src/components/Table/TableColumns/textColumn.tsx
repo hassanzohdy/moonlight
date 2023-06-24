@@ -34,6 +34,8 @@ export class TextColumn extends Column {
 
 export function textColumn(key = "name", heading: string = key) {
   return new TextColumn(key, heading).formatter(({ value, column }) => {
+    if (!value) return "";
+
     if (column._maxChars && value.length > column._maxChars) {
       return (
         <>

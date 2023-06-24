@@ -816,6 +816,7 @@ export class InputBuilder {
         props.defaultChecked = this.parseDefaultChecked();
       }
     }
+
     props.defaultValue = this.parseDefaultValue();
 
     return (this.preparedProps = props);

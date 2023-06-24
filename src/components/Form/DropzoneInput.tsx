@@ -172,13 +172,13 @@ export function DropzoneInput({
           loaderRef.current = null;
         } else {
           loading.update(
-            trans(moonlightTranslations.uploadingFiles, {
+            trans("moonlight.uploadingFiles", {
               count: stats.total.files,
               current: stats.total.uploaded,
             }),
             <>
               <div>
-                {trans(moonlightTranslations.uploadingFilesDescription, {
+                {trans("moonlight.uploadingFilesDescription", {
                   count: stats.total.files,
                   current: stats.total.uploaded,
                 })}
@@ -449,7 +449,7 @@ export function DropzoneInput({
               style={{
                 marginTop: "-3rem",
               }}>
-              Drag images here or click to select files
+              {trans("moonlight.dragFiles")}
             </Text>
             <Text
               color="dimmed"
@@ -459,7 +459,7 @@ export function DropzoneInput({
               }}
               inline
               mt={8}>
-              Attach as many files as you like, each file should not exceed 5mb
+              {trans("moonlight.dropzoneDescription")}
             </Text>
           </Text>
         </Group>
