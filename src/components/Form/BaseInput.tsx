@@ -3,8 +3,7 @@ import { trans } from "@mongez/localization";
 import { FormControlProps, useFormControl } from "@mongez/react-form";
 import { IconAlertCircle, IconHelp } from "@tabler/icons-react";
 import React from "react";
-import { left, right } from "../../utils/directions";
-import { currentDirection } from "../../utils/helpers";
+import { left } from "../../utils/directions";
 import { Tooltip } from "../Tooltip";
 
 export type BaseInputProps = FormControlProps & {
@@ -129,7 +128,8 @@ function _BaseInput(
           rightSection={rightSection}
           styles={() => ({
             input: {
-              textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
+              // textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
+              textAlign: left(dir),
             },
           })}
           placeholder={

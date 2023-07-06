@@ -2,8 +2,7 @@ import { Textarea } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { requiredRule, useFormControl } from "@mongez/react-form";
 import React from "react";
-import { currentDirection } from "../../utils";
-import { left, right } from "../../utils/directions";
+import { left } from "../../utils/directions";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
 
@@ -41,7 +40,8 @@ function _TextAreaInput(
           styles={() => ({
             input: {
               // this is needed to make the input aligned based on the given direction
-              textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
+              // textAlign: currentDirection() === "ltr" ? left(dir) : right(dir),
+              textAlign: left(dir),
             },
           })}
           required={required}

@@ -23,7 +23,7 @@ export class FormTable extends InputBuilder {
   /**
    * Columns
    */
-  public columns: any[] = [];
+  public columns: FormTableColumn[] = [];
 
   /**
    * Form Record

@@ -44,8 +44,8 @@ export function DatePickerInput({
     otherProps,
   } = useFormControl(props);
 
-  const [minDate, setMinDate] = useState<Date | undefined>(incomingMaxDate);
-  const [maxDate, setMaxDate] = useState<Date | undefined>(incomingMinDate);
+  const [minDate, setMinDate] = useState<Date | undefined>(incomingMinDate);
+  const [maxDate, setMaxDate] = useState<Date | undefined>(incomingMaxDate);
 
   const [date, setDate] = useState<Date | null | undefined>(() => {
     if (!value) return null;

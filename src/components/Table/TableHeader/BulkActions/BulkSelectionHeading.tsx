@@ -34,14 +34,6 @@ export function BulkSelectionHeading() {
     });
   });
 
-  useOnce(() => {
-    return superTable.registerKeyboardShortcut({
-      keys: ["mod", "s"],
-      description: "Select/Deselect Record (When hovering over row)",
-      order: 1,
-    });
-  });
-
   return (
     <CheckBoxWrapper>
       <CheckboxInput

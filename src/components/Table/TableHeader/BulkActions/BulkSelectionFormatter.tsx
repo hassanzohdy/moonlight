@@ -15,10 +15,18 @@ export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
 
   useRowHoverAction({
     id: row.id,
-    keys: ["mod", "s"],
+    keys: ["mod", "shift", "x"],
     in: () => {
       updateCheckedState(!bulkSelection.current?.checked);
     },
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
+      keys: ["mod", "shift", "x"],
+      description: "Select/Deselect Record (When hovering over row)",
+      order: 1,
+    });
   });
 
   const updateCheckedState = (checked: boolean) => {

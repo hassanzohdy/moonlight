@@ -53,13 +53,13 @@ function _CloneButton({ row }: FormatterProps) {
 
   useRowHoverAction({
     id: row.id,
-    keys: ["mod", "c"],
+    keys: ["mod", "shift", "c"],
     in: openForm,
   });
 
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
-      keys: ["mod", "c"],
+      keys: ["mod", "shift", "c"],
       description: "Clone Record (When hovering over row)",
       once: true,
     });
