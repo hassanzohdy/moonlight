@@ -56,7 +56,11 @@ export function GoogleMapInput({
       defaultValue,
     },
     {
-      transformValue: value => value,
+      transformValue: value => {
+        console.log(value);
+
+        return value;
+      },
     },
   );
 
