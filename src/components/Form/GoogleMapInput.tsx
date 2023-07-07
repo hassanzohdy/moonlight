@@ -1,6 +1,6 @@
 import { Grid, List, Modal, Text, ThemeIcon } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import { requiredRule, useFormControl } from "@mongez/react-form";
+import { HiddenInput, requiredRule, useFormControl } from "@mongez/react-form";
 import { useOuterClick } from "@mongez/react-hooks";
 import { readMoreChars } from "@mongez/reinforcements";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
@@ -33,6 +33,7 @@ export function GoogleMapInput({
   label,
   autoFocus = true,
   placeholder,
+  name,
   required,
   zoom = googleMapConfig("zoom", 18),
   libraries = googleMapConfig("libraries", [
@@ -50,17 +51,19 @@ export function GoogleMapInput({
   searchScope = ["address"],
   ...props
 }: any) {
-  const { error, visibleElementRef, id, changeValue } = useFormControl(
+  const {
+    error,
+    visibleElementRef,
+    id,
+    changeValue,
+    value: inputValue,
+  } = useFormControl(
     {
       ...props,
       defaultValue,
     },
     {
-      transformValue: value => {
-        console.log(value);
-
-        return value;
-      },
+      transformValue: value => value,
     },
   );
 
@@ -165,12 +168,14 @@ export function GoogleMapInput({
         required={required}
         tooltip={location.address}
         id={id}>
+        <HiddenInput name={name} value={inputValue} />
         <TextInput
           value={readMoreChars(location.address || "", 80)}
           placeholder={placeholder && trans(placeholder)}
           id={id}
           onClick={() => setOpen(true)}
           readOnly
+          name={name + "_address"}
           rightSection={
             <>
               {!required && location.address && (
