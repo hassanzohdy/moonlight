@@ -4,7 +4,7 @@ import { IconFilter, IconFilterOff } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import { components } from "../../../utils/resolvers";
 import LimitOptions from "../Pagination/LimitOptions";
-import { TableFilter } from "../TableFilter/Filters/TableFilterForm";
+import { TableFilterForm } from "../TableFilter/Filters/TableFilterForm";
 import { useSuperTable } from "../hooks/useSuperTable";
 import { ColumnsSelector } from "./ColumnsSelector";
 import SuperTableShortcuts from "./SuperTableShortcuts";
@@ -90,7 +90,7 @@ export function TableHeader() {
             </RightSide>
           </Wrapper>
           <Collapse in={opened}>
-            <TableFilter />
+            <TableFilterForm />
           </Collapse>
         </Paper>
       </Paper>

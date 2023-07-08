@@ -141,6 +141,7 @@ export function ImageInput({
         changeValue(file);
       })
       .catch(error => {
+        console.error(error);
         loader.error(parseError(error));
         setUploadError(true);
       })
