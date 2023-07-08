@@ -12,7 +12,7 @@ import { SubmitButton } from "../../../Form";
 import { useSuperTable } from "../../hooks/useSuperTable";
 import { ButtonWrapper, FilterWrapper } from "./style";
 
-export function TableFilter() {
+export function TableFilterForm() {
   const superTable = useSuperTable();
   const [viewAllFilters, toggleFilters] = useState(
     superTable.getCached("viewAllFilters") || false,

@@ -1,4 +1,4 @@
-export * from "./TableFilter";
+export * from "./TableFilterForm";
 export * from "./activeFilter";
 export * from "./booleanFilter";
 export * from "./chooseFilter";
