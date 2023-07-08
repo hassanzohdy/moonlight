@@ -1,6 +1,6 @@
 {
     "name": "@mongez/moonlight",
-    "version": "1.1.43",
+    "version": "1.1.44",
     "description": "A Massive React Builder and ready-made components for web apps.",
     "main": "src/index.ts",
     "dependencies": {
@@ -16,7 +16,7 @@
         "@mongez/http": "^2.2.4",
         "@mongez/localization": "^2.2.3",
         "@mongez/react-localization": "^1.0.5",
-        "@mongez/react-atom": "^3.1.2",
+        "@mongez/react-atom": "^3.1.3",
         "@mongez/react-form": "^2.0.15",
         "@mongez/react-hooks": "^1.3.3",
         "@mongez/reinforcements": "^2.3.7",
