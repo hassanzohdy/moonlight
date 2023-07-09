@@ -465,6 +465,10 @@ export const moonlightTranslations = {
     es: "Borrar",
     de: "Klar",
   },
+  loading: {
+    en: "Loading...",
+    ar: "جاري التحميل...",
+  },
   uploading: {
     en: "Uploading",
     ar: "جاري الرفع",

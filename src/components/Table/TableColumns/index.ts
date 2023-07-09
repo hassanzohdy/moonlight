@@ -10,7 +10,7 @@ export * from "./linkColumn";
 export * from "./localizedColumn";
 export * from "./moneyColumn";
 export * from "./numberColumn";
-export * from "./status-column";
+export * from "./statusColumn";
 export * from "./tableColumn";
 export * from "./textColumn";
 export * from "./translateColumn";

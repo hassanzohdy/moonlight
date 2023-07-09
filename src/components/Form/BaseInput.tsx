@@ -3,9 +3,9 @@ import { trans } from "@mongez/localization";
 import { FormControlProps, useFormControl } from "@mongez/react-form";
 import { IconAlertCircle, IconHelp } from "@tabler/icons-react";
 import React from "react";
+import { currentDirection } from "../../utils";
 import { left, right } from "../../utils/directions";
 import { Tooltip } from "../Tooltip";
-import { currentDirection } from "../../utils";
 
 export type BaseInputProps = FormControlProps & {
   description?: React.ReactNode;

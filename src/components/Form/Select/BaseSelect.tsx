@@ -94,7 +94,7 @@ export const BaseSelect = (
             onSearchChange={onSearchChange}
             placeholder={
               isLoading
-                ? trans("loading")
+                ? trans("moonlight.loading")
                 : placeholder
                 ? trans(placeholder) + (props.required ? " *" : "")
                 : ""

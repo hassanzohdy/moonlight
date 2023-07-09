@@ -2,10 +2,10 @@ import { Textarea } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { requiredRule, useFormControl } from "@mongez/react-form";
 import React from "react";
+import { currentDirection } from "../../utils";
 import { left, right } from "../../utils/directions";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";
-import { currentDirection } from "../../utils";
 
 function _TextAreaInput(
   { dir, label, required, placeholder, description, ...props }: BaseInputProps,

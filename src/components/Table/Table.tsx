@@ -37,7 +37,7 @@ function _Table(props: TableProps & BaseTableProps) {
   );
 }
 
-export const Table = React.memo(_Table);
+export const Table: React.FC<TableProps & BaseTableProps> = React.memo(_Table);
 
 Table.displayName = "Table";
 

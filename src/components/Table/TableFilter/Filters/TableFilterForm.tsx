@@ -53,6 +53,7 @@ export function TableFilterForm() {
 
   return (
     <Form
+      ignoreEmptyValues
       id={superTable.tableFilterFromId}
       onSubmit={superTable.submitFilter.bind(superTable)}>
       <Box>
