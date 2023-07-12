@@ -126,7 +126,7 @@ export class ReactiveForm {
   /**
    * Whether to ignore empty values
    */
-  protected _ignoreEmptyValues = true;
+  protected _ignoreEmptyValues?: boolean = undefined;
 
   /**
    * Default modal props
@@ -957,6 +957,8 @@ export class ReactiveForm {
 
           const data = this._submitFormat === "json" ? values : formData;
 
+          console.log(form.shouldIgnoreEmptyValues());
+
           if (this._recordId) {
             response = await service.update(this._recordId, data);
           } else {
@@ -996,6 +998,7 @@ export class ReactiveForm {
           }, getMoonlightConfig("reactiveForm.saveEventDelay", 100));
         }
       } catch (error) {
+        console.error(error);
         if (loader) {
           loader.error(parseError(error), trans("moonlight.saveFailed"));
         } else {

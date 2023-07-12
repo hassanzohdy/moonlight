@@ -19,7 +19,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { SortableItem, SortableList } from "@thaddeusjiang/react-sortable-list";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { moonlightTranslations } from "../../locales";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
@@ -101,12 +101,18 @@ export function DropzoneInput({
   const theme = useMantineTheme();
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFileType[]>([]);
+
   const [filesList, setFilesList] = useState<any[]>(() =>
     (value || []).map((attachment: any) => ({
       ...attachment,
       id: attachment?.id || Random.string(),
     })),
   );
+
+  useEffect(() => {
+    changeValue(filesList);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filesList]);
 
   const updateFile = async (file: UploadedFileType, index: number) => {
     setUploadedFiles(uploadedFiles => {

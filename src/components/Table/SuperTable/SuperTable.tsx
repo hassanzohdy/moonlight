@@ -1418,7 +1418,7 @@ export class SuperTable {
     // reset page to 1
     params.page = 1;
 
-    this.load(params, "partial").then(() => {
+    this.load(params, "partial").finally(() => {
       form.submitting(false);
     });
   }

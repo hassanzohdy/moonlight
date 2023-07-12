@@ -63,8 +63,8 @@ export function ImageInput({
     },
     {
       transformValue: value => value,
-      collectValue: ({ value }) => value?.id,
-      isCollectable: ({ value }) => value?.id !== undefined,
+      collectValue: ({ value }) => value?.id || "",
+      isCollectable: () => true,
     },
   );
 
@@ -154,10 +154,11 @@ export function ImageInput({
     if (uploadedFile && value && uploadedFile.id === value.id) {
       deleteUploadedFile(uploadedFile.id);
       setUploadedFile(null);
-      toggleImageOptionsPopup(false);
     }
 
-    changeValue(null);
+    toggleImageOptionsPopup(false);
+
+    changeValue("");
   };
 
   const handleDragEnter = (e: any) => {
