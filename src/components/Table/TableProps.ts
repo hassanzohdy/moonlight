@@ -2,19 +2,47 @@ import { RestfulEndpoint } from "@mongez/http";
 import { FormInterface } from "@mongez/react-form";
 import { AxiosResponse } from "axios";
 import React from "react";
-import { InputBuilder } from "../../form-builder/components/InputBuilder";
-import { Column } from "./Column";
-import { PaginationInfo, SuperTable } from "./SuperTable";
+import type { InputBuilder } from "../../form-builder/components/InputBuilder";
+import type { Column } from "./Column";
+import type { PaginationInfo, SuperTable } from "./SuperTable";
 
 export type FormatterProps = {
+  /**
+   * Current row data
+   */
   row: any;
+  /**
+   * Current row index
+   */
   rowIndex: number;
+  /**
+   * Current column index
+   */
   columnIndex: number;
+  /**
+   * Column object
+   */
   column: Column;
+  /**
+   * Cell Value
+   */
   value: any;
+  /**
+   * Cell key
+   */
   key: string | number;
+  /**
+   * Column settings that will be passed to the formatter
+   */
   settings: any;
+  /**
+   * Default value if cell value is not returned from api
+   */
   defaultValue: any;
+  /**
+   * Super table instance
+   */
+  superTable: SuperTable;
 };
 
 export type TableColumnFormatter =

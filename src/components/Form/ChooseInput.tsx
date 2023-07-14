@@ -36,7 +36,8 @@ export function ChooseInput({
   data: incomingData,
   ...props
 }: ChooseInputProps) {
-  const { value, changeValue, otherProps, ...rest } = useFormControl(props);
+  const { value, changeValue, disabled, otherProps, ...rest } =
+    useFormControl(props);
   const previousValue = useRef(value);
   const keyRef = useRef(Random.string(6));
 
@@ -76,6 +77,7 @@ export function ChooseInput({
             key={segmentKey}
             name={Random.string(6)}
             onChange={changeValue}
+            disabled={disabled}
             data={data}
             {...otherProps}
           />

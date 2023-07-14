@@ -1,7 +1,6 @@
 import { ActionIcon, Text, Tooltip } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
-import { useOnce } from "@mongez/react-hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { FormatterProps } from "../../TableProps";
 import { useRowHoverAction } from "../../hooks/useRowHoverAction";
@@ -42,14 +41,6 @@ export function DeleteButton({ row, rowIndex }: FormatterProps) {
     keys: ["mod", "d"],
     ignoreKeys: ["shift"],
     in: openDeleteModal,
-  });
-
-  useOnce(() => {
-    return superTable.registerKeyboardShortcut({
-      keys: ["mod", "d"],
-      description: "Delete Record (When hovering over row)",
-      once: true,
-    });
   });
 
   if (superTable.forbids("delete", row, rowIndex)) return null;

@@ -18,12 +18,26 @@ export function BulkSelectionHeading() {
   const updateState = (checked: boolean) => {
     checkedRef.current = checked;
     superTable.toggleAllBulkSelection(checked);
+
     setChecked(checked);
   };
+
+  // useEvent(() => {
+  // allow super table to toggle the check state without triggering the bulk selection
+  // this is useful when a bulk action is performed and the bulk selection should be updated
+  // });
 
   useHotKeys({
     keys: ["mod", "shift", "a"],
     callback: () => updateState(!checkedRef.current),
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
+      keys: ["mod", "shift", "x"],
+      description: "Select/Deselect Record (When hovering over row)",
+      order: 1,
+    });
   });
 
   useOnce(() => {

@@ -13,3 +13,5 @@ export function publishedColumn() {
     getMoonlightConfig("publishedColumn.label"),
   ).sortable();
 }
+
+export const activeColumn = publishedColumn;

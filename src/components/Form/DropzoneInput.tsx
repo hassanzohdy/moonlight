@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Box,
   Flex,
   Group,
   Progress,
@@ -183,12 +184,12 @@ export function DropzoneInput({
               current: stats.total.uploaded,
             }),
             <>
-              <div>
+              <Box mb="xs">
                 {trans("moonlight.uploadingFilesDescription", {
                   count: stats.total.files,
                   current: stats.total.uploaded,
                 })}
-              </div>
+              </Box>
               <Tooltip label={stats.total.progressPercentage + "%"}>
                 <Progress value={stats.total.progressPercentage} />
               </Tooltip>

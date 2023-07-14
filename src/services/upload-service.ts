@@ -2,7 +2,7 @@ import { Fileable } from "../components/Form/DropzoneInput.types";
 import { getMoonlightConfig } from "../config";
 
 export function uploadFiles(
-  data: any,
+  data: FormData,
   progressPercentageCallback?: (percentage: number) => void,
 ): Promise<Fileable[]> {
   const endpoint = getMoonlightConfig("endpoint");

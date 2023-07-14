@@ -21,14 +21,6 @@ export function BulkSelectionFormatter({ row, rowIndex }: FormatterProps) {
     },
   });
 
-  useOnce(() => {
-    return superTable.registerKeyboardShortcut({
-      keys: ["mod", "shift", "x"],
-      description: "Select/Deselect Record (When hovering over row)",
-      order: 1,
-    });
-  });
-
   const updateCheckedState = (checked: boolean) => {
     bulkSelection.current?.setChecked(checked);
   };

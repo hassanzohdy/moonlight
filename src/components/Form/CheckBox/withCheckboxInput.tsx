@@ -51,6 +51,9 @@ export function withCheckboxInput<T>(
               cursor: "pointer",
               color: options.inputColor(theme),
             },
+            track: {
+              cursor: "pointer",
+            },
             input: {
               cursor: "pointer",
             },
@@ -58,9 +61,9 @@ export function withCheckboxInput<T>(
           disabled={disabled}
           id={id}
           checked={checked}
-          onChange={e =>
-            setChecked(typeof e === "boolean" ? e : e.currentTarget.checked)
-          }
+          onChange={e => {
+            setChecked(typeof e === "boolean" ? e : e.currentTarget.checked);
+          }}
           {...options.otherProps(otherProps, props)}
         />
       </span>

@@ -293,6 +293,7 @@ export class Column {
           key: this.key,
           columnIndex,
           value,
+          superTable,
           defaultValue: column.defaultValue,
           settings: column.settings || {},
         }}

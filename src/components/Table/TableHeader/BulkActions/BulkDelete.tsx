@@ -20,17 +20,17 @@ async function deleteMultipleRows(
   const service: any = superTable.service;
   if (service) {
     const loader = toastLoading(
-      trans("moonlight.deleting"),
       trans("moonlight.deletingInProgress"),
+      trans("moonlight.deleting"),
     );
 
     try {
       if (service.bulkDelete) {
-        const response = await service.bulkDelete(
-          bulkRows.map(({ row }) => row.id),
-        );
+        await service.bulkDelete({
+          id: bulkRows.map(({ row }) => row.id),
+        });
 
-        superTable.updateDataFromResponse(response);
+        // superTable.updateDataFromResponse(response);
       } else {
         // promise all to delete all rows
         await Promise.all(bulkRows.map(({ row }) => service.delete(row.id)));
@@ -48,8 +48,8 @@ async function deleteMultipleRows(
       superTable.removeBulkRows(bulkRows);
 
       loader.success(
-        trans("moonlight.success"),
         trans("moonlight.deleteSuccess"),
+        trans("moonlight.success"),
       );
     } catch (error) {
       loader.error(parseError(error), trans("moonlight.deleteError"));
@@ -73,6 +73,9 @@ export function BulkDelete() {
       ),
       centered: true,
       trapFocus: false,
+      closeOnConfirm: true,
+      closeOnCancel: true,
+      closeOnEscape: true,
       transitionProps: {
         exitDuration: 400,
       },
@@ -105,6 +108,14 @@ export function BulkDelete() {
         openDeleteModal();
       }, 0);
     },
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
+      keys: ["mod", "d"],
+      description: "Delete Record (When hovering over row)",
+      once: true,
+    });
   });
 
   useOnce(() => {

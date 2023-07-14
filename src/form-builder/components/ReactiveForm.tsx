@@ -957,8 +957,6 @@ export class ReactiveForm {
 
           const data = this._submitFormat === "json" ? values : formData;
 
-          console.log(form.shouldIgnoreEmptyValues());
-
           if (this._recordId) {
             response = await service.update(this._recordId, data);
           } else {

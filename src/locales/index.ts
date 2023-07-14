@@ -465,9 +465,13 @@ export const moonlightTranslations = {
     es: "Borrar",
     de: "Klar",
   },
-  loading: {
-    en: "Loading...",
-    ar: "جاري التحميل...",
+  updating: {
+    en: "Updating",
+    ar: "جاري التحديث",
+  },
+  updatedSuccessfully: {
+    en: "Data has been updated successfully",
+    ar: "تم تحديث البيانات بنجاح",
   },
   uploading: {
     en: "Uploading",

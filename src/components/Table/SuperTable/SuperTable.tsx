@@ -654,6 +654,21 @@ export class SuperTable {
   }
 
   /**
+   * Toggle check state for selected bulk rows
+   */
+  public toggleSelectedBulkRows() {
+    const selectedBulkRows = this.getSelectedBulkRows();
+
+    selectedBulkRows.forEach(row => {
+      row.setChecked(!row.checked);
+    });
+
+    this.trigger("bulkSelection", this.registeredBulkSelection);
+
+    return this;
+  }
+
+  /**
    * Unregister bulk selection
    */
   public unregisterBulkSelection(row: any, rowIndex) {
@@ -704,6 +719,8 @@ export class SuperTable {
         );
       },
     );
+
+    this.trigger("bulkSelection", this.registeredBulkSelection);
 
     return this;
   }
@@ -1153,10 +1170,9 @@ export class SuperTable {
   /**
    * Delete table row
    */
-  public deleteRow(row: any, rowIndex: number) {
+  public deleteRow(row: any, _rowIndex: number) {
     const deleteRowFromTable = () => {
-      this.data.splice(rowIndex, 1);
-      this.setData([...this.data]);
+      this.setData(this.data.filter(r => r.id !== row.id));
 
       this.decreasePaginationInfoRow(1);
     };
@@ -1358,7 +1374,11 @@ export class SuperTable {
         componentProps.placeholder = trans(filter.placeholder);
       }
 
-      const valueFromQueryString = queryString?.().get(filter.name);
+      let valueFromQueryString = queryString?.().get(filter.name);
+
+      if (!Is.empty(valueFromQueryString)) {
+        valueFromQueryString = String(valueFromQueryString);
+      }
 
       if (
         filter.type &&
