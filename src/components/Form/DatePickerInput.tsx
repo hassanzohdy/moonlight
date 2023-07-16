@@ -7,7 +7,7 @@ import {
 } from "@mongez/react-form";
 import { useOnce } from "@mongez/react-hooks";
 import dayjs from "dayjs";
-import { ComponentType, useEffect, useState } from "react";
+import React, { ComponentType, useEffect, useState } from "react";
 import { getMoonlightConfig } from "../../config";
 import { BaseInputProps } from "./BaseInput";
 import { InputWrapper } from "./InputWrapper";

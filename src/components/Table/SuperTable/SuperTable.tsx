@@ -22,7 +22,7 @@ import {
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
 import { toastError, toastLoading } from "../../toasters";
-import Column from "../Column";
+import type { Column } from "../Column";
 import { tableColumn } from "../TableColumns/tableColumn";
 import { BulkSelectionFormatter } from "../TableHeader/BulkActions/BulkSelectionFormatter";
 import { BulkSelectionHeading } from "../TableHeader/BulkActions/BulkSelectionHeading";

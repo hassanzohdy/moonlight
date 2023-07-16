@@ -1,4 +1,5 @@
 import { MantineColor } from "@mantine/core";
+import React from "react";
 import { StatusFormatter } from "../Formatters";
 import { TableColumn } from "../TableProps";
 import { tableColumn } from "./tableColumn";

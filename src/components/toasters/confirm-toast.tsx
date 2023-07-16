@@ -1,6 +1,7 @@
 import { MantineColor, Text } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { trans } from "@mongez/localization";
+import React from "react";
 
 export function toastConfirm(
   header: React.ReactNode,

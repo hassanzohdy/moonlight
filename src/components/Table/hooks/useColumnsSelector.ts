@@ -1,7 +1,7 @@
 import type { FormControlChangeOptions } from "@mongez/react-form";
 import { unique } from "@mongez/reinforcements";
 import { useMemo, useState } from "react";
-import Column from "../Column";
+import type { Column } from "../Column";
 import { useSuperTable } from "./useSuperTable";
 
 export function useColumnsSelector() {

@@ -1,7 +1,7 @@
-import { RestfulEndpoint } from "@mongez/http";
-import { FormInterface } from "@mongez/react-form";
-import { AxiosResponse } from "axios";
-import React from "react";
+import type { RestfulEndpoint } from "@mongez/http";
+import type { FormInterface } from "@mongez/react-form";
+import type { AxiosResponse } from "axios";
+import type React from "react";
 import type { InputBuilder } from "../../form-builder/components/InputBuilder";
 import type { Column } from "./Column";
 import type { PaginationInfo, SuperTable } from "./SuperTable";

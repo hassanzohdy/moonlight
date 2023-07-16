@@ -8,7 +8,7 @@ import {
 } from "@tabler/icons-react";
 import React from "react";
 import { Tooltip } from "../../Tooltip";
-import type Column from "../Column";
+import type { Column } from "../Column";
 import { useTableChange } from "../hooks";
 import { useSuperTable } from "../hooks/useSuperTable";
 

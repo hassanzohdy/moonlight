@@ -8,7 +8,7 @@ import {
 } from "@mongez/react-form";
 import { readMoreChars } from "@mongez/reinforcements";
 import { IconRefresh, IconTrash } from "@tabler/icons-react";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { moonlightTranslations } from "../../locales";
 import {
   deleteUploadedFile,
@@ -16,8 +16,8 @@ import {
   uploadsHandler,
 } from "../../services/upload-service";
 import { humanSize } from "../../utils/human-size";
-import { Tooltip } from "../Tooltip";
-import { toastLoading } from "../toasters";
+import { Tooltip } from "./../Tooltip";
+import { toastLoading } from "./../toasters";
 import { parseError } from "./../../utils/parse-error";
 import { InputWrapper } from "./InputWrapper";
 

@@ -1,6 +1,6 @@
 import { readMoreChars, readMoreWords } from "@mongez/reinforcements";
 import { Tooltip } from "../../Tooltip";
-import Column from "../Column";
+import { Column } from "../Column";
 
 export class TextColumn extends Column {
   /**

@@ -1,6 +1,6 @@
 import { trans } from "@mongez/localization";
 import { GenericObject } from "@mongez/reinforcements";
-import { ComponentType } from "react";
+import React, { ComponentType } from "react";
 import { getMoonlightConfig } from "../../../config";
 import { parseError } from "../../../utils";
 import { SwitchInput, TextInput } from "../../Form";

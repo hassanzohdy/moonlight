@@ -1,6 +1,6 @@
 import { useEvent, useForceUpdate } from "@mongez/react-hooks";
 import { useRef } from "react";
-import Column from "../Column";
+import type { Column } from "../Column";
 import { useSuperTable } from "./useSuperTable";
 
 export function useDisplayedColumn(column: Column) {

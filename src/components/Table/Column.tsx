@@ -374,5 +374,3 @@ export class Column {
     return this.data.validate?.(this, superTable) || true;
   }
 }
-
-export default Column;

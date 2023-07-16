@@ -1,4 +1,4 @@
-import Column from "./Column";
+import type { Column } from "./Column";
 import { useDisplayedColumn, useSuperTable } from "./hooks";
 
 export type TableCellProps = {
