@@ -91,7 +91,7 @@ export async function uploadFileChunked({
   progressPercentageCallback?: (percentage: number) => void;
 }) {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async resolve => {
     const totalChunks = Math.ceil(file.size / maxChunkSize);
     // now we want to upload each chunk
     for (let i = 0; i < totalChunks; i++) {
