@@ -473,6 +473,10 @@ export const moonlightTranslations = {
     en: "Data has been updated successfully",
     ar: "تم تحديث البيانات بنجاح",
   },
+  maxFiles: {
+    en: "Maximum allowed files are :maxFiles",
+    ar: "الحد الأقصى للملفات المسموح بها هو :maxFiles",
+  },
   uploading: {
     en: "Uploading",
     ar: "جاري الرفع",

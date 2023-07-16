@@ -6,7 +6,7 @@ import { parseError } from "../../../utils";
 import { SwitchInput, TextInput } from "../../Form";
 import { toastLoading } from "../../toasters";
 import { BooleanFormatter } from "../Formatters";
-import { FormatterProps } from "../TableProps";
+import type { FormatterProps } from "../TableProps";
 import { tableColumn } from "./tableColumn";
 
 export type ColumnInputOptions = {

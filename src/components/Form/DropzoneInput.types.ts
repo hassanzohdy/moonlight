@@ -10,6 +10,10 @@ export type DropzoneInputProps = FormControlProps &
     description?: React.ReactNode;
     hint?: React.ReactNode;
     remoteDelete?: boolean;
+    chunked?: boolean;
+    maxChunkSize?: number;
+    inParallel?: boolean;
+    maxFiles?: number;
   };
 
 export type UploadedFile = {

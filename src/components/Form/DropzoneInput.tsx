@@ -23,7 +23,11 @@ import { SortableItem, SortableList } from "@thaddeusjiang/react-sortable-list";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { moonlightTranslations } from "../../locales";
-import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
+import {
+  deleteUploadedFile,
+  uploadFile,
+  uploadFileChunked,
+} from "../../services/upload-service";
 import { parseError } from "../../utils/parse-error";
 import { Tooltip } from "../Tooltip";
 import { toastError, toastLoading } from "../toasters";
@@ -91,6 +95,11 @@ export function DropzoneInput({
   imageHeight,
   minSize,
   maxSize,
+  chunked = false,
+  maxFiles,
+  // maxChunkSize = 500 * 1024,
+  maxChunkSize = 100 * 1024,
+  inParallel = true,
   ...props
 }: DropzoneInputProps) {
   const { value, changeValue, formControl, error, id, otherProps } =
@@ -243,17 +252,35 @@ export function DropzoneInput({
       updateFile(file, index);
     };
 
-    uploadFile(file.file, progress => {
+    const progressCallback = (progress: number) => {
       file.progress = progress;
 
       updateFile(file, index);
-    })
+    };
+
+    const uploadHandler = chunked
+      ? uploadFileChunked({
+          file: file.file,
+          progressPercentageCallback: progressCallback,
+          maxChunkSize,
+        })
+      : uploadFile(file.file, progressCallback);
+
+    uploadHandler
       .then(attachment => {
         file.state = "uploaded";
         setFilesList(filesList => {
           const attachments = [...filesList, attachment];
 
           changeValue(attachments);
+
+          // now remove the file from the uploaded files
+
+          setUploadedFiles(uploadedFiles => {
+            return uploadedFiles.filter(
+              uploadedFile => file.id !== uploadedFile.id,
+            );
+          });
 
           return attachments;
         });
@@ -279,6 +306,14 @@ export function DropzoneInput({
       imageHeight,
     });
 
+    if (maxFiles && uploadingFiles.length + filesList.length > maxFiles) {
+      return toastError(
+        trans("moonlight.maxFiles", {
+          maxFiles: maxFiles,
+        }),
+      );
+    }
+
     const stats = calculateStats(uploadingFiles);
 
     if (!loaderRef.current) {
@@ -294,9 +329,13 @@ export function DropzoneInput({
       loaderRef.current = loading;
     }
 
-    uploadingFiles.forEach(upload);
-
     setUploadedFiles(uploadingFiles);
+
+    if (inParallel) return uploadingFiles.forEach(upload);
+
+    for (let i = 0; i < uploadingFiles.length; i++) {
+      await upload(uploadingFiles[i], i);
+    }
   };
 
   const reuploadFile = (file: UploadedFileType) => {

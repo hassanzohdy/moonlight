@@ -34,6 +34,30 @@ export class DropzoneInputBuilder extends InputBuilder {
   }
 
   /**
+   * Whether to uplooad files in parallel
+   */
+  public parallel(parallel = true) {
+    this.componentProps.parallel = parallel;
+    return this;
+  }
+
+  /**
+   * Whether to chunk uploaded files
+   */
+  public chunk(chunk = true) {
+    this.componentProps.chunk = chunk;
+    return this;
+  }
+
+  /**
+   * Set max chunk size in bytes
+   */
+  public chunkSize(size: number) {
+    this.componentProps.maxChunkSize = size;
+    return this;
+  }
+
+  /**
    * Set image width for that must be uploaded
    */
   public width(width: number) {
@@ -94,6 +118,14 @@ export class DropzoneInputBuilder extends InputBuilder {
    */
   public maxSize(size: number) {
     this.componentProps.maxSize = size;
+    return this;
+  }
+
+  /**
+   * Set max number of files that can be uploaded
+   */
+  public maxFiles(max: number) {
+    this.componentProps.maxFiles = max;
     return this;
   }
 
