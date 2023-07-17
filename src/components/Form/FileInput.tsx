@@ -8,7 +8,7 @@ import {
 } from "@mongez/react-form";
 import { readMoreChars } from "@mongez/reinforcements";
 import { IconRefresh, IconTrash } from "@tabler/icons-react";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { moonlightTranslations } from "../../locales";
 import {
   deleteUploadedFile,

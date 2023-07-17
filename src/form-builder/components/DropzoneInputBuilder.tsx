@@ -44,8 +44,8 @@ export class DropzoneInputBuilder extends InputBuilder {
   /**
    * Whether to chunk uploaded files
    */
-  public chunk(chunk = true) {
-    this.componentProps.chunk = chunk;
+  public chunked(chunked = true) {
+    this.componentProps.chunked = chunked;
     return this;
   }
 

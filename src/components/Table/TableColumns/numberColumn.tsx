@@ -1,9 +1,6 @@
-import { FormatterProps } from "../TableProps";
+import { NumberColumnFormatter } from "../Formatters";
 import { tableColumn } from "./tableColumn";
 
 export function numberColumn(key = "name", heading: string = key) {
-  return tableColumn(key, heading).formatter(({ value }: FormatterProps) =>
-    // new Intl.NumberFormat().format(Number(value)),
-    value ? new Number(value).toLocaleString() : value,
-  );
+  return tableColumn(key, heading).formatter(NumberColumnFormatter);
 }

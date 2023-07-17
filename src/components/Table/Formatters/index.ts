@@ -4,5 +4,6 @@ export * from "./EmailFormatter";
 export * from "./ExternalLinkFormatter";
 export * from "./IdFormatter";
 export * from "./ImageFormatter";
+export * from "./NumberColumnFormatter";
 export * from "./NumberFormatter";
 export * from "./StatusFormatter";

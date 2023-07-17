@@ -1,13 +1,10 @@
 import { trans } from "@mongez/localization";
 import { get, merge } from "@mongez/reinforcements";
 import React from "react";
-import { createReactForm } from "./../../form-builder";
 import { SuperTable } from "./SuperTable";
-import { EditColumn } from "./SuperTable/EditColumn";
 import {
   ColumnSortBy,
   EditColumnCallback,
-  EditOptions,
   TableColumn,
   TableColumnDisplay,
   TableColumnFormatter,
@@ -19,13 +16,6 @@ export class Column {
    * Column data
    */
   public data: TablePlainColumn;
-
-  /**
-   * Determine if the column is editable
-   */
-  public editColumnOptions: Partial<EditOptions> = {
-    enabled: false,
-  };
 
   /**
    * On edit callback
@@ -86,22 +76,6 @@ export class Column {
   public formatter(formatter: TableColumnFormatter) {
     this.data.formatter = formatter;
     return this;
-  }
-
-  /**
-   * Set column edit options
-   */
-  public editable(editOptions: EditOptions) {
-    editOptions.enabled = true;
-    this.editColumnOptions = editOptions;
-    return this;
-  }
-
-  /**
-   * Get edit options
-   */
-  public getEditColumnOptions() {
-    return this.editColumnOptions as EditOptions;
   }
 
   /**
@@ -237,6 +211,13 @@ export class Column {
   }
 
   /**
+   * Get formatter
+   */
+  public getFormatter() {
+    return this.data.formatter as TableColumnFormatter;
+  }
+
+  /**
    * Render cell contents
    */
   public render({ row, rowIndex, columnIndex, superTable }) {
@@ -244,47 +225,12 @@ export class Column {
 
     const value = get(row, column.key, column.defaultValue);
 
-    const Formatter = column.formatter as React.ComponentType<any>;
-
-    const editOptions = this.getEditColumnOptions();
+    const Formatter = this.getFormatter();
 
     let Wrapper: React.ComponentType<any> = React.Fragment;
     let wrapperProps = {};
 
-    if (editOptions.enabled) {
-      Wrapper = EditColumn;
-
-      const FormComponent = createReactForm(reactiveForm => {
-        reactiveForm
-          .heading(trans("moonlight.quickEdit"))
-          .withResetButton(false)
-          .withSaveAndClearButton(false)
-          .closeOnEscape()
-          .onSave(record => {
-            superTable.updateRow(record, rowIndex);
-          })
-          .setInputs(editOptions.inputs({ row, rowIndex, column: this }))
-          .submitter(({ values, form }) => {
-            return editOptions.onEdit({
-              row,
-              rowIndex,
-              column: this,
-              form,
-              values,
-            });
-          });
-      });
-
-      wrapperProps = {
-        ...editOptions,
-        row,
-        rowIndex,
-        column: this,
-        FormComponent,
-      };
-    }
-
-    const children = column.formatter ? (
+    const children = Formatter ? (
       <Formatter
         {...{
           row,

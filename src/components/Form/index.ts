@@ -17,6 +17,7 @@ export * from "./IntegerInput";
 export * from "./MultiLingualInput";
 export * from "./NumberInput";
 export * from "./PasswordInput";
+export * from "./PinInput";
 export * from "./QuickInputs";
 export * from "./RadioGroupInput";
 export * from "./RadioInput";

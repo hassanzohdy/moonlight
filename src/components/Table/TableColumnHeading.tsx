@@ -1,5 +1,5 @@
 import { trans } from "@mongez/localization";
-import type Column from "./Column";
+import type { Column } from "./Column";
 import { SortByColumn } from "./SuperTable/SortByColumn";
 import { useDisplayedColumn } from "./hooks";
 
