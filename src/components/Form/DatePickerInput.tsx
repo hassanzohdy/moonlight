@@ -42,7 +42,13 @@ export function DatePickerInput({
     error,
     visibleElementRef,
     otherProps,
-  } = useFormControl(props);
+  } = useFormControl(props, {
+    collectValue({ value }) {
+      if (value.timestamp) return new Date(value.timestamp);
+
+      return value;
+    },
+  });
 
   const [minDate, setMinDate] = useState<Date | undefined>(incomingMinDate);
   const [maxDate, setMaxDate] = useState<Date | undefined>(incomingMaxDate);
@@ -83,28 +89,21 @@ export function DatePickerInput({
 
       if (!input) return;
 
-      input.onChange(() => {
-        const minDate = input.value;
+      input.onChange((...o) => {
+        let minDate = input.value?.toDate() || input.value;
+
+        if (minDate.timestamp) {
+          minDate = new Date(minDate.timestamp);
+        }
 
         if (minDate) {
-          const minDateValue = dayjs(
-            minDate,
-            getMoonlightConfig("date.dateFormat"),
-          ).toDate();
-
-          setMinDate(minDateValue);
+          setMinDate(minDate);
+        } else {
+          setMinDate(undefined);
         }
       });
     }, 100);
   }, [minDateInput]);
-
-  useOnce(() => {
-    const onReset = formControl.onReset(() => {
-      setDate(null);
-    });
-
-    return () => onReset.unsubscribe();
-  });
 
   useEffect(() => {
     if (!maxDateInput) return;
@@ -119,25 +118,39 @@ export function DatePickerInput({
       if (!input) return;
 
       input.onChange(() => {
-        const maxDate = input.value;
+        let maxDate = input.value?.toDate() || input.value;
+
+        if (maxDate.timestamp) {
+          maxDate = new Date(maxDate.timestamp);
+        }
+
+        console.log(maxDate);
 
         if (maxDate) {
-          const maxDateValue = dayjs(
-            minDate,
-            getMoonlightConfig("date.dateFormat"),
-          ).toDate();
-
-          setMaxDate(maxDateValue);
+          setMaxDate(maxDate);
+        } else {
+          setMaxDate(undefined);
         }
       });
     }, 100);
   }, [maxDateInput, minDate]);
 
+  useOnce(() => {
+    const onReset = formControl.onReset(() => {
+      setDate(null);
+    });
+
+    return () => onReset.unsubscribe();
+  });
+
   const updateDate = (date: Date) => {
     setDate(date);
-    changeValue(dayjs(date, getMoonlightConfig("date.dateFormat")), {
-      date,
-    });
+    changeValue(
+      date ? dayjs(date, getMoonlightConfig("date.dateFormat")) : null,
+      {
+        date,
+      },
+    );
   };
 
   return (
