@@ -49,6 +49,7 @@ export function useTable({
   fetchRecord,
   total,
   defaultRecord,
+  route,
   columnsSelections,
   sortCallback,
   ...otherProps
@@ -101,6 +102,10 @@ export function useTable({
 
   if (fetchRecord !== undefined) {
     superTable.fetchRecord = fetchRecord;
+  }
+
+  if (route !== undefined) {
+    superTable.setRoute(route);
   }
 
   useEffect(() => {

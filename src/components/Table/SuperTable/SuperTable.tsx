@@ -9,7 +9,7 @@ import { AxiosResponse } from "axios";
 import React from "react";
 import { moonlightTranslations } from "../../../locales";
 import { parseError } from "../../../utils/parse-error";
-import { queryString } from "../../../utils/resolvers";
+import { queryString, router } from "../../../utils/resolvers";
 import { scrollTop } from "../../../utils/scroll";
 import {
   DatePickerInput,
@@ -227,6 +227,11 @@ export class SuperTable {
   protected currentQueryString: Record<string, any> = {};
 
   /**
+   * Base route for the table
+   */
+  public route: string = router.currentRoute()();
+
+  /**
    * Sort by options
    */
   public sortByOptions: ColumnSortBy = {
@@ -340,6 +345,15 @@ export class SuperTable {
         this.castPaginationInfo(paginationInfoHandler);
       }
     }
+  }
+
+  /**
+   * Set table base route
+   */
+  public setRoute(route: string) {
+    this.route = route;
+
+    return this;
   }
 
   /**

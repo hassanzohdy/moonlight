@@ -1,7 +1,7 @@
 import { ActionIcon, Anchor, Tooltip } from "@mantine/core";
 import { trans } from "@mongez/localization";
 import { IconEyeCheck } from "@tabler/icons-react";
-import { components, router } from "../../../../utils/resolvers";
+import { components } from "../../../../utils/resolvers";
 import { FormatterProps } from "../../TableProps";
 import { useSuperTable } from "../../hooks/useSuperTable";
 
@@ -10,7 +10,7 @@ export function ViewButton({ row, rowIndex, settings }: FormatterProps) {
 
   if (superTable.forbids("view", row, rowIndex)) return null;
 
-  const route = settings?.route || router.currentRoute()() + "/" + row.id;
+  const route = settings?.route?.(row) || superTable.route + "/" + row.id;
 
   return (
     <Anchor component={components.link} to={route}>

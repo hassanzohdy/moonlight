@@ -155,6 +155,12 @@ export type TableProps = {
    */
   title?: string;
   /**
+   * Table route
+   *
+   * @default current route
+   */
+  route?: string;
+  /**
    * Table description
    */
   description?: string;
