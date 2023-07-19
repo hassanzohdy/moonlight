@@ -89,7 +89,7 @@ export function DatePickerInput({
 
       if (!input) return;
 
-      input.onChange((...o) => {
+      input.onChange(() => {
         let minDate = input.value?.toDate() || input.value;
 
         if (minDate.timestamp) {
@@ -123,8 +123,6 @@ export function DatePickerInput({
         if (maxDate.timestamp) {
           maxDate = new Date(maxDate.timestamp);
         }
-
-        console.log(maxDate);
 
         if (maxDate) {
           setMaxDate(maxDate);

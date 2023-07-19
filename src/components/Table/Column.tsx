@@ -227,8 +227,8 @@ export class Column {
 
     const Formatter = this.getFormatter();
 
-    let Wrapper: React.ComponentType<any> = React.Fragment;
-    let wrapperProps = {};
+    const Wrapper: React.ComponentType<any> = React.Fragment;
+    const wrapperProps = {};
 
     const children = Formatter ? (
       <Formatter
