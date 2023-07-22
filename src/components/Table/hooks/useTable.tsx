@@ -169,7 +169,7 @@ export function useTable({
   useOnce(() => {
     if (!service) return;
 
-    if (!superTable.hasPermission("list")) return;
+    if (!superTable.hasPermission("list") || data !== undefined) return;
 
     superTable.init();
   });
