@@ -34,7 +34,7 @@ export function useTable({
   bulkSelection = bulkActions !== undefined && bulkActions.length > 0,
   updateQueryString,
   id,
-  lazy = service !== undefined,
+  lazy = service !== undefined && data === undefined,
   limit = 10,
   page = 1,
   totalPages,
