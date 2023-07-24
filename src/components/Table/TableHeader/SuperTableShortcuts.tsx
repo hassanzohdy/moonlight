@@ -20,7 +20,7 @@ export default function SuperTableShortcuts() {
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "H"],
-      description: "Show Keyboard Shortcuts",
+      description: trans("moonlight.helpShortcut"),
       order: 0,
     });
   });

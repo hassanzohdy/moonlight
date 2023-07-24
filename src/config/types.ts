@@ -229,6 +229,8 @@ export type MoonlightConfigurations = {
     limitOptions?: number[] | false;
     /**
      * Whether to display table header
+     *
+     * @default true
      */
     displayHeader?: boolean;
     /**
@@ -250,10 +252,20 @@ export type MoonlightConfigurations = {
     bulkActions?: ComponentType<any>[];
     /**
      * Wether to enable shortcuts
+     *
+     * @default true
      */
     shortcuts?: boolean;
     /**
+     * Whether to Scroll to top page | table root when table is sorted, filtered, or paged
+     *
+     * @default table
+     */
+    scrollTo?: "table" | "top" | false;
+    /**
      * Whether to enable columns selection
+     *
+     * @default true
      */
     columnsSelections?: boolean;
     /**

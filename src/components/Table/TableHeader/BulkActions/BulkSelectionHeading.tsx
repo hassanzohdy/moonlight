@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { trans } from "@mongez/localization";
 import { useOnce } from "@mongez/react-hooks";
 import { useRef, useState } from "react";
 import { useHotKeys } from "../../../../hooks/use-hot-keys";
@@ -35,7 +36,7 @@ export function BulkSelectionHeading() {
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "shift", "x"],
-      description: "Select/Deselect Record (When hovering over row)",
+      description: trans("moonlight.selectRowShortcut"),
       order: 1,
     });
   });
@@ -43,7 +44,7 @@ export function BulkSelectionHeading() {
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "shift", "a"],
-      description: "Select/Deselect All Records",
+      description: trans("moonlight.selectAllShortcut"),
       order: 1,
     });
   });

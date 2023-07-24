@@ -17,10 +17,11 @@ export function TableLoader() {
 
   // the set time out because of this component is called immediately after the load state is changed
   setTimeout(() => {
+    if (loaderRef.current) {
+      loaderRef.current.close();
+    }
+
     if (!superTable.isLoading) {
-      if (loaderRef.current) {
-        loaderRef.current.close();
-      }
       loaderRef.current = null;
     } else {
       loaderRef.current = toastLoading(

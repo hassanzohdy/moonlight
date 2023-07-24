@@ -161,6 +161,10 @@ export type TableProps = {
    */
   route?: string;
   /**
+   * Table root id
+   */
+  rootId?: string;
+  /**
    * Table description
    */
   description?: string;
@@ -368,6 +372,12 @@ export type TableProps = {
    * @default [15, 25, 50, 100]
    */
   limitOptions?: number[] | false;
+  /**
+   * Whether to Scroll to top page | table root when table is sorted, filtered, or paged
+   *
+   * @default table
+   */
+  scrollTo?: "table" | "top" | false;
   /**
    * Cast pagination info from response
    * Used only with lazy enabled

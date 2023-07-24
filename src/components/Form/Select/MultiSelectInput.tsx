@@ -8,6 +8,8 @@ export const MultiSelectInput: React.FC<SelectInputProps> = BaseSelect(
   {
     multiple: true,
     parseValue: (value: any) => {
+      if (value === "") return [];
+
       if (!Array.isArray(value)) {
         value = [value];
       }

@@ -21,7 +21,7 @@ function _Table(props: TableProps & BaseTableProps) {
 
   return (
     <SuperTableContext.Provider value={superTable}>
-      <Box pos="relative">
+      <Box pos="relative" id={superTable.rootId}>
         <TableLoader />
         <TableHeader />
         <TableWrapper>
@@ -39,7 +39,7 @@ function _Table(props: TableProps & BaseTableProps) {
 
 export const Table: React.FC<TableProps & BaseTableProps> = React.memo(_Table);
 
-Table.displayName = "Table";
+Table.displayName = "SuperTable";
 
 export const BasicTable = React.memo(function _BasicTable(props: TableProps) {
   return (

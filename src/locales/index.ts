@@ -17,6 +17,38 @@ export const moonlightTranslations = {
     es: "Reiniciar",
     de: "Zurücksetzen",
   },
+  cloneShortcut: {
+    en: "Clone Record (When hovering over row)",
+    ar: "نسخ السجل (عند الوقوف فوق الصف)",
+  },
+  editShortcut: {
+    en: "Edit Record (When hovering over row)",
+    ar: "تعديل السجل (عند الوقوف فوق الصف)",
+  },
+  helpShortcut: {
+    en: "Show Keyboard Shortcuts",
+    ar: "عرض اختصارات لوحة المفاتيح",
+  },
+  deleteShortcut: {
+    en: "Delete Record (When hovering over row)",
+    ar: "حذف السجل (عند الوقوف فوق الصف)",
+  },
+  deleteAllShortcut: {
+    en: '"Select all rows and open confirm delete popup"',
+    ar: "تحديد  جميع الصفوف و اظهار رسالة تأكيد الحذف",
+  },
+  selectRowShortcut: {
+    en: "Select/Deselect Row (When hovering over row)",
+    ar: "تحديد/إلغاء تحديد الصف (عند الوقوف فوق الصف)",
+  },
+  selectAllShortcut: {
+    en: "Select/Deselect All Records",
+    ar: "تحديد/إلغاء تحديد جميع السجلات",
+  },
+  viewRecordShortcut: {
+    en: "View Record (When hovering over row)",
+    ar: "عرض السجل (عند الوقوف فوق الصف)",
+  },
   didYouKnow: {
     en: "Did you know?",
     ar: "هل تعلم؟",

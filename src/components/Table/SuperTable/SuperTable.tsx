@@ -10,7 +10,7 @@ import React from "react";
 import { moonlightTranslations } from "../../../locales";
 import { parseError } from "../../../utils/parse-error";
 import { queryString, router } from "../../../utils/resolvers";
-import { scrollTop } from "../../../utils/scroll";
+import { scrollTo, scrollTop } from "../../../utils/scroll";
 import {
   DatePickerInput,
   EmailInput,
@@ -179,7 +179,12 @@ export class SuperTable {
   /**
    * Table id
    */
-  public tableId = "";
+  public tableId = "SuperTable-" + Random.id();
+
+  /**
+   * Table root id
+   */
+  public rootId = "SuperTableRoot-" + Random.id();
 
   /**
    * Displayed columns keys
@@ -270,7 +275,7 @@ export class SuperTable {
   /**
    * Determine if shortcuts are enabled
    */
-  public shortcuts = getMoonlightConfig("table.shortcuts", false);
+  public shortcuts = getMoonlightConfig("table.shortcuts", true);
 
   /**
    * Determine if columns selections should be displayed
@@ -294,6 +299,11 @@ export class SuperTable {
    * Max filters to be displayed before hiding the rest
    */
   public maxFilters = 6;
+
+  /**
+   * Whether to scroll to top when table is filtered, sorted, or page changed
+   */
+  public scrollTo = getMoonlightConfig("table.scrollTo", "table");
 
   /**
    * Keys names for records and record
@@ -364,7 +374,7 @@ export class SuperTable {
       shortcut.order = 9999;
     }
 
-    if (shortcut.once) {
+    if (shortcut.once !== false) {
       // check if the keys already exists
       // if so then return
       if (
@@ -377,12 +387,6 @@ export class SuperTable {
     }
 
     this.keyboardShortcuts.push(shortcut);
-
-    // return () => {
-    //   this.keyboardShortcuts = this.keyboardShortcuts.filter(
-    //     s => areEqual(s.keys, shortcut.keys) === false,
-    //   );
-    // };
   }
 
   /**
@@ -819,6 +823,10 @@ export class SuperTable {
     params: any = {},
     loadMode: LoadMode = "full",
   ): Promise<SuperTable> {
+    if (!params.limit) {
+      params.limit = this.paginationInfo.limit;
+    }
+
     return new Promise((resolve, reject) => {
       if (!this.service) {
         throw new Error("Service is not defined");
@@ -839,7 +847,12 @@ export class SuperTable {
       this.service
         .list(finalParams)
         .then(response => {
-          scrollTop();
+          if (this.scrollTo === "table") {
+            scrollTo(document.getElementById(this.rootId) as HTMLElement);
+          } else if (this.scrollTo === "top") {
+            scrollTop();
+          }
+
           this.updateDataFromResponse(response);
           this.setLoading(false);
 

@@ -60,7 +60,7 @@ function _CloneButton({ row }: FormatterProps) {
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "shift", "c"],
-      description: "Clone Record (When hovering over row)",
+      description: trans("moonlight.cloneShortcut"),
       once: true,
     });
   });

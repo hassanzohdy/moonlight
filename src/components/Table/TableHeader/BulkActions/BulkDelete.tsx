@@ -112,16 +112,8 @@ export function BulkDelete() {
 
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
-      keys: ["mod", "d"],
-      description: "Delete Record (When hovering over row)",
-      once: true,
-    });
-  });
-
-  useOnce(() => {
-    return superTable.registerKeyboardShortcut({
       keys: ["mod", "shift", "D"],
-      description: "Select all rows and open confirm delete popup",
+      description: trans("moonlight.deleteAllShortcut"),
     });
   });
 

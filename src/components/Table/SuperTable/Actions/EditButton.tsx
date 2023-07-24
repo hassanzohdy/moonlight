@@ -36,7 +36,7 @@ export function EditButton({ row, rowIndex }: FormatterProps) {
   useOnce(() => {
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "e"],
-      description: "Edit Record (When hovering over row)",
+      description: trans("moonlight.editShortcut"),
       once: true,
     });
   });

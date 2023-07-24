@@ -39,7 +39,12 @@ export function useSelect(
     visibleElementRef,
   } = useFormControl(props, {
     multiple,
+    isCollectable() {
+      return true;
+    },
     collectValue(formControl) {
+      if (formControl.value === "" && multiple) return [];
+
       return formControl.value;
     },
   });

@@ -50,6 +50,8 @@ export function useTable({
   total,
   defaultRecord,
   route,
+  rootId,
+  scrollTo,
   columnsSelections,
   sortCallback,
   ...otherProps
@@ -64,12 +66,20 @@ export function useTable({
     superTable.shortcuts = shortcuts;
   }
 
+  if (rootId) {
+    superTable.rootId = rootId;
+  }
+
   if (columnsSelections !== undefined) {
     superTable.columnsSelections = columnsSelections;
   }
 
   if (displayHeader !== undefined) {
     superTable.displayHeader = displayHeader;
+  }
+
+  if (scrollTo !== undefined) {
+    superTable.scrollTo = scrollTo;
   }
 
   superTable.setPermissions(permissions);
