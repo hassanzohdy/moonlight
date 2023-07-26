@@ -35,7 +35,7 @@ export function useTable({
   updateQueryString,
   id,
   lazy = service !== undefined && data === undefined,
-  limit = 10,
+  limit,
   page = 1,
   totalPages,
   pagination = true,
@@ -121,7 +121,7 @@ export function useTable({
   useEffect(() => {
     const paginationInfo = superTable.paginationInfo;
 
-    if (paginationInfo.limit !== limit) {
+    if (limit && paginationInfo.limit !== limit) {
       paginationInfo.limit = limit;
     }
 
@@ -141,7 +141,7 @@ export function useTable({
 
     if (totalPages) {
       paginationInfo.pages = totalPages;
-    } else {
+    } else if (limit) {
       paginationInfo.pages = Math.ceil(totalResults / limit);
     }
 
@@ -157,7 +157,7 @@ export function useTable({
 
     if (data) {
       let finalData = data;
-      if (pagination) {
+      if (pagination && limit) {
         // get only data for current page with limit
         finalData = data.slice((page - 1) * limit, page * limit);
       }

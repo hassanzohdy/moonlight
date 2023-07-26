@@ -52,13 +52,7 @@ export class SuperTable {
   /**
    * Table Pagination settings
    */
-  public paginationInfo: PaginationInfo = {
-    page: 1,
-    results: 0,
-    limit: 1,
-    total: 0,
-    pages: 0,
-  };
+  public paginationInfo: PaginationInfo = {} as PaginationInfo;
 
   /**
    * Default record data

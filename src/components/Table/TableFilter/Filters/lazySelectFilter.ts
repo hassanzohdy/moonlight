@@ -4,7 +4,7 @@ export function selectLazyRequestFilter(
   name = "name",
   lazyRequest: any,
   placeholder = name,
-  moreComponentProps: Partial<TableFilter> = {},
+  moreComponentProps: TableFilter["componentProps"] = {},
 ): TableFilter {
   return {
     name: name,
