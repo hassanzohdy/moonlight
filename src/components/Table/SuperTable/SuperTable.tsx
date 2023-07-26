@@ -817,7 +817,7 @@ export class SuperTable {
     params: any = {},
     loadMode: LoadMode = "full",
   ): Promise<SuperTable> {
-    if (!params.limit) {
+    if (!params.limit && this.paginationInfo.limit) {
       params.limit = this.paginationInfo.limit;
     }
 

@@ -52,6 +52,7 @@ async function deleteMultipleRows(
         trans("moonlight.success"),
       );
     } catch (error) {
+      console.error(error);
       loader.error(parseError(error), trans("moonlight.deleteError"));
     }
   }
