@@ -18,6 +18,7 @@ import {
   IntegerInput,
   NumberInput,
   SelectInput,
+  MultiSelectInput,
   SwitchInput,
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";
@@ -1371,7 +1372,7 @@ export class SuperTable {
             Component = SelectInput;
             break;
           case "multiSelect":
-            Component = SelectInput;
+            Component = MultiSelectInput;
             break;
           case "switch":
             Component = SwitchInput;
@@ -1393,6 +1394,11 @@ export class SuperTable {
 
       if (filter.placeholder) {
         componentProps.placeholder = trans(filter.placeholder);
+      }
+
+      if (filter.type === "select" || filter.type === "multiSelect") {
+        componentProps.autoSelectSingleOption = false;
+        componentProps.autoSelectFirstOption = false;
       }
 
       let valueFromQueryString = queryString?.().get(filter.name);
