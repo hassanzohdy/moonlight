@@ -1,6 +1,8 @@
 import { sha1 } from "@mongez/encryption";
+import { toastError, toastSuccess } from "../components";
 import { Fileable } from "../components/Form/DropzoneInput.types";
 import { getMoonlightConfig } from "../config";
+import { parseError } from "../utils";
 
 export function uploadFiles(
   data: FormData,
@@ -58,6 +60,7 @@ async function uploadChunkContent({
         name: file.name,
         size: file.size,
         type: file.type,
+        time: new Date().getTime(),
       }),
     );
   }
@@ -91,45 +94,74 @@ export async function uploadFileChunked({
   progressPercentageCallback?: (percentage: number) => void;
 }) {
   // eslint-disable-next-line no-async-promise-executor
-  return new Promise(async resolve => {
+  return new Promise(async (resolve, reject) => {
     const totalChunks = Math.ceil(file.size / maxChunkSize);
-    // now we want to upload each chunk
-    for (let i = 0; i < totalChunks; i++) {
-      const start = i * maxChunkSize;
+
+    let errorToaster;
+    let toastId;
+    async function uploadChunk(chunkNumber: number) {
+      const start = chunkNumber * maxChunkSize;
       const end = Math.min(start + maxChunkSize, file.size);
       const currentChunkSize = end - start;
-      const chunkNumber = i; // zero-based
       const chunkSize = maxChunkSize;
-      // now get the chunk content using file reader
-      const chunkContent = await getChunkContent(file, start, end);
-
-      // now upload the chunk
-      const response = await uploadChunkContent({
-        file,
-        chunkNumber,
-        totalChunks,
-        chunkSize,
-        currentChunkSize,
-        start,
-        end,
-        chunk: chunkContent,
-      });
-
-      if (progressPercentageCallback) {
-        const uploadProgress = Math.round(
-          ((chunkNumber + 1) * 100) / totalChunks,
-        );
-        progressPercentageCallback(uploadProgress);
+      if (errorToaster && errorToaster !== chunkNumber) {
+        errorToaster = undefined;
+        toastId.close();
+        toastId = undefined;
+        toastSuccess("Continuing upload...", "Upload resumed");
       }
 
-      // if it is the last chunk, resolve the promise
-      if (chunkNumber === totalChunks - 1) {
-        progressPercentageCallback?.(100);
-        const file = uploadsHandler.resolveResponse(response);
+      try {
+        // now get the chunk content using file reader
+        const chunkContent = await getChunkContent(file, start, end);
 
-        resolve(file);
+        // now upload the chunk
+        const response = await uploadChunkContent({
+          file,
+          chunkNumber,
+          totalChunks,
+          chunkSize,
+          currentChunkSize,
+          start,
+          end,
+          chunk: chunkContent,
+        });
+
+        if (progressPercentageCallback) {
+          const uploadProgress = Math.round(
+            ((chunkNumber + 1) * 100) / totalChunks,
+          );
+          progressPercentageCallback(uploadProgress);
+        }
+
+        // if it is the last chunk, resolve the promise
+        if (chunkNumber === totalChunks - 1) {
+          progressPercentageCallback?.(100);
+          const file = uploadsHandler.resolveResponse(response);
+          resolve(file);
+        } else {
+          // Continue with the next chunk after a delay of one second (1000 milliseconds)
+          setTimeout(() => {
+            uploadChunk(chunkNumber + 1);
+          }, 1000);
+        }
+      } catch (error) {
+        // Retry the chunk upload
+        if (!errorToaster) {
+          toastId = toastError(parseError(error), "Retrying upload...", {
+            autoClose: false,
+          });
+          errorToaster = chunkNumber;
+        }
+        // Retry with the same chunk number after a delay of one second (1000 milliseconds)
+        setTimeout(() => {
+          uploadChunk(chunkNumber);
+        }, 1000);
       }
     }
+
+    // Start uploading the first chunk
+    uploadChunk(0);
   });
 }
 

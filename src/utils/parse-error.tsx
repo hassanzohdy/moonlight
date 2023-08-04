@@ -11,7 +11,7 @@ export function parseError(error: any) {
     error = error.response;
   }
 
-  if ([405, 500, 401].includes(error.status)) {
+  if ([405, 500].includes(error.status)) {
     return <span>{trans("somethingWentWrong")}</span>;
   }
 

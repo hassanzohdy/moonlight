@@ -37,15 +37,25 @@ export function toastSuccess(
 export function toastError(
   message: React.ReactNode,
   title: React.ReactNode = trans("moonlight.error"),
-  placement: NotificationsProps["position"] = "top-right",
+  options: NotificationsProps = {},
 ) {
-  toastAtom.change("position", placement);
+  const { position = "top-right", ...rest } = options;
+  toastAtom.change("position", position);
+  const toastId = Random.string(8);
   showNotification({
     title,
     message,
+    id: toastId,
     color: "red",
     onClose: () => toastAtom.change("position", "top-right"),
+    ...rest,
   });
+
+  return {
+    close: () => {
+      hideNotification(toastId);
+    },
+  };
 }
 
 export function toastLoading(

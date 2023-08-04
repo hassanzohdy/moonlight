@@ -50,9 +50,16 @@ export function UploadedFile({
         size={file.file.size}
         rightIcon={rightIcon}
       />
-      <Tooltip label={file.progress + "%"}>
-        <Progress color={color} value={file.progress} />
-      </Tooltip>
+
+      <Progress
+        sections={[
+          {
+            value: file.progress,
+            tooltip: file.progress + "%",
+            color,
+          },
+        ]}
+      />
 
       {file.error && (
         <Text color="red" size="sm">
