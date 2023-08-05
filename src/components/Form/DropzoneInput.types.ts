@@ -14,6 +14,12 @@ export type DropzoneInputProps = FormControlProps &
     maxChunkSize?: number;
     inParallel?: boolean;
     maxFiles?: number;
+    /**
+     * Max parallel chunks to upload
+     *
+     * @default 10
+     */
+    maxParallelUploads?: number;
   };
 
 export type UploadedFile = {

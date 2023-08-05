@@ -23,11 +23,8 @@ import { SortableItem, SortableList } from "@thaddeusjiang/react-sortable-list";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FileRejection } from "react-dropzone";
 import { moonlightTranslations } from "../../locales";
-import {
-  deleteUploadedFile,
-  uploadFile,
-  uploadFileChunked,
-} from "../../services/upload-service";
+import { uploadFileChunked } from "../../services/upload-chunk";
+import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
 import { parseError } from "../../utils/parse-error";
 import { Tooltip } from "../Tooltip";
 import { toastError, toastLoading } from "../toasters";
@@ -98,7 +95,8 @@ export function DropzoneInput({
   chunked = false,
   maxFiles,
   // maxChunkSize = 500 * 1024,
-  maxChunkSize = 100 * 1024,
+  maxChunkSize,
+  maxParallelUploads,
   inParallel = true,
   ...props
 }: DropzoneInputProps) {
@@ -171,7 +169,7 @@ export function DropzoneInput({
                 </>,
               );
             }
-          } else {
+          } else if (loading) {
             loading.success(
               trans(moonlightTranslations.filesUploaded),
               <>
@@ -261,6 +259,7 @@ export function DropzoneInput({
     const uploadHandler = chunked
       ? uploadFileChunked({
           file: file.file,
+          maxParallelChunks: maxParallelUploads,
           progressPercentageCallback: progressCallback,
           maxChunkSize,
         })

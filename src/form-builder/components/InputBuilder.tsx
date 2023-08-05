@@ -830,11 +830,16 @@ export class InputBuilder {
 
     if (!defaultValue) {
       if (this.valueFromQueryString) {
-        defaultValue =
-          queryString?.().get(
-            this.valueFromQueryString,
-            this.inputDefaultValue,
-          ) || this.inputDefaultValue;
+        defaultValue = queryString?.().get(
+          this.valueFromQueryString,
+          this.inputDefaultValue,
+        );
+      }
+    }
+
+    if (!defaultValue && this.inputDefaultValue) {
+      if (typeof this.inputDefaultValue === "function") {
+        defaultValue = this.inputDefaultValue(this.record);
       } else {
         defaultValue = this.inputDefaultValue;
       }

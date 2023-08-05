@@ -16,9 +16,9 @@ import {
   EmailInput,
   FloatInput,
   IntegerInput,
+  MultiSelectInput,
   NumberInput,
   SelectInput,
-  MultiSelectInput,
   SwitchInput,
 } from "../../Form";
 import { TextInput } from "../../Form/TextInput";

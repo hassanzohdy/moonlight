@@ -58,6 +58,14 @@ export class DropzoneInputBuilder extends InputBuilder {
   }
 
   /**
+   * Set max parallel uploads
+   */
+  public maxParallelUploads(max: number) {
+    this.componentProps.maxParallelUploads = max;
+    return this;
+  }
+
+  /**
    * Set image width for that must be uploaded
    */
   public width(width: number) {
