@@ -153,20 +153,34 @@ export class SelectInputBuilder extends InputBuilder {
    */
   protected parseDefaultValue() {
     if (this.isMultiple) {
-      return get(
-        this.record,
-        this.data.defaultValueKey,
-        this.inputDefaultValue || [],
-      ).map(value => value?.id || value);
+      const value = get(this.record, this.data.defaultValueKey).map(
+        value => value?.id || value,
+      );
+
+      if (value !== undefined) return value;
+
+      if (this.inputDefaultValue !== undefined) {
+        if (typeof this.inputDefaultValue === "function") {
+          return this.inputDefaultValue(this.record);
+        } else {
+          return this.inputDefaultValue;
+        }
+      }
     }
 
-    const value = get(
-      this.record,
-      this.data.defaultValueKey,
-      this.inputDefaultValue || "",
-    );
+    const value = get(this.record, this.data.defaultValueKey);
 
-    return value?.id || value;
+    if (value) {
+      return value?.id || value;
+    }
+
+    if (this.inputDefaultValue !== undefined) {
+      if (typeof this.inputDefaultValue === "function") {
+        return this.inputDefaultValue(this.record);
+      } else {
+        return this.inputDefaultValue;
+      }
+    }
   }
 
   /**

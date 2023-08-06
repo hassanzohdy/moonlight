@@ -837,7 +837,7 @@ export class InputBuilder {
       }
     }
 
-    if (!defaultValue && this.inputDefaultValue) {
+    if ([null, undefined].includes(defaultValue) && this.inputDefaultValue) {
       if (typeof this.inputDefaultValue === "function") {
         defaultValue = this.inputDefaultValue(this.record);
       } else {

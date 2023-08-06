@@ -92,11 +92,11 @@ export function BulkDelete() {
         </Text>
       ),
       labels: {
-        confirm: trans("confirmDelete"),
-        cancel: trans("cancelDelete"),
+        confirm: trans("moonlight.confirmDelete"),
+        cancel: trans("moonlight.cancelDelete"),
       },
       confirmProps: { color: "red", autoFocus: true },
-      onConfirm: async () => {
+      onConfirm: () => {
         deleteMultipleRows(superTable, superTable.getSelectedBulkRows());
       },
     });
