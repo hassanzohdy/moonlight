@@ -153,11 +153,10 @@ export class SelectInputBuilder extends InputBuilder {
    */
   protected parseDefaultValue() {
     if (this.isMultiple) {
-      const value = get(this.record, this.data.defaultValueKey).map(
-        value => value?.id || value,
-      );
+      const value = get(this.record, this.data.defaultValueKey);
 
-      if (value !== undefined) return value;
+      if (value !== undefined && Array.isArray(value))
+        return value.map(value => value?.id || value);
 
       if (this.inputDefaultValue !== undefined) {
         if (typeof this.inputDefaultValue === "function") {
