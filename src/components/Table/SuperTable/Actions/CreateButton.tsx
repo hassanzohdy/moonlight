@@ -3,56 +3,54 @@ import { trans } from "@mongez/localization";
 import { useBooleanState, useOnce } from "@mongez/react-hooks";
 import { get } from "@mongez/reinforcements";
 import { AxiosResponse } from "axios";
-import React from "react";
 import { useHotKeys } from "../../../../hooks/use-hot-keys";
 import { modButtons } from "../../../../utils";
 import { Tooltip } from "../../../Tooltip";
+import { SuperTableCreateButtonProps } from "../../TableProps";
 import { useSuperTable } from "../../hooks/useSuperTable";
 
-export function createButton(Form: React.ComponentType<any>) {
-  function CreateButtonComponent() {
-    const superTable = useSuperTable();
-    const [opened, open, close] = useBooleanState();
+export function CreateButton({ form: Form }: SuperTableCreateButtonProps) {
+  const superTable = useSuperTable();
+  const [opened, open, close] = useBooleanState();
 
-    const pushRow = (response: AxiosResponse) => {
-      const record = get(response.data, superTable.getKey("createRecord"));
+  const pushRow = (response: AxiosResponse) => {
+    const record = get(response.data, superTable.getKey("createRecord"));
 
-      if (record) {
-        superTable.unshiftRow(record);
-      }
-    };
+    if (record) {
+      superTable.unshiftRow(record);
+    }
+  };
 
-    useHotKeys({
+  useHotKeys({
+    keys: ["mod", "Q"],
+    callback: open,
+  });
+
+  useOnce(() => {
+    return superTable.registerKeyboardShortcut({
       keys: ["mod", "Q"],
-      callback: open,
+      description: trans("moonlight.createNewRecord"),
     });
+  });
 
-    useOnce(() => {
-      return superTable.registerKeyboardShortcut({
-        keys: ["mod", "Q"],
-        description: trans("moonlight.createNewRecord"),
-      });
-    });
+  if (!Form) return null;
 
-    return (
-      <>
-        <Tooltip label={modButtons(["q"])}>
-          <Button onClick={open} variant="light">
-            {trans("moonlight.create")}
-          </Button>
-        </Tooltip>
+  return (
+    <>
+      <Tooltip label={modButtons(["q"])}>
+        <Button onClick={open} variant="light">
+          {trans("moonlight.create")}
+        </Button>
+      </Tooltip>
 
-        <Form
-          record={superTable.getDefaultRecord()}
-          open={opened}
-          onSave={pushRow}
-          onClose={close}
-        />
-      </>
-    );
-  }
-
-  CreateButtonComponent.permission = "create";
-
-  return CreateButtonComponent;
+      <Form
+        record={superTable.getDefaultRecord()}
+        open={opened}
+        onSave={pushRow}
+        onClose={close}
+      />
+    </>
+  );
 }
+
+CreateButton.permission = "create";

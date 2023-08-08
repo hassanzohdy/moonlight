@@ -118,11 +118,11 @@ export type TableFilter = {
   wrapperProps?: any;
 };
 
-export type TableHeaderButtons = {
-  actions?: any[];
-  create?: any[];
-  bulkActions?: any[];
+export type SuperTableCreateButtonProps = {
+  form: React.FC<any>;
 };
+
+export type TableCreateButton = React.FC<SuperTableCreateButtonProps>;
 
 export type TableFormProps = {
   open: boolean;
@@ -235,7 +235,7 @@ export type TableProps = {
   /**
    * Table header buttons
    */
-  buttons?: TableHeaderButtons;
+  createButtons?: TableCreateButton[];
   /**
    * Table filters
    */

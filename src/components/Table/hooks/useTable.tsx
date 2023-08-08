@@ -2,8 +2,7 @@ import { TableProps as BaseTableProps } from "@mantine/core";
 import { useEvent, useOnce } from "@mongez/react-hooks";
 import { useEffect, useRef } from "react";
 import { getMoonlightConfig } from "../../../config";
-import { SuperTable } from "../SuperTable";
-import { createButton } from "../SuperTable/Actions/CreateButton";
+import { CreateButton, SuperTable } from "../SuperTable";
 import { TableProps } from "../TableProps";
 
 const defaultPermissions = {
@@ -20,7 +19,6 @@ export function useTable({
   hovered = true,
   service,
   permissions = { ...defaultPermissions },
-  buttons,
   data,
   shortcuts,
   form,
@@ -38,6 +36,7 @@ export function useTable({
   limit,
   page = 1,
   totalPages,
+  createButtons = [CreateButton],
   pagination = true,
   onPageChange,
   onSortChange,
@@ -223,16 +222,10 @@ export function useTable({
 
   if (form) {
     superTable.setBaseForm(form);
-
-    if (!buttons) {
-      buttons = {
-        create: [createButton(form)],
-      };
-    }
   }
 
-  if (buttons) {
-    superTable.setButtons(buttons);
+  if (createButtons) {
+    superTable.setCreateButtons(createButtons);
   }
 
   if (title) {

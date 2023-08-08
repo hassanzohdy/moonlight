@@ -54,7 +54,7 @@ export function TableHeader() {
           </Box>
           <Flex gap={10} pb={10}>
             {createButtons.map((Button, index) => (
-              <Button key={index} />
+              <Button form={superTable.baseForm!} key={index} />
             ))}
           </Flex>
         </Wrapper>

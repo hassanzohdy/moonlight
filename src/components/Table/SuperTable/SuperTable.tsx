@@ -31,8 +31,8 @@ import {
   ColumnSortBy,
   SortDirection,
   SuperTableShortKeys,
+  TableCreateButton,
   TableFilter,
-  TableHeaderButtons,
   TableProps,
 } from "../TableProps";
 import { getMoonlightConfig } from "./../../../config";
@@ -136,10 +136,7 @@ export class SuperTable {
   /**
    * Table header buttons
    */
-  public buttons: TableHeaderButtons = {
-    actions: [],
-    create: [],
-  };
+  public createButtons: TableCreateButton[] = [];
 
   /**
    * Whether to fetch data when editing or cloning documents when using the buttons
@@ -762,8 +759,8 @@ export class SuperTable {
   /**
    * Get create buttons
    */
-  public getCreateButtons(): React.ComponentType<any>[] {
-    return (this.buttons?.create || []).filter((Component: any) => {
+  public getCreateButtons(): TableCreateButton[] {
+    return (this.createButtons || []).filter((Component: any) => {
       if (Component.permission) {
         return this.hasPermission(Component.permission);
       }
@@ -1174,10 +1171,10 @@ export class SuperTable {
   }
 
   /**
-   * Set table buttons
+   * Set create buttons
    */
-  public setButtons(buttons: TableHeaderButtons) {
-    this.buttons = buttons;
+  public setCreateButtons(buttons: TableCreateButton[]) {
+    this.createButtons = buttons;
     return this;
   }
 
@@ -1299,10 +1296,7 @@ export class SuperTable {
       total: 0,
       pages: 0,
     };
-    this.buttons = {
-      actions: [],
-      create: [],
-    };
+    this.createButtons = [];
   }
 
   /**
