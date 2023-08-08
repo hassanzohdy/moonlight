@@ -811,13 +811,14 @@ export class InputBuilder {
       };
     }
 
+    props.defaultValue = this.parseDefaultValue();
+
     if (["checkbox", "radio", "switch"].includes(this.data.type)) {
       if (props.defaultChecked === undefined) {
         props.defaultChecked = this.parseDefaultChecked();
+        delete props.defaultValue;
       }
     }
-
-    props.defaultValue = this.parseDefaultValue();
 
     return (this.preparedProps = props);
   }

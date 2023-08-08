@@ -25,7 +25,7 @@ function _TableBody() {
         return (
           <tr>
             <EmptyColumn colSpan={displayedColumns.length}>
-              {trans("loading")}
+              {trans("moonlight.loading")}
             </EmptyColumn>
           </tr>
         );
@@ -34,7 +34,7 @@ function _TableBody() {
       return (
         <tr>
           <EmptyColumn colSpan={displayedColumns.length}>
-            {trans("noData")}
+            {trans("moonlight.noData")}
           </EmptyColumn>
         </tr>
       );

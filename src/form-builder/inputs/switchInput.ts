@@ -4,7 +4,7 @@ import { SwitchInputBuilder } from "../components";
 export function switchInput(name: string) {
   return new SwitchInputBuilder(name)
     .component(SwitchInput)
-    .type("switch")
+    .type("checkbox")
     .updateComponentProps({
       collectUnchecked: true,
       uncheckedValue: false,
