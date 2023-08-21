@@ -17,6 +17,7 @@ export type MultiLingualInputProps = {
   localeCodeTextKey?: string;
   autoFocus?: boolean;
   withFlag?: boolean;
+  rightSection: any;
 };
 
 function _MultiLingualInput({

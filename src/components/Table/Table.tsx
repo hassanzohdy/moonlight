@@ -46,6 +46,9 @@ export const BasicTable = React.memo(function _BasicTable(props: TableProps) {
     <Table
       bulkSelection={false}
       displayHeader={false}
+      withHelmet={false}
+      createButtons={[]}
+      bulkActions={[]}
       shortcuts={false}
       {...props}
     />

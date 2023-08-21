@@ -1,5 +1,6 @@
 import { trans } from "@mongez/localization";
 import { GenericObject, debounce } from "@mongez/reinforcements";
+import { AxiosResponse } from "axios";
 import React, { ComponentType, useState } from "react";
 import { getMoonlightConfig } from "../../../config";
 import { parseError } from "../../../utils";
@@ -7,6 +8,7 @@ import {
   ChooseInput,
   EmailInput,
   NumberInput,
+  SelectInput,
   SwitchInput,
   TextInput,
 } from "../../Form";
@@ -386,4 +388,57 @@ export function numberInputColumn(name: string, heading = name) {
     .hideControls(true)
     .notPermittedFormatter(NumberColumnFormatter)
     .width(50);
+}
+
+export function selectInputColumn(name: string, heading = name) {
+  return new SelectInputColumn(name, heading).component(SelectInput);
+}
+
+export class SelectInputColumn extends InputColumn {
+  /**
+   * Add initial request
+   */
+  public request(request: () => Promise<AxiosResponse<any>>) {
+    this.componentProps.request = request;
+
+    return this;
+  }
+
+  /**
+   * Placeholder
+   */
+  public placeholder(placeholder: string) {
+    this.componentProps.placeholder = trans(placeholder);
+
+    return this;
+  }
+
+  /**
+   * Add lazy request
+   */
+  public lazyRequest(request: () => Promise<AxiosResponse<any>>) {
+    this.componentProps.lazyRequest = request;
+
+    return this;
+  }
+
+  /**
+   * Set data list
+   */
+  public dataList(data: any[]) {
+    this.componentProps.data = data;
+
+    return this;
+  }
+
+  /**
+   * Add search request
+   */
+  public searchRequest(
+    request: (keywords: string) => Promise<AxiosResponse<any>>,
+  ) {
+    this.componentProps.searchRequest = request;
+
+    return this;
+  }
 }

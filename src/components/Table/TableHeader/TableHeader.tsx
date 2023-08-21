@@ -15,6 +15,8 @@ export function TableHeader() {
   const [opened, setOpened] = useState(superTable.isFiltersOpened());
 
   const bulkActions = useMemo(() => {
+    if (!superTable.getBulkSelection()) return [];
+
     return superTable
       .getBulkActions()
       .map((Component, index) => <Component key={index} />);

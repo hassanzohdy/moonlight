@@ -27,6 +27,7 @@ export function CreateButton({ form: Form }: SuperTableCreateButtonProps) {
   });
 
   useOnce(() => {
+    if (!Form) return null;
     return superTable.registerKeyboardShortcut({
       keys: ["mod", "Q"],
       description: trans("moonlight.createNewRecord"),

@@ -16,5 +16,5 @@ export const TableWrapper = styled(ScrollArea)`
   max-width: 100%;
   margin: 2rem 0;
   position: relative;
-  overflow: auto;
+  overflow-x: auto;
 `;

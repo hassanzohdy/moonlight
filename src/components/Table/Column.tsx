@@ -296,7 +296,7 @@ export class Column {
     const column = this.data;
 
     if (column.width) {
-      style.width = column.width;
+      style.minWidth = column.width;
     }
 
     if (column.align) {
