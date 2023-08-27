@@ -213,7 +213,10 @@ export function DropzoneInput({
     // total progress percentage = average of all files that's its progress is not either 100 or 0 progress percentage
     let totalFiles = 0;
     const totalPercentage = uploadedFiles.reduce((total, file) => {
+      if (!file) return total;
+
       totalFiles++;
+
       total += file.progress;
 
       return total;
@@ -223,16 +226,16 @@ export function DropzoneInput({
 
     return {
       uploadingFiles: uploadedFiles.filter(
-        file => !["uploaded", "initial"].includes(file.state),
+        file => !["uploaded", "initial"].includes(file?.state),
       ),
       total: {
         progressPercentage,
         files: uploadedFiles.length,
-        uploading: uploadedFiles.filter(file => file.state === "uploading")
+        uploading: uploadedFiles.filter(file => file?.state === "uploading")
           .length,
-        uploaded: uploadedFiles.filter(file => file.state === "uploaded")
+        uploaded: uploadedFiles.filter(file => file?.state === "uploaded")
           .length,
-        errors: uploadedFiles.filter(file => file.state === "error").length,
+        errors: uploadedFiles.filter(file => file?.state === "error").length,
       },
     };
   };
@@ -277,7 +280,7 @@ export function DropzoneInput({
 
           setUploadedFiles(uploadedFiles => {
             return uploadedFiles.filter(
-              uploadedFile => file.id !== uploadedFile.id,
+              uploadedFile => file?.id !== uploadedFile?.id,
             );
           });
 
@@ -510,6 +513,8 @@ export function DropzoneInput({
         </Group>
       </Dropzone>
       {uploadStats.uploadingFiles.map(file => {
+        if (!file) return null;
+
         return (
           <UploadedFile
             reupload={() => reuploadFile(file)}
