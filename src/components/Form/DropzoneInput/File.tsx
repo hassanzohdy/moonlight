@@ -3,8 +3,8 @@ import { Avatar, Flex, MantineTheme, Text } from "@mantine/core";
 import { extension } from "@mongez/reinforcements";
 import { IconFile } from "@tabler/icons-react";
 import React from "react";
-import { isImageExtension } from "../../utils/extensions";
-import { humanSize } from "../../utils/human-size";
+import { isImageExtension } from "../../../utils/extensions";
+import { humanSize } from "../../../utils/human-size";
 
 const FileText = styled.div`
   label: FileText;

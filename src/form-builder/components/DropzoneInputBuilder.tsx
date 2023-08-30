@@ -1,4 +1,4 @@
-import { DropzoneInput } from "../../components/Form/DropzoneInput";
+import { DropzoneInput } from "../../components";
 import { InputBuilder } from "./InputBuilder";
 
 export class DropzoneInputBuilder extends InputBuilder {
@@ -37,7 +37,7 @@ export class DropzoneInputBuilder extends InputBuilder {
    * Whether to uplooad files in parallel
    */
   public parallel(parallel = true) {
-    this.componentProps.parallel = parallel;
+    this.componentProps.inParallel = parallel;
     return this;
   }
 
@@ -54,6 +54,14 @@ export class DropzoneInputBuilder extends InputBuilder {
    */
   public chunkSize(size: number) {
     this.componentProps.maxChunkSize = size;
+    return this;
+  }
+
+  /**
+   * Max parallel chunks per file
+   */
+  public maxParallelChunks(max: number) {
+    this.componentProps.maxParallelChunks = max;
     return this;
   }
 

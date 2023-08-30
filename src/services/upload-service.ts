@@ -1,15 +1,18 @@
-import { Fileable } from "../components/Form/DropzoneInput.types";
+import Endpoint from "@mongez/http";
+import { Fileable } from "../components";
 import { getMoonlightConfig } from "../config";
 
 export function uploadFiles(
   data: FormData,
   progressPercentageCallback?: (percentage: number) => void,
+  cancelToken?: AbortSignal,
 ): Promise<Fileable[]> {
-  const endpoint = getMoonlightConfig("endpoint");
+  const endpoint = getMoonlightConfig("endpoint") as Endpoint;
   const uploadsRoute = getMoonlightConfig("uploads.route", "/uploads");
   return new Promise((resolve, reject) => {
     endpoint
       .post(uploadsRoute, data, {
+        signal: cancelToken,
         onUploadProgress(progressEvent) {
           if (!progressEvent.total || !progressPercentageCallback) return;
 
@@ -36,13 +39,14 @@ export function deleteUploadedFile(fileId: string | number) {
 export function uploadFile(
   file: File,
   progressPercentageCallback?: (percentage: number) => void,
+  signal?: AbortSignal,
 ): Promise<Fileable> {
   const formData = new FormData();
 
   formData.append(uploadsHandler.uploadsKey(), file);
 
   return new Promise((resolve, reject) => {
-    uploadFiles(formData, progressPercentageCallback)
+    uploadFiles(formData, progressPercentageCallback, signal)
       .then(files => {
         resolve(files[0]);
       })

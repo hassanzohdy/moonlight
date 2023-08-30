@@ -625,6 +625,22 @@ export const moonlightTranslations = {
     en: "Drag & Drop files here to upload or click to browse files from your device",
     ar: "اسحب الملفات هنا للرفع أو انقر للتصفح",
   },
+  retryingUpload: {
+    en: "Retrying upload...",
+    ar: "إعادة محاولة الرفع...",
+  },
+  cancelingUpload: {
+    en: "Canceling upload...",
+    ar: "إلغاء الرفع...",
+  },
+  continuingUpload: {
+    en: "Continuing upload...",
+    ar: "مواصلة الرفع...",
+  },
+  resumedUpload: {
+    en: "Upload has been resumed",
+    ar: "تم استئناف الرفع",
+  },
 };
 
 groupedTranslations("moonlight", moonlightTranslations);

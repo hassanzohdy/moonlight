@@ -1,16 +1,5 @@
 import { trans } from "@mongez/localization";
-import { toastError } from "../components";
-
-export type UploadingFileValidationOptions = {
-  imageWidth?: number;
-  minWidth?: number;
-  maxWidth?: number;
-  imageHeight?: number;
-  minHeight?: number;
-  maxHeight?: number;
-  minSize?: number;
-  maxSize?: number;
-};
+import { UploadingFileValidationOptions, toastError } from "../components";
 
 export const isValidFile = (
   file: File,

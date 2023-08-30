@@ -2,8 +2,7 @@ import { ColSpan } from "@mantine/core/lib/Grid/Col/Col.styles";
 import Endpoint from "@mongez/http";
 import { AxiosResponse } from "axios";
 import React, { ComponentType } from "react";
-import { PaginationInfo } from "../components";
-import { Fileable } from "../components/Form/DropzoneInput.types";
+import { Fileable, PaginationInfo } from "../components";
 import { TableKeys } from "../components/Table/TableProps";
 
 export type MoonlightConfigurations = {

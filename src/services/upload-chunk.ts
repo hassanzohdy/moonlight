@@ -1,7 +1,9 @@
 /* eslint-disable no-async-promise-executor */
 import { sha1 } from "@mongez/encryption";
+import { trans } from "@mongez/localization";
+import { CanceledError } from "axios";
 import CryptoJS, { SHA256 } from "crypto-js";
-import { toastError, toastSuccess } from "../components";
+import { Fileable, toastError, toastSuccess } from "../components";
 import { getMoonlightConfig } from "../config";
 import { parseError } from "../utils";
 import { uploadsHandler } from "./upload-service";
@@ -26,6 +28,7 @@ async function uploadChunkContent({
   start,
   end,
   chunk,
+  signal,
 }) {
   const formData = new FormData();
 
@@ -45,7 +48,7 @@ async function uploadChunkContent({
   }
 
   formData.append("fileId", file.id);
-  formData.append("chunk", blob);
+  formData.append("chunk", blob); // partial file content
   formData.append("totalChunks", totalChunks.toString());
   formData.append("chunkNumber", chunkNumber.toString());
   formData.append("chunkSize", chunkSize.toString());
@@ -59,19 +62,24 @@ async function uploadChunkContent({
 
   const endpoint = getMoonlightConfig("endpoint");
 
-  return endpoint.post("/uploads/chunks?c=" + chunkNumber, formData);
+  return endpoint.post("/uploads/chunks?c=" + chunkNumber, formData, {
+    signal,
+  });
 }
+
 export async function uploadFileChunked({
   file,
   progressPercentageCallback,
   maxChunkSize = 500 * 1024,
   maxParallelChunks = 10,
+  abortControllers = [],
 }: {
   maxChunkSize?: number;
   maxParallelChunks?: number;
   file: File;
   progressPercentageCallback?: (percentage: number) => void;
-}) {
+  abortControllers?: AbortController[];
+}): Promise<Fileable> {
   return new Promise(async resolve => {
     const totalChunks = Math.ceil(file.size / maxChunkSize);
 
@@ -86,7 +94,10 @@ export async function uploadFileChunked({
         errorToaster = undefined;
         toastId.close();
         toastId = undefined;
-        toastSuccess("Continuing upload...", "Upload resumed");
+        toastSuccess(
+          trans("moonlight.continuingUpload"),
+          trans("moonlight.resumedUpload"),
+        );
       }
 
       try {
@@ -102,6 +113,10 @@ export async function uploadFileChunked({
 
             const chunkContent = await getChunkContent(file, start, end);
 
+            const abortController = new AbortController();
+
+            abortControllers.push(abortController);
+
             const uploadPromise = uploadChunkContent({
               file,
               chunkNumber: chunkIndex,
@@ -111,6 +126,7 @@ export async function uploadFileChunked({
               start,
               end,
               chunk: chunkContent,
+              signal: abortController.signal,
             });
 
             // Once the chunk is uploaded, mark it as completed
@@ -128,6 +144,7 @@ export async function uploadFileChunked({
           const uploadProgress = Math.round(
             (uploadedChunks.filter(Boolean).length * 100) / totalChunks,
           );
+
           progressPercentageCallback(uploadProgress);
         }
 
@@ -150,11 +167,17 @@ export async function uploadFileChunked({
           }
         }
       } catch (error) {
+        if (error instanceof CanceledError) return;
+
         // Retry the chunk upload
         if (!errorToaster) {
-          toastId = toastError(parseError(error), "Retrying upload...", {
-            autoClose: false,
-          });
+          toastId = toastError(
+            parseError(error),
+            trans("moonlight.retryingError"),
+            {
+              autoClose: false,
+            },
+          );
           errorToaster = chunkNumber;
         }
         // Retry with the same chunk number

@@ -18,14 +18,11 @@ import {
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React, { useRef, useState } from "react";
 import { deleteUploadedFile, uploadFile } from "../../services/upload-service";
-import {
-  UploadingFileValidationOptions,
-  isValidFile,
-  parseError,
-} from "../../utils";
+import { isValidFile, parseError } from "../../utils";
 import { acceptImagesOnly } from "../../utils/extensions";
 import { Tooltip } from "../Tooltip";
 import { toastError, toastLoading } from "../toasters";
+import { UploadingFileValidationOptions } from "./DropzoneInput";
 import { InputWrapper } from "./InputWrapper";
 
 export type ImageInputProps = AvatarProps &
