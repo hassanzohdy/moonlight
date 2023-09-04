@@ -5,11 +5,11 @@ import {
   minLengthRule,
   requiredRule,
 } from "@mongez/react-form";
-import Is from "@mongez/supportive-is";
+import { isScalar } from "@mongez/supportive-is";
 import { getLocalizedValue } from "./localization";
 
 export function defaultMapOption(option: any, _index: number): any {
-  if (Is.scalar(option)) {
+  if (isScalar(option)) {
     option = {
       label: typeof option === "string" ? trans(option) : String(option),
       value: String(option),

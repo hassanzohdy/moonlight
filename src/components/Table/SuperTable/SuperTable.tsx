@@ -4,7 +4,7 @@ import { RestfulEndpoint } from "@mongez/http";
 import { trans } from "@mongez/localization";
 import { FormInterface, getForm } from "@mongez/react-form";
 import { Random, areEqual, debounce, get, merge } from "@mongez/reinforcements";
-import Is from "@mongez/supportive-is";
+import { isDesktop, isEmpty } from "@mongez/supportive-is";
 import { AxiosResponse } from "axios";
 import React from "react";
 import { moonlightTranslations } from "../../../locales";
@@ -1397,7 +1397,7 @@ export class SuperTable {
 
       let valueFromQueryString = queryString?.().get(filter.name);
 
-      if (!Is.empty(valueFromQueryString)) {
+      if (!isEmpty(valueFromQueryString)) {
         valueFromQueryString = String(valueFromQueryString);
       }
 
@@ -1468,7 +1468,7 @@ export class SuperTable {
    * Get initial filter open state
    */
   public isFiltersOpened() {
-    return this.getCached("filterState", Is.desktop());
+    return this.getCached("filterState", isDesktop());
   }
 
   /**

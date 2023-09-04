@@ -1,10 +1,10 @@
 import { List, Text } from "@mantine/core";
 import { trans } from "@mongez/localization";
-import Is from "@mongez/supportive-is";
+import { isEmpty, isObject } from "@mongez/supportive-is";
 
 export function parseError(error: any) {
-  if (Is.empty(error)) {
-    return Is.object(error) ? <span>{trans("somethingWentWrong")}</span> : null;
+  if (isEmpty(error)) {
+    return isObject(error) ? <span>{trans("somethingWentWrong")}</span> : null;
   }
 
   if (error.response) {
@@ -37,7 +37,7 @@ export function parseError(error: any) {
 
   let errorContent: any;
 
-  if (Is.array(error)) {
+  if (Array.isArray(error)) {
     const errorsList = error.map((error: any) => {
       return (
         <List.Item key={error.key}>

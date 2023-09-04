@@ -1,7 +1,7 @@
 import { useFormControl } from "@mongez/react-form";
 import { useOnce } from "@mongez/react-hooks";
 import { get, trim } from "@mongez/reinforcements";
-import Is from "@mongez/supportive-is";
+import { isEmpty } from "@mongez/supportive-is";
 import { useEffect, useRef, useState } from "react";
 import { getMoonlightConfig } from "../config";
 import { mapData } from "../utils/select";
@@ -69,7 +69,7 @@ export function useSelect(
       ? (value || []).map(value => String(value))
       : String(value);
 
-    if (!Is.empty(value)) {
+    if (!isEmpty(value)) {
       if (multiple) {
         const stringedData = data.map(item => String(item.value));
         // check for each value if it exists in the new data
